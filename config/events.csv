@@ -1,0 +1,21 @@
+date,event,category
+2021-06-29,GitHub Copilot technical preview,ai
+2022-06-21,GitHub Copilot GA,ai
+2022-11-30,ChatGPT launch,ai
+2023-03-14,GPT-4 release,ai
+2023-07-18,Llama 2 release,ai
+2024-02-15,Gemini 1.5 release,ai
+2024-04-18,Llama 3 release,ai
+2024-10-22,Claude 3.5 Sonnet,ai
+2016-10-01,Hacktoberfest 2016,hacktoberfest
+2017-10-01,Hacktoberfest 2017,hacktoberfest
+2018-10-01,Hacktoberfest 2018,hacktoberfest
+2019-10-01,Hacktoberfest 2019,hacktoberfest
+2020-10-01,Hacktoberfest 2020,hacktoberfest
+2021-10-01,Hacktoberfest 2021,hacktoberfest
+2022-10-01,Hacktoberfest 2022,hacktoberfest
+2023-10-01,Hacktoberfest 2023,hacktoberfest
+2024-10-01,Hacktoberfest 2024,hacktoberfest
+2025-10-01,Hacktoberfest 2025,hacktoberfest
+2020-03-11,WHO declares COVID-19 pandemic,external
+2023-06-12,EU AI Act preliminary agreement,external

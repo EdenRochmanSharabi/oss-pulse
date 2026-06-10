@@ -1,0 +1,73 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "oss-pulse"
+version = "0.1.0"
+description = "Time-series analysis of Pull Requests across top open-source GitHub projects"
+readme = "README.md"
+license = "CC-BY-4.0"
+requires-python = ">=3.11"
+authors = [{ name = "Eden Rochman" }]
+keywords = ["open-source", "github", "time-series", "data-science"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "pandas>=2.0",
+    "pyarrow>=14.0",
+    "statsmodels>=0.14",
+    "scikit-learn>=1.4",
+    "xgboost>=2.0",
+    "lifelines>=0.29",
+    "prophet>=1.1",
+    "ruptures>=1.1",
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+]
+
+[project.optional-dependencies]
+bigquery = ["google-cloud-bigquery>=3.0", "db-dtypes>=1.0"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "mypy>=1.8",
+    "ruff>=0.3",
+    "pandas-stubs>=2.0",
+    "types-seaborn>=0.13",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM"]
+ignore = ["N806"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+plugins = []
+
+[[tool.mypy.overrides]]
+module = [
+    "statsmodels.*",
+    "prophet.*",
+    "ruptures.*",
+    "lifelines.*",
+    "xgboost.*",
+    "sklearn.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=src/oss_pulse --cov-report=term-missing"

@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Build
+build/
+dist/
+
+# Data and outputs
+data/
+output/figures/*.png
+*.parquet
+
+# Secrets
+.env
+.env.*
+credentials.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
