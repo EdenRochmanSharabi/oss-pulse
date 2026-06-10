@@ -71,3 +71,9 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--cov=src/oss_pulse --cov-report=term-missing"
+
+[tool.coverage.run]
+omit = [
+    "src/oss_pulse/extract/bigquery.py",
+    "src/oss_pulse/extract/queries.py",
+]

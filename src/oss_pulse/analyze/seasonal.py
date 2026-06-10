@@ -58,8 +58,8 @@ if __name__ == "__main__":
     df = pd.read_parquet(data_path)
 
     first_repo: str = df["repo_name"].iloc[0]
-    repo_df = df[df["repo_name"] == first_repo].sort_values("week")
-    series = repo_df.set_index("week")["pr_count"]
+    repo_df = df[df["repo_name"] == first_repo].sort_values("year_week")
+    series = repo_df.set_index("year_week")["pr_count"]
 
     print(f"Repo: {first_repo}")
     print(f"Series length: {len(series)}")

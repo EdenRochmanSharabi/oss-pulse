@@ -15,14 +15,14 @@ class BigQueryClient:
 
     def __init__(self, credentials_path: Path | None = None) -> None:
         try:
-            from google.cloud import bigquery  # type: ignore[import-untyped]
+            from google.cloud import bigquery  # type: ignore[import-not-found]
         except ImportError as exc:
             msg = "Install bigquery extra: pip install -e '.[bigquery]'"
             raise ImportError(msg) from exc
 
         kwargs: dict[str, Any] = {}
         if credentials_path is not None:
-            from google.oauth2 import service_account  # type: ignore[import-untyped]
+            from google.oauth2 import service_account  # type: ignore[import-not-found]
 
             creds = service_account.Credentials.from_service_account_file(
                 str(credentials_path)
@@ -37,7 +37,7 @@ class BigQueryClient:
         sql: str,
         params: dict[str, Any] | None = None,
     ) -> pd.DataFrame:
-        from google.cloud import bigquery  # type: ignore[import-untyped]
+        from google.cloud import bigquery
 
         job_config = bigquery.QueryJobConfig()
         if params:
@@ -45,7 +45,7 @@ class BigQueryClient:
                 _to_query_param(k, v) for k, v in params.items()
             ]
         job = self._client.query(sql, job_config=job_config)
-        return job.to_dataframe()
+        return job.to_dataframe()  # type: ignore[no-any-return]
 
     def extract_top_repos(
         self,
@@ -95,7 +95,7 @@ class BigQueryClient:
 
 
 def _to_query_param(name: str, value: Any) -> Any:
-    from google.cloud import bigquery  # type: ignore[import-untyped]
+    from google.cloud import bigquery
 
     if isinstance(value, int):
         return bigquery.ScalarQueryParameter(name, "INT64", value)

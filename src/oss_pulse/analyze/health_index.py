@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from scipy import stats as scipy_stats
+from scipy import stats as scipy_stats  # type: ignore[import-untyped]
 
 DEFAULT_WEIGHTS: dict[str, float] = {
     "response_time": 0.25,
@@ -69,7 +69,9 @@ def compute_health_components(repo_monthly: pd.DataFrame) -> pd.DataFrame:
         else:
             trend_score = 0.0
 
-        contributor_counts = grp_sorted["unique_contributors"].values.astype(float)
+        contributor_counts = np.asarray(
+            grp_sorted["unique_contributors"].values, dtype=float
+        )
         bus_factor_score = (
             1.0 - _gini(contributor_counts) if len(contributor_counts) > 1 else 0.5
         )
@@ -100,7 +102,7 @@ def compute_health_components(repo_monthly: pd.DataFrame) -> pd.DataFrame:
 def compute_health_index(
     components: pd.DataFrame,
     weights: dict[str, float] | None = None,
-) -> pd.Series:  # type: ignore[type-arg]
+) -> pd.Series[float]:
     """Compute a weighted-average health index from normalized component scores."""
     w = weights if weights is not None else DEFAULT_WEIGHTS
 
@@ -112,7 +114,7 @@ def compute_health_index(
         "bus_factor": "bus_factor_score",
     }
 
-    health: pd.Series = pd.Series(0.0, index=components.index)  # type: ignore[type-arg]
+    health: pd.Series[float] = pd.Series(0.0, index=components.index)
     for component, col_name in weight_map.items():
         health = health + components[col_name] * w[component]
 

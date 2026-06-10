@@ -11,7 +11,7 @@ import ruptures as rpt
 
 
 def detect_changepoints(
-    series: pd.Series,  # type: ignore[type-arg]
+    series: pd.Series[float],
     method: str = "pelt",
     min_size: int = 12,
 ) -> list[int]:
@@ -20,7 +20,7 @@ def detect_changepoints(
     Returns indices of changepoints, excluding the terminal index that
     ruptures always appends (== len(series)).
     """
-    values: np.ndarray = series.dropna().values.astype(float)
+    values: np.ndarray = np.asarray(series.dropna().values, dtype=float)
 
     if method == "pelt":
         algo = rpt.Pelt(model="rbf", min_size=min_size).fit(values)
@@ -39,7 +39,7 @@ def detect_changepoints(
 
 def annotate_ai_events(
     changepoints: list[int],
-    series: pd.Series,  # type: ignore[type-arg]
+    series: pd.Series[float],
     events_df: pd.DataFrame,
 ) -> pd.DataFrame:
     """Match each changepoint to the nearest event within +/-4 weeks.
@@ -52,8 +52,11 @@ def annotate_ai_events(
     records: list[dict[str, Any]] = []
 
     for cp_idx in changepoints:
-        cp_date = series.index[cp_idx]
-        cp_date = pd.Timestamp(cp_date)
+        idx_val = series.index[cp_idx]
+        try:
+            cp_date = pd.Timestamp(str(idx_val))
+        except Exception:
+            continue
 
         mask = (event_dates >= cp_date - window) & (event_dates <= cp_date + window)
         nearby = events_df.loc[mask].copy()
@@ -79,7 +82,9 @@ def annotate_ai_events(
                 "changepoint_idx": cp_idx,
                 "changepoint_date": cp_date,
                 "nearest_event": nearby.loc[closest_pos, "event"],
-                "nearest_event_date": pd.Timestamp(nearby.loc[closest_pos, "date"]),
+                "nearest_event_date": pd.Timestamp(
+                    str(nearby.loc[closest_pos, "date"])
+                ),
                 "days_apart": int(days_diff.loc[closest_pos].days),
             }
         )
@@ -88,7 +93,7 @@ def annotate_ai_events(
 
 
 def compute_pre_post_stats(
-    series: pd.Series,  # type: ignore[type-arg]
+    series: pd.Series[float],
     changepoint_idx: int,
 ) -> dict[str, Any]:
     """Compute summary statistics and Cohen's d for the split at changepoint_idx."""
@@ -143,7 +148,7 @@ if __name__ == "__main__":
 
     if events_path.exists():
         events_df = pd.read_csv(events_path)
-        annotations = annotate_ai_events(cps, series, events_df)
-        print(f"\nAnnotated changepoints:\n{annotations.to_string(index=False)}")
+        annotation_results = annotate_ai_events(cps, series, events_df)
+        print(f"\nAnnotated changepoints:\n{annotation_results.to_string(index=False)}")
     else:
         print(f"\nEvents file not found at {events_path}, skipping annotation.")
