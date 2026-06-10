@@ -37,7 +37,9 @@ def mock_pr_data() -> pd.DataFrame:
                 "pr_updated_at": closed_at
                 if pd.notna(closed_at)
                 else created + pd.Timedelta(days=1),
-                "pr_outcome": "merged" if i % 3 == 0 else ("closed" if i % 3 == 1 else "open"),
+                "pr_outcome": (
+                    "merged" if i % 3 == 0 else ("closed" if i % 3 == 1 else "open")
+                ),
                 "author_class": "regular" if i % 4 else "first-timer",
                 "author_type": "regular" if i % 4 else "first-timer",
                 "org_type": "company" if i % 2 else "community",
