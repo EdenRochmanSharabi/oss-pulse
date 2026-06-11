@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from scipy import stats
+from scipy import stats  # type: ignore[import-untyped]
 
 
 def compute_merge_time_stats(df: pd.DataFrame) -> pd.DataFrame:

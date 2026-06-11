@@ -75,3 +75,43 @@ def test_default_weights_sum_to_one() -> None:
     from oss_pulse.analyze.health_index import DEFAULT_WEIGHTS
 
     assert abs(sum(DEFAULT_WEIGHTS.values()) - 1.0) < 1e-9
+
+
+def test_health_single_month_repo() -> None:
+    """Repo with only 1 month should get trend_score=0 (edge case line 70)."""
+    from oss_pulse.analyze.health_index import compute_health_components
+
+    df = pd.DataFrame(
+        [
+            {
+                "repo_name": "org/single",
+                "year": 2025,
+                "month": 1,
+                "pr_count": 50,
+                "merge_rate": 0.7,
+                "unique_contributors": 10,
+                "median_merge_time_hours": 24.0,
+                "merged_count": 35,
+                "closed_count": 5,
+                "abandoned_count": 2,
+            }
+        ]
+    )
+    components = compute_health_components(df)
+    assert len(components) == 1
+
+
+def test_gini_all_zeros() -> None:
+    """Gini of all-zero values should be 0 (edge case line 25)."""
+    from oss_pulse.analyze.health_index import _gini
+
+    assert _gini(np.array([0, 0, 0])) == 0.0
+
+
+def test_normalize_constant_column() -> None:
+    """Constant column normalizes to 50."""
+    from oss_pulse.analyze.health_index import _normalize_scores
+
+    df = pd.DataFrame({"score": [5.0, 5.0, 5.0]})
+    result = _normalize_scores(df, ["score"])
+    assert (result["score"] == 50.0).all()

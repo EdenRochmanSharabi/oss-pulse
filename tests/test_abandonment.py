@@ -67,3 +67,38 @@ def test_kaplan_meier_monotonic(mock_pr_data: pd.DataFrame) -> None:
     kmf = fit_kaplan_meier(surv)
     sf = kmf.survival_function_
     assert sf.iloc[0, 0] >= sf.iloc[-1, 0]
+
+
+def test_cox_ph_fits(mock_pr_data: pd.DataFrame) -> None:
+    from oss_pulse.analyze.abandonment import build_survival_data, fit_cox_ph
+
+    surv = build_survival_data(mock_pr_data)
+    cph = fit_cox_ph(surv, covariates=["author_type", "org_type"])
+    assert cph.summary is not None
+    assert len(cph.summary) > 0
+
+
+def test_abandonment_classifier(mock_pr_data: pd.DataFrame) -> None:
+    import numpy as np
+
+    from oss_pulse.analyze.abandonment import fit_abandonment_classifier
+
+    rng = np.random.default_rng(42)
+    n = len(mock_pr_data)
+    features_df = pd.DataFrame(
+        {
+            "feat_a": rng.normal(0, 1, n),
+            "feat_b": rng.normal(0, 1, n),
+            "feat_c": rng.normal(0, 1, n),
+            "is_abandoned": rng.binomial(1, 0.3, n),
+        }
+    )
+    result = fit_abandonment_classifier(features_df)
+    assert "rf_auc" in result
+    assert "xgb_auc" in result
+    assert "best_model" in result
+    assert result["best_model"] in ("random_forest", "xgboost")
+    assert 0 <= result["rf_auc"] <= 1
+    assert 0 <= result["xgb_auc"] <= 1
+    assert "feature_importance" in result
+    assert len(result["feature_importance"]) == 3

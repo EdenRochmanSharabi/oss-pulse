@@ -48,14 +48,14 @@ def plot_forecast(
 
     ax.plot(
         actual.index,
-        actual.values,
+        actual.to_numpy(),
         color=PALETTE["primary"],
         linewidth=1.5,
         label="Actual",
     )
     ax.plot(
         predicted.index,
-        predicted.values,
+        predicted.to_numpy(),
         color=PALETTE["accent"],
         linewidth=1.5,
         linestyle="--",
@@ -65,8 +65,8 @@ def plot_forecast(
     if ci_lower is not None and ci_upper is not None:
         ax.fill_between(
             predicted.index,
-            ci_lower.values,
-            ci_upper.values,
+            ci_lower.to_numpy(),
+            ci_upper.to_numpy(),
             color=PALETTE["accent"],
             alpha=0.2,
             label="95% CI",

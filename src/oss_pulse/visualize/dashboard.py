@@ -73,7 +73,7 @@ def create_overview_dashboard(data: dict[str, Any]) -> mfigure.Figure:
     ax_bar.set_title("Top 10 Health Index", fontsize=12, fontweight="bold")
     ax_bar.set_xlabel("Health Index")
 
-    merge_times: pd.Series = data["merge_times"]  # type: ignore[assignment]
+    merge_times: pd.Series[float] = data["merge_times"]
     ax_hist = axes[1, 1]
     ax_hist.hist(
         merge_times,
@@ -110,7 +110,7 @@ def create_ai_effect_dashboard(data: dict[str, Any]) -> mfigure.Figure:
 
     fig, (ax_ts, ax_bar) = plt.subplots(1, 2, figsize=(18, 7))
 
-    series: pd.Series = data["series"]  # type: ignore[assignment]
+    series: pd.Series[float] = data["series"]
     changepoints: list[Any] = data["changepoints"]
 
     ax_ts.plot(series.index, series.values, color=PALETTE["primary"], linewidth=1.3)

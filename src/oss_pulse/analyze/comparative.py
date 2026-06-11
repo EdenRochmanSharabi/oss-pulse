@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from itertools import combinations
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pandas as pd
-from scipy import stats
+from scipy import stats  # type: ignore[import-untyped]
 
 
 def compare_groups(df: pd.DataFrame, metric: str, group_col: str) -> dict[str, Any]:
@@ -74,7 +74,8 @@ def compare_ecosystems(monthly_df: pd.DataFrame) -> pd.DataFrame:
     agg_funcs: dict[str, list[str]] = {col: ["mean", "median"] for col in available}
 
     result = monthly_df.groupby("language").agg(agg_funcs)
-    result.columns = [f"{col}_{stat}" for col, stat in result.columns]
+    multi_cols = cast(list[tuple[str, str]], result.columns.tolist())
+    result.columns = pd.Index([f"{col}_{stat}" for col, stat in multi_cols])
     result = result.reset_index()
 
     return result
@@ -82,7 +83,16 @@ def compare_ecosystems(monthly_df: pd.DataFrame) -> pd.DataFrame:
 
 if __name__ == "__main__":
     data_path = Path("data/processed/repo_monthly.parquet")
+    repos_path = Path("data/raw/top_repos.parquet")
     df = pd.read_parquet(data_path)
+
+    if repos_path.exists():
+        repos = pd.read_parquet(repos_path)[["repo_name", "org_type"]]
+        df = df.merge(repos, on="repo_name", how="left")
+
+    if "org_type" not in df.columns:
+        print("No org_type column, skipping.")
+        raise SystemExit(0)
 
     print("Comparing org_types on merge_rate:")
     comparison = compare_groups(df, metric="merge_rate", group_col="org_type")

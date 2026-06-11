@@ -58,3 +58,20 @@ def test_repo_monthly_merge_rate_range(repo_monthly: pd.DataFrame) -> None:
 
 def test_repo_monthly_no_nan_counts(repo_monthly: pd.DataFrame) -> None:
     assert repo_monthly["pr_count"].isna().sum() == 0
+
+
+def test_repo_weekly_shape(featured_events: pd.DataFrame) -> None:
+    from oss_pulse.transform.features import build_repo_weekly
+
+    weekly = build_repo_weekly(featured_events)
+    assert len(weekly) > 0
+    expected = {"repo_name", "year_week", "pr_count", "merge_rate"}
+    assert expected.issubset(set(weekly.columns))
+
+
+def test_repo_weekly_merge_rate_range(featured_events: pd.DataFrame) -> None:
+    from oss_pulse.transform.features import build_repo_weekly
+
+    weekly = build_repo_weekly(featured_events)
+    assert weekly["merge_rate"].min() >= 0
+    assert weekly["merge_rate"].max() <= 1.0

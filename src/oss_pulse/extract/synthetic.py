@@ -83,7 +83,7 @@ def _generate_pr_events(
 ) -> pd.DataFrame:
     end_date = pd.Timestamp("2026-01-01", tz="UTC")
     start_date = end_date - pd.DateOffset(years=years)
-    all_events = []
+    all_events: list[dict[str, object]] = []
 
     for _, repo in repos_df.iterrows():
         repo_name: str = repo["repo_name"]
@@ -142,6 +142,8 @@ def _generate_pr_events(
                 merge_time_hours = min(merge_time_hours, 24 * 180)
 
                 fate_roll = rng.random()
+                merged_at: pd.Timestamp | None
+                closed_at: pd.Timestamp | None
                 if fate_roll < 0.65:
                     state = "closed"
                     merged = True
@@ -153,12 +155,12 @@ def _generate_pr_events(
                     closed_at = pr_created + pd.Timedelta(
                         hours=float(rng.lognormal(4, 1))
                     )
-                    merged_at = pd.NaT
+                    merged_at = None
                 else:
                     state = "open"
                     merged = False
-                    merged_at = pd.NaT
-                    closed_at = pd.NaT
+                    merged_at = None
+                    closed_at = None
 
                 additions = int(rng.lognormal(3, 2))
                 deletions = int(rng.lognormal(2, 2))
@@ -173,13 +175,13 @@ def _generate_pr_events(
                         "merged": str(merged).lower(),
                         "pr_created_at": pr_created.isoformat(),
                         "pr_merged_at": merged_at.isoformat()
-                        if pd.notna(merged_at)
+                        if merged_at is not None
                         else None,
                         "pr_closed_at": closed_at.isoformat()
-                        if pd.notna(closed_at)
+                        if closed_at is not None
                         else None,
                         "pr_updated_at": (
-                            closed_at if pd.notna(closed_at) else pr_created
+                            closed_at if closed_at is not None else pr_created
                         ).isoformat(),
                         "author": author,
                         "additions": str(additions),

@@ -174,8 +174,8 @@ def plot_roc_curve(
         linewidth=1.0,
         label="Random",
     )
-    ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.05])
+    ax.set_xlim((0.0, 1.0))
+    ax.set_ylim((0.0, 1.05))
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
     ax.set_title(title, fontsize=14, fontweight="bold")
