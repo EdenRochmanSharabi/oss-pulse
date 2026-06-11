@@ -182,6 +182,45 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 **Summary of the AI effect:** The data tells a nuanced story with a clear lag. The effects of AI coding tools were not visible at launch; they emerged gradually over 2-3 years as adoption spread. By 2025-2026: more people are contributing than ever (858/month vs 335), including more first-timers in absolute numbers (476/month vs 187). But PRs are 10x larger, rejection rates are climbing (especially for first-timers: 63% vs 52%), and more individuals are getting shut out entirely. AI tools appear to have amplified both contribution volume and quality demands simultaneously.
 
+#### 5h. Counterfactual: What Would Have Happened Without AI?
+
+We trained forecasting models (ETS) on pre-Copilot data only (2016 to May 2022), then predicted what the next 4 years would have looked like if the pre-AI trend had simply continued. The dashed red line is the "no AI" prediction; the solid blue is what actually happened.
+
+| Metric | Predicted (no AI) | Actual (with AI) | Excess |
+|--------|------------------|-----------------|--------|
+| PR volume/month | 1,193 | 1,823 | **+53%** |
+| Unique contributors/month | 526 | 684 | **+30%** |
+| First-timers/month | 254 | 363 | **+43%** |
+| Rejection rate | 0.20 | 0.33 | **+78%** |
+| First-timer rejection rate | 0.52 | 0.58 | **+12%** |
+| Median PR size (lines) | 17 | 23 | **+35%** |
+
+<img src="output/figures/counterfactual_01_pr_count.svg" width="100%">
+
+PR volume is 53% above what the pre-AI trend predicted. The green shading shows the "AI surplus": months where actual contributions exceeded the counterfactual.
+
+<img src="output/figures/counterfactual_02_unique_authors.svg" width="100%">
+
+30% more unique contributors than expected. The gap widens over time, consistent with gradual AI adoption.
+
+<img src="output/figures/counterfactual_03_ft_count.svg" width="100%">
+
+43% more first-timers than the model predicted. AI tools are bringing new people to open source, contradicting the narrative that AI only helps experienced developers.
+
+<img src="output/figures/counterfactual_04_rejection_rate.svg" width="100%">
+
+The rejection rate diverged the most from the prediction: 78% higher than expected. The pre-AI trend was *declining* (projects were getting better at merging PRs), but that trend reversed after AI adoption.
+
+<img src="output/figures/counterfactual_05_ft_rejection.svg" width="100%">
+
+First-timer rejection is 12% above the counterfactual. The model predicted rejection would stabilize around 52%; instead it climbed to 58-63%.
+
+<img src="output/figures/counterfactual_06_median_size.svg" width="100%">
+
+PRs are 35% larger than expected. The pre-AI trend showed slow growth in PR size; post-AI, the growth accelerated.
+
+**Counterfactual conclusion:** AI tools appear to have accelerated every metric: more contributors, more PRs, larger PRs, but also more rejections. The most striking finding is that the rejection rate trend *reversed*. Before AI, projects were getting better at accepting contributions. After AI, that progress stopped and rejection climbed. This suggests that while AI lowers the barrier to *submitting* code, it may not be raising the quality enough to clear the bar that maintainers set.
+
 ### 6. The Health Index
 
 We constructed a composite health score (0-100) from five components: response time, merge rate, contributor diversity, activity trend, and bus factor (Gini coefficient of contribution concentration).
