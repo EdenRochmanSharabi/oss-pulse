@@ -15,7 +15,10 @@ GRAPHQL_URL = "https://api.github.com/graphql"
 PR_QUERY = """
 query($owner: String!, $name: String!, $cursor: String) {
   repository(owner: $owner, name: $name) {
-    pullRequests(first: 100, after: $cursor, orderBy: {field: CREATED_AT, direction: ASC}) {
+    pullRequests(
+      first: 100, after: $cursor,
+      orderBy: {field: CREATED_AT, direction: ASC}
+    ) {
       totalCount
       pageInfo {
         hasNextPage
@@ -163,9 +166,9 @@ def extract_repo_prs(
                     "pr_closed_at": node["closedAt"],
                     "pr_updated_at": node["updatedAt"],
                     "author": author,
-                    "additions": str(node["additions"]) if node["additions"] is not None else "0",
-                    "deletions": str(node["deletions"]) if node["deletions"] is not None else "0",
-                    "changed_files": str(node["changedFiles"]) if node["changedFiles"] is not None else "0",
+                    "additions": str(node["additions"] or 0),
+                    "deletions": str(node["deletions"] or 0),
+                    "changed_files": str(node["changedFiles"] or 0),
                     "event_actor": author,
                     "event_timestamp": created,
                     "first_review_at": first_review,
@@ -203,7 +206,7 @@ def extract_all_repos(
 
     sorted_repos = repos_df.sort_values("event_count", ascending=True)
 
-    for i, row in sorted_repos.iterrows():
+    for _i, row in sorted_repos.iterrows():
         repo_name: str = row["repo_name"]
         event_count: int = int(row["event_count"])
         owner, name = repo_name.split("/", 1)
@@ -230,7 +233,7 @@ def extract_all_repos(
             print(f"ERROR: {e}")
 
     if deferred:
-        print(f"\n--- Deferred {len(deferred)} large repos (>{max_prs_per_repo} events) ---")
+        print(f"\n--- Deferred {len(deferred)} large repos ---")
         for repo_name in deferred:
             print(f"  {repo_name}")
 
@@ -250,4 +253,5 @@ if __name__ == "__main__":
     repos = pd.read_parquet(repos_path)
     print(f"Extracting PRs for {len(repos)} repos via GitHub API...")
     result = extract_all_repos(repos)
-    print(f"\nDone: {len(result):,} total PRs across {result['repo_name'].nunique()} repos")
+    n_repos = result["repo_name"].nunique()
+    print(f"\nDone: {len(result):,} total PRs across {n_repos} repos")
