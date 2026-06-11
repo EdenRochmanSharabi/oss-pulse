@@ -137,35 +137,50 @@ The first-to-second PR transition is where open source loses most contributors. 
 
 ### 5. The AI Effect: Six Angles on the Same Question
 
-Did LLM coding tools (Copilot, ChatGPT, GPT-4) change open-source contribution dynamics? Instead of assuming the answer, we measured it six different ways. Each vertical dashed line marks an LLM launch date.
+Did LLM coding tools (Copilot, ChatGPT, GPT-4) change open-source contribution dynamics? Instead of assuming the answer, we measured it six different ways. We split the data at Copilot GA (June 2022) and compared pre vs post. Each vertical dashed line in the figures marks an LLM launch date.
 
-**5a. Changepoint detection (unsupervised).** We let the PELT algorithm find structural breaks in the weekly PR volume series without telling it when to look. The detected changepoints and their proximity to AI tool launches:
+**The headline numbers (by era, to capture adoption lag):**
+
+| Metric | 2016-2019 | 2020-2021 | 2022 (Copilot) | 2023 (ChatGPT) | 2024 | 2025-2026 |
+|--------|-----------|-----------|----------------|-----------------|------|-----------|
+| Contributors/month | 335 | 467 | 579 | 538 | 569 | **858** |
+| First-timers/month | 187 | 244 | 296 | 279 | 285 | **476** |
+| First-timer rejection | 51.7% | 53.5% | 53.0% | 56.8% | 55.0% | **62.8%** |
+| Overall rejection | 40.2% | 28.2% | 29.8% | 30.1% | 27.1% | **37.6%** |
+| Median PR size (lines) | 4 | 9 | 8 | 10 | 16 | **39** |
+| PRs/author/month | 1.52 | 2.33 | 2.46 | 2.42 | 2.72 | **2.80** |
+
+The most striking feature of this table is that the biggest shifts don't appear at the AI tool launch dates. They appear **2-3 years later**, in 2025-2026, once adoption matured. This lag effect means a simple pre/post split at Copilot's launch misses the real story.
+
+**5a. Changepoint detection (unsupervised).** The PELT algorithm found structural breaks in the weekly PR volume series without being told when to look.
 
 <img src="output/figures/06_changepoints.svg" width="100%">
 
-**5b. Did more people start contributing?** Monthly unique contributors over the decade. If AI tools lower the barrier to entry, we should see an inflection in the number of distinct humans opening PRs.
+**5b. More people are contributing, including newcomers.** Monthly unique contributors grew from 335 (2016-2019) to 858 (2025-2026). First-timers per month also grew: 187 to 476. In absolute terms, more newcomers than ever are attempting to contribute. However, their share of total PRs dropped from 37% to 20% because regular contributors grew even faster.
 
 <img src="output/figures/ai_01_unique_contributors.svg" width="100%">
 
-**5c. Did the rejection rate change?** More contributors could mean more low-quality PRs. The rejection rate (PRs closed without merge / total) over time:
+**5c. The rejection rate shows a lag effect.** From 2020 to 2024, the overall rejection rate was stable around 28-30%. But in 2025-2026, it jumped to 37.6%. The effect wasn't immediate with AI tool launches; it took 2-3 years of adoption before the impact became visible in the data.
 
 <img src="output/figures/ai_02_rejection_rate.svg" width="100%">
 
-**5d. How many people tried and failed?** The absolute number and percentage of contributors who submitted PRs in a given month but got zero merges. These are people who tried to contribute but were rejected entirely.
+**5d. But more individuals are getting shut out.** The percentage of contributors who get zero merges in a month rose from 42% to 48%. More people are trying, and a larger fraction are failing. The absolute number of "zero-merge contributors" grew substantially.
 
 <img src="output/figures/ai_03_rejected_contributors.svg" width="100%">
 
-**5e. The first-timer experience.** Two questions: are more first-timers showing up, and is their rejection rate changing? If AI tools help newcomers write better code, their merge rate should improve.
+**5e. First-timers are showing up in record numbers, but struggling more.** 476 first-timers/month in 2025-2026, up from 187 in 2016-2019. But their rejection rate climbed steadily: 51.7% (2016-2019) to 53% (2022) to 56.8% (2023) to **62.8%** (2025-2026). More people are trying, but the success rate is dropping, especially in the most recent period where AI adoption is highest.
 
 <img src="output/figures/ai_04_firsttimer_analysis.svg" width="100%">
 
-**5f. Are PRs getting bigger or smaller?** If contributors are using AI to generate code, PRs might grow in size. The median lines changed (additions + deletions) per PR over time:
+**5f. PRs grew 10x.** The median PR went from 4 lines (2016-2019) to 39 lines (2025-2026). The growth was gradual until 2024 (16 lines) then accelerated sharply. This is consistent with AI-assisted code generation producing larger changesets, and the timing aligns with widespread LLM adoption rather than any single tool launch.
 
 <img src="output/figures/ai_05_pr_size_trend.svg" width="100%">
 
-**5g. Individual productivity.** PRs per contributor per month. If AI makes each person more productive, this ratio should increase after the LLM launches.
+**5g. Individual productivity is up 40%.** Each contributor produces more PRs per month (1.9 to 2.7). Combined with the size increase, the total code output per person has grown substantially.
 
 <img src="output/figures/ai_06_prs_per_contributor.svg" width="100%">
+
+**Summary of the AI effect:** The data tells a nuanced story with a clear lag. The effects of AI coding tools were not visible at launch; they emerged gradually over 2-3 years as adoption spread. By 2025-2026: more people are contributing than ever (858/month vs 335), including more first-timers in absolute numbers (476/month vs 187). But PRs are 10x larger, rejection rates are climbing (especially for first-timers: 63% vs 52%), and more individuals are getting shut out entirely. AI tools appear to have amplified both contribution volume and quality demands simultaneously.
 
 ### 6. The Health Index
 
