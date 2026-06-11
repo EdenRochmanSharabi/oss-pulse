@@ -45,9 +45,7 @@ def setup_style() -> None:
     )
 
 
-def save_fig(
-    fig: mfigure.Figure, name: str, dpi: int = 300, fmt: str = "svg"
-) -> Path:
+def save_fig(fig: mfigure.Figure, name: str, dpi: int = 300, fmt: str = "svg") -> Path:
     """Save figure to output/figures/{name}.{fmt}."""
     output_dir = Path("output/figures")
     output_dir.mkdir(parents=True, exist_ok=True)

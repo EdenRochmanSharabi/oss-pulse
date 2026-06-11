@@ -40,7 +40,7 @@ class TestStyle:
         ax.plot([1, 2, 3])
         path = save_fig(fig, "test_plot")
         assert path.exists()
-        assert path.suffix == ".png"
+        assert path.suffix == ".svg"
 
 
 class TestTimeseries:
