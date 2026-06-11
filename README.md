@@ -12,7 +12,7 @@ Open source runs the world, but how does it actually work? Who contributes, how 
 2. **What temporal patterns exist in PR activity?** Are there weekly, seasonal, or event-driven cycles (e.g., Hacktoberfest)?
 3. **How fast do projects respond to contributions?** What determines whether a PR gets merged in hours or ignored for months?
 4. **Where do contributors go?** Of all the developers who open their first PR, how many come back for a second? A fifth? A twentieth?
-5. **Did AI coding tools change contribution dynamics?** Can we detect a structural shift in PR patterns after the release of Copilot, ChatGPT, or GPT-4, without assuming when it happened?
+5. **Did AI coding tools change contribution dynamics?** Can we detect a structural shift in PR patterns after the release of LLM coding, without assuming when it happened?
 6. **Can we measure project health?** Is it possible to build a composite index that captures responsiveness, diversity, momentum, and resilience, and does it correlate with popularity?
 7. **Can we predict decline?** Are there early warning signs that a project is starting to lose momentum, visible in the PR data before it becomes obvious?
 
