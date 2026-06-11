@@ -135,15 +135,37 @@ The first-to-second PR transition is where open source loses most contributors. 
 
 <img src="output/figures/05_contributor_funnel.svg" width="100%">
 
-### 5. Changepoint Detection: What the Data Says About AI
+### 5. The AI Effect: Six Angles on the Same Question
 
-Rather than assuming AI tools caused a change and testing for it, we let an unsupervised changepoint detection algorithm (PELT) find structural breaks in the weekly PR volume series.
+Did LLM coding tools (Copilot, ChatGPT, GPT-4) change open-source contribution dynamics? Instead of assuming the answer, we measured it six different ways. Each vertical dashed line marks an LLM launch date.
 
-The algorithm detected changepoints. Their alignment (or lack thereof) with known AI tool releases (Copilot June 2022, ChatGPT November 2022, GPT-4 March 2023) is part of the analysis.
-
-*Detailed findings in the narrative notebook.*
+**5a. Changepoint detection (unsupervised).** We let the PELT algorithm find structural breaks in the weekly PR volume series without telling it when to look. The detected changepoints and their proximity to AI tool launches:
 
 <img src="output/figures/06_changepoints.svg" width="100%">
+
+**5b. Did more people start contributing?** Monthly unique contributors over the decade. If AI tools lower the barrier to entry, we should see an inflection in the number of distinct humans opening PRs.
+
+<img src="output/figures/ai_01_unique_contributors.svg" width="100%">
+
+**5c. Did the rejection rate change?** More contributors could mean more low-quality PRs. The rejection rate (PRs closed without merge / total) over time:
+
+<img src="output/figures/ai_02_rejection_rate.svg" width="100%">
+
+**5d. How many people tried and failed?** The absolute number and percentage of contributors who submitted PRs in a given month but got zero merges. These are people who tried to contribute but were rejected entirely.
+
+<img src="output/figures/ai_03_rejected_contributors.svg" width="100%">
+
+**5e. The first-timer experience.** Two questions: are more first-timers showing up, and is their rejection rate changing? If AI tools help newcomers write better code, their merge rate should improve.
+
+<img src="output/figures/ai_04_firsttimer_analysis.svg" width="100%">
+
+**5f. Are PRs getting bigger or smaller?** If contributors are using AI to generate code, PRs might grow in size. The median lines changed (additions + deletions) per PR over time:
+
+<img src="output/figures/ai_05_pr_size_trend.svg" width="100%">
+
+**5g. Individual productivity.** PRs per contributor per month. If AI makes each person more productive, this ratio should increase after the LLM launches.
+
+<img src="output/figures/ai_06_prs_per_contributor.svg" width="100%">
 
 ### 6. The Health Index
 
