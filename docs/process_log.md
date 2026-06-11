@@ -198,3 +198,39 @@ without a cleaning step.
 | 10:15 | Lost all cached repo parquets. Also lost BigQuery top_repos (replaced by synthetic). |
 | 10:20 | Recreated venv inside oss-pulse. Re-discovered top 200 repos via GitHub Search API (by stars). |
 | 10:25 | Relaunched extraction. Small repos completing in seconds. Many awesome-lists return 0 PRs (expected). |
+| 11:00 | 82 repos extracted. Ran full pipeline E2E on real data. |
+| 12:00 | Fixed null authors and state=merged. Created real-data integration tests. |
+| 14:00 | Narrative notebook: 9 sections, 19 figures, executed E2E. |
+| 15:00 | README rewritten as research study with findings. |
+| 16:00 | Switched figures to SVG. |
+| 17:00 | AI deep-dive: 6 analyses on LLM effect. |
+| 17:30 | Era-by-era table revealed lag effect (2-3 years after launch). |
+| 18:00 | Counterfactual analysis: rejection rate trend reversed post-AI. |
+| 19:30 | Holiday analysis: 15 countries, single-country holidays have no effect. |
+| 20:00 | Found June 2026 artifact (incomplete month). Filtered, regenerated all. |
+
+## Observations Log (for re-analysis with full 200 repos)
+
+Things we noticed with 82 repos that should be verified with the full dataset:
+
+1. **Incomplete month artifact**: June 2026 showed a dramatic drop. It was just
+   11 days of data. Always filter incomplete periods before plotting.
+
+2. **AI effect lag**: The biggest changes appear 2-3 years after LLM launches,
+   not at the launch dates. Simple pre/post comparisons miss this.
+
+3. **First-timers: two truths**: Absolute numbers grew (187 to 476/month), but
+   their share dropped (37% to 20%). Both are correct; which you emphasize
+   changes the narrative entirely.
+
+4. **Rejection rate reversal**: Pre-AI, rejection was *improving*. Post-AI, it
+   reversed. This is the most provocative finding. Needs careful framing.
+
+5. **Holiday resilience**: No single country's holidays affect global PR volume.
+   Only Christmas/New Year matter. Strong evidence of true globalization.
+
+6. **PR size explosion**: 4 lines to 39 lines median. The acceleration is in
+   2024-2025, consistent with widespread LLM adoption lag.
+
+7. **Dataset bias**: Top-by-stars mixes awesome-lists with real software.
+   Should categorize and analyze separately with full data.
