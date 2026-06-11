@@ -30,8 +30,10 @@ BOT_PATTERNS: list[str] = [
 ]
 
 
-def is_bot(username: str) -> bool:
+def is_bot(username: str | None) -> bool:
     """Check whether a username belongs to a known bot."""
+    if not username:
+        return False
     lower = username.lower()
     if "[bot]" in lower:
         return True
