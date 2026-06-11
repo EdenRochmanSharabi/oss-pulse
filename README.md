@@ -116,6 +116,24 @@ Weekend contributions exist but are significantly lower (~40% of weekday volume)
 
 <img src="output/figures/03_activity_heatmap_all.svg" width="100%">
 
+#### Do National Holidays Matter?
+
+We cross-referenced daily PR activity with national holidays from 15 countries (US, China, India, Germany, UK, France, Japan, Brazil, Canada, Australia, South Korea, Russia, Netherlands, Sweden, Poland), using exact dates for each year (including moveable holidays like Easter, Eid, and Lunar New Year).
+
+**The surprising finding: a single country's holiday has almost no effect on global PR activity.** When only one country is on holiday, the remaining 14 countries' contributors compensate completely. The only days that show a measurable drop are those where *many countries celebrate simultaneously* (Christmas, New Year's).
+
+<img src="output/figures/holidays_02_by_overlap.svg" width="100%">
+
+The top individual holidays by PR impact are all multi-country events: Christmas Day (celebrated in 12 of our 15 countries, -81% PR volume), New Year's Day (14 countries, -81%), and Good Friday (8 countries, -86%). No single-country holiday cracks the top 20.
+
+<img src="output/figures/holidays_01_by_country.svg" width="100%">
+
+Per-country analysis shows that holidays in China, India, and South Korea are associated with *lower* PR activity, while holidays in Western countries (US, UK, Canada, Australia) paradoxically correlate with *higher* activity. This likely reflects the global distribution of contributors: when Western developers are off work, they may contribute *more* to open source as a leisure activity, while the baseline is maintained by contributors in other time zones.
+
+<img src="output/figures/holidays_03_by_month.svg" width="100%">
+
+December stands out as the month where holidays have the strongest impact, driven by the Christmas-New Year cluster where most of the world stops simultaneously. The rest of the year, the global nature of open source acts as a buffer: no single country's calendar can measurably dent the contribution rate.
+
 ### 3. The 5-Hour PR
 
 The median time from PR creation to merge is **5.4 hours**. But the distribution is heavily skewed: the 95th percentile is measured in weeks.
