@@ -4,6 +4,9 @@ install:
 	pip install -e ".[dev,bigquery]"
 
 extract:
+	python -m oss_pulse.extract.github_api
+
+extract-bq:
 	python -m oss_pulse.extract.bigquery
 
 extract-synthetic:

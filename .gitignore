@@ -16,6 +16,7 @@ dist/
 data/
 output/figures/*.png
 *.parquet
+!tests/fixtures/*.parquet
 
 # Secrets
 .env
@@ -26,3 +27,4 @@ credentials.json
 .idea/
 .vscode/
 *.swp
+.coverage
