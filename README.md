@@ -106,7 +106,7 @@ Monthly PR volume grew roughly **5x** from 2016 to 2026, from ~400/month to ~2,0
 
 But the growth is not uniform. The top 5 repos by volume account for a disproportionate share of the increase. Some repos that were active in 2018-2020 show declining activity by 2024.
 
-<img src="output/figures/02_monthly_pr_volume_trend.png" width="100%">
+<img src="output/figures/02_monthly_pr_volume_trend.svg" width="100%">
 
 ### 2. The Workweek Pattern
 
@@ -114,7 +114,7 @@ PR activity follows a clear workweek pattern: Monday through Thursday, 8:00-17:0
 
 Weekend contributions exist but are significantly lower (~40% of weekday volume). This suggests that even in "community-driven" open source, most contributions happen during working hours, likely by developers whose employers allow or encourage OSS participation.
 
-<img src="output/figures/03_activity_heatmap_all.png" width="100%">
+<img src="output/figures/03_activity_heatmap_all.svg" width="100%">
 
 ### 3. The 5-Hour PR
 
@@ -122,7 +122,7 @@ The median time from PR creation to merge is **5.4 hours**. But the distribution
 
 Breakdown by author type reveals that **maintainer PRs merge fastest** (often self-merged within minutes), while **first-timer PRs take significantly longer**. This isn't necessarily gatekeeping; it likely reflects the additional review needed for unfamiliar contributors.
 
-<img src="output/figures/04_merge_time_distribution.png" width="100%">
+<img src="output/figures/04_merge_time_distribution.svg" width="100%">
 
 ### 4. The Retention Crisis
 
@@ -133,7 +133,7 @@ Of **46,302 contributors** who opened at least one PR:
 
 The first-to-second PR transition is where open source loses most contributors. **73% of first-time contributors never return.** This is consistent across ecosystems and has not improved significantly over the decade.
 
-<img src="output/figures/05_contributor_funnel.png" width="100%">
+<img src="output/figures/05_contributor_funnel.svg" width="100%">
 
 ### 5. Changepoint Detection: What the Data Says About AI
 
@@ -143,7 +143,7 @@ The algorithm detected changepoints. Their alignment (or lack thereof) with know
 
 *Detailed findings in the narrative notebook.*
 
-<img src="output/figures/06_changepoints.png" width="100%">
+<img src="output/figures/06_changepoints.svg" width="100%">
 
 ### 6. The Health Index
 
@@ -151,8 +151,8 @@ We constructed a composite health score (0-100) from five components: response t
 
 Initial finding: **popularity (stars) does not strongly correlate with health.** Some of the most-starred repos score below average on health, while newer, less-known projects score highest.
 
-<img src="output/figures/07_health_top_bottom_15.png" width="100%">
-<img src="output/figures/07_health_radar_comparison.png" width="100%">
+<img src="output/figures/07_health_top_bottom_15.svg" width="100%">
+<img src="output/figures/07_health_radar_comparison.svg" width="100%">
 
 ### 7. PR Survival Analysis
 
@@ -160,7 +160,7 @@ Kaplan-Meier survival curves show distinct patterns by author type: maintainer P
 
 This has implications for contributor retention (Finding #4): if first-timers wait days or weeks for their PR to be reviewed, they're unlikely to contribute again.
 
-<img src="output/figures/08_survival_by_author_type.png" width="100%">
+<img src="output/figures/08_survival_by_author_type.svg" width="100%">
 
 ---
 
