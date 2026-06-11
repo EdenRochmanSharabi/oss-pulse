@@ -213,7 +213,7 @@ def extract_all_repos(
         cache_path = output_dir / f"{owner}__{name}.parquet"
 
         if cache_path.exists():
-            print(f"[{len(all_dfs)+1}/{len(repos_df)}] {repo_name}: cached")
+            print(f"[{len(all_dfs) + 1}/{len(repos_df)}] {repo_name}: cached")
             df = pd.read_parquet(cache_path)
             all_dfs.append(df)
             continue
@@ -223,7 +223,9 @@ def extract_all_repos(
             print(f"[deferred] {repo_name} ({event_count:,} events)")
             continue
 
-        print(f"[{len(all_dfs)+1}/{len(repos_df)}] {repo_name}...", end=" ", flush=True)
+        print(
+            f"[{len(all_dfs) + 1}/{len(repos_df)}] {repo_name}...", end=" ", flush=True
+        )
         try:
             df = extract_repo_prs(owner, name, token, since=since)
             df.to_parquet(cache_path, index=False)
