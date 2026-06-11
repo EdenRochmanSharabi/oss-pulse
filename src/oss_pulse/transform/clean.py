@@ -38,6 +38,16 @@ def clean_pr_events(df: pd.DataFrame) -> pd.DataFrame:
 
     out = out.dropna(subset=["pr_created_at"])
 
+    if "state" in out.columns:
+        merged_mask = out["state"].str.lower() == "merged"
+        out.loc[merged_mask, "state"] = "closed"
+        out.loc[merged_mask, "merged"] = "true"
+        out["state"] = out["state"].str.lower()
+
+    if "author" in out.columns:
+        out["author"] = out["author"].fillna("ghost")
+        out["event_actor"] = out["event_actor"].fillna("ghost")
+
     for col in NUMERIC_COLS:
         if col in out.columns:
             out[col] = pd.to_numeric(out[col], errors="coerce").fillna(0).astype(int)
