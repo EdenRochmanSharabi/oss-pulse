@@ -209,8 +209,8 @@ We trained forecasting models (ETS) on pre-Copilot data only (2016 to May 2022),
 | PR volume/month | 1,193 | 1,823 | **+53%** |
 | Unique contributors/month | 526 | 684 | **+30%** |
 | First-timers/month | 254 | 363 | **+43%** |
-| Rejection rate | 0.20 | 0.33 | **+78%** |
-| First-timer rejection rate | 0.52 | 0.58 | **+12%** |
+| Rejection rate | 20% | 33% | **+78%** |
+| First-timer rejection rate | 52% | 58% | **+12%** |
 | Median PR size (lines) | 17 | 23 | **+35%** |
 
 <img src="output/figures/counterfactual_01_pr_count.svg" width="100%">
@@ -254,7 +254,7 @@ Kaplan-Meier survival curves show distinct patterns by author type: maintainer P
 
 This has implications for contributor retention (Finding #4): if first-timers wait days or weeks for their PR to be reviewed, they're unlikely to contribute again.
 
-<img src="output/figures/08_survival_by_author_type.svg" width="100%">
+<img src="output/figures/08_survival_by_author_type.png" width="100%">
 
 ---
 
