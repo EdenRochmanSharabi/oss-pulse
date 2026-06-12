@@ -6,7 +6,11 @@ date,event,category
 2023-07-18,Llama 2 release,ai
 2024-02-15,Gemini 1.5 release,ai
 2024-04-18,Llama 3 release,ai
-2024-10-22,Claude 3.5 Sonnet,ai
+2024-03-01,Cursor AI widespread adoption,ai_agentic
+2024-06-20,Claude 3.5 Sonnet,ai
+2024-10-22,OpenAI Codex CLI preview,ai_agentic
+2025-02-24,Claude Code launch,ai_agentic
+2025-04-14,OpenAI Codex GA,ai_agentic
 2016-10-01,Hacktoberfest 2016,hacktoberfest
 2017-10-01,Hacktoberfest 2017,hacktoberfest
 2018-10-01,Hacktoberfest 2018,hacktoberfest

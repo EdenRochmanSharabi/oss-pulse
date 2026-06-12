@@ -198,7 +198,19 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_06_prs_per_contributor.svg" width="100%">
 
-**Summary of the AI effect:** The data tells a nuanced story with a clear lag. The effects of AI coding tools were not visible at launch; they emerged gradually over 2-3 years as adoption spread. By 2025-2026: more people are contributing than ever (858/month vs 335), including more first-timers in absolute numbers (476/month vs 187). But PRs are 10x larger, rejection rates are climbing (especially for first-timers: 63% vs 52%), and more individuals are getting shut out entirely. AI tools appear to have amplified both contribution volume and quality demands simultaneously.
+**5h. Who benefits? Productivity and merge rate by author group.** The aggregate +40% masks a stark inequality. Maintainers went from 5 to 10 PRs/person/month while keeping a 79% merge rate. Regulars gained modestly (1.5 to 1.9) but their merge rate collapsed from 59% to 42%. First-timers are by definition at 1 PR/month, but their merge rate dropped from 48% to 33%.
+
+| Group | PRs/person/month (2016) | PRs/person/month (2025) | Merge rate (2016) | Merge rate (2025) |
+|-------|------------------------|------------------------|-------------------|-------------------|
+| Maintainer | 5.0 | 10.1 | 78% | 79% |
+| Regular | 1.5 | 1.9 | 56% | 42% |
+| First-timer | 1.0 | 1.0 | 48% | 33% |
+
+The productivity gains of AI tools are concentrated in those who already had expertise. For everyone else, the bar has risen.
+
+<img src="output/figures/ai_07_productivity_by_group.svg" width="100%">
+
+**Summary of the AI effect:** The data tells a nuanced story with a clear lag. The effects were not visible at model launches (Copilot, ChatGPT); they emerged 2-3 years later as agentic coding tools (Cursor, Claude Code, Codex) reached mainstream adoption. By 2025-2026: more people are contributing than ever, including more first-timers in absolute numbers. But PRs are 10x larger, and the merge rate gap between maintainers and newcomers has widened dramatically (79% vs 33%). AI tools amplified productivity for experts while raising the quality bar that newcomers must clear.
 
 #### 5h. Counterfactual: What Would Have Happened Without AI?
 
