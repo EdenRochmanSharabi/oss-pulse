@@ -326,6 +326,57 @@ ETS (Exponential Smoothing) wins with 17.7% MAPE. Prophet is a close second. The
 
 ---
 
+## Advanced Models
+
+### 12. Can We Predict If a Contributor Will Come Back? (LSTM)
+
+The abandonment classifier (Section 10) used flat features and achieved AUC=0.736. But contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
+
+| Model | AUC | What it captures |
+|-------|-----|-----------------|
+| XGBoost (flat features) | 0.736 | PR size, author type |
+| **LSTM (sequence)** | **0.825** | Merge momentum, gap patterns, rejection streaks |
+
+The +0.089 AUC improvement confirms that the *order* of events matters. The LSTM learns patterns like "consecutive merges predict return" and "growing gaps between PRs predict churn" that flat features cannot express.
+
+<img src="output/figures/nn_contributor_return.svg" width="100%">
+
+### 13. The Hidden Map of Open Source (Repo Embeddings)
+
+We trained a neural network to learn 16-dimensional vector representations of repos, based solely on *who contributes to them*. Repos with overlapping contributor bases end up close in embedding space. We then projected these embeddings to 2D with t-SNE.
+
+The result reveals that **language is a weak signal for repo similarity**. The real structure is social:
+
+- `fastapi` (Python) and `airbnb/javascript` (JavaScript) are neighbors: same web-developer community
+- `code-server` (TypeScript) and `rustdesk` (Rust) cluster together: remote-access tool users
+- `karpathy/autoresearch` (Python) and `papers-we-love` (Shell) are close: ML research community
+- 69 of 82 repos form one massive supercluster of "generalist GitHub participants" who star and browse across all languages
+
+The contributor overlap graph exposes communities of practice that language tags hide.
+
+<img src="output/figures/nn_repo_embeddings.svg" width="100%">
+
+### 14. Optimizing the Health Index with a Genetic Algorithm
+
+The Health Index weights (Section 6) were hand-picked. But which weights actually predict future repo growth? We used a Genetic Algorithm to search for weights that maximize Spearman correlation between today's health score and PR growth 6 months later.
+
+| Component | Original weight | GA-optimized weight |
+|-----------|----------------|-------------------|
+| Response time | 25% | **48.6%** |
+| Bus factor | 20% | **26.6%** |
+| Diversity | 20% | 18.2% |
+| Merge rate | 20% | 6.1% |
+| Trend | 15% | **0.4%** |
+
+The GA nearly doubled the weight on response time (25% to 49%) and eliminated trend (15% to 0.4%). The optimized weights improved Spearman correlation from 0.14 to 0.21.
+
+**The insight**: The single best predictor of whether a project will grow is **how fast it responds to contributions**. Not its current momentum, not its merge rate. Speed of response. This aligns with the contributor return finding (Section 12): contributors come back when they get fast feedback.
+
+<img src="output/figures/ga_weights_comparison.svg" width="100%">
+<img src="output/figures/ga_convergence.svg" width="100%">
+
+---
+
 ## What's Next
 
 This is a first draft based on 156 of 200 targeted repos. The extraction is running and will complete soon. Planned updates:
