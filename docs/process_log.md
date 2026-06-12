@@ -208,6 +208,12 @@ without a cleaning step.
 | 18:00 | Counterfactual analysis: rejection rate trend reversed post-AI. |
 | 19:30 | Holiday analysis: 15 countries, single-country holidays have no effect. |
 | 20:00 | Found June 2026 artifact (incomplete month). Filtered, regenerated all. |
+| --- | **Day 3 (2026-06-12)** |
+| 10:00 | Completed Hacktoberfest, comparative, abandonment classifier, forecasting benchmark. |
+| 11:00 | LSTM contributor return (AUC 0.825), repo embeddings (t-SNE), GA health weights. |
+| 12:00 | First-timer success predictor with repo ranking. |
+| 13:00 | Discovered top-by-stars includes ~30% non-software repos. Excluded in two waves. |
+| 13:30 | 52 software repos, 119k PRs. All analyses updated. |
 
 ## Observations Log (for re-analysis with full 200 repos)
 
@@ -232,5 +238,22 @@ Things we noticed with 82 repos that should be verified with the full dataset:
 6. **PR size explosion**: 4 lines to 39 lines median. The acceleration is in
    2024-2025, consistent with widespread LLM adoption lag.
 
-7. **Dataset bias**: Top-by-stars mixes awesome-lists with real software.
-   Should categorize and analyze separately with full data.
+7. **Stars don't measure what you think**: The most-starred repos on GitHub
+   are not software projects. Of our top 200 by stars, 30 were awesome-lists,
+   interview prep collections, book compilations, and curated resource pages.
+   These repos have PRs (people add links, fix typos) but their dynamics are
+   completely different from software projects: higher merge rates (adding a
+   link is easy to review), different author profiles, no code review culture.
+   
+   We discovered this in two waves. First, we filtered 20 repos with
+   language=None or Markdown. Then we realized 10 more had a language assigned
+   by GitHub (papers-we-love shows as "Shell" because of a script) but were
+   still curated lists, not software. Had to manually inspect and exclude them.
+   
+   **Lesson**: "top GitHub repos" and "top open-source software projects" are
+   different populations. Stars measure popularity with developers as an
+   audience, not the health or activity of a software project. Any study using
+   stars as a proxy for "important OSS" will include ~15-30% non-software repos
+   unless explicitly filtered. This filtering decision should be documented
+   because it materially affects results (our merge rate changed from 65% to
+   67% after excluding non-code repos).
