@@ -210,9 +210,25 @@ The productivity gains of AI tools are concentrated in those who already had exp
 
 <img src="output/figures/ai_07_productivity_by_group.svg" width="100%">
 
-**Summary of the AI effect:** The data tells a nuanced story with a clear lag. The effects were not visible at model launches (Copilot, ChatGPT); they emerged 2-3 years later as agentic coding tools (Cursor, Claude Code, Codex) reached mainstream adoption. By 2025-2026: more people are contributing than ever, including more first-timers in absolute numbers. But PRs are 10x larger, and the merge rate gap between maintainers and newcomers has widened dramatically (79% vs 33%). AI tools amplified productivity for experts while raising the quality bar that newcomers must clear.
+**5i. Did better tools mean better merges?** We expected agentic coding tools (Cursor, Claude Code, Codex) to *improve* merge rates compared to simpler tools (Copilot, ChatGPT). The data says the opposite.
 
-#### 5h. Counterfactual: What Would Have Happened Without AI?
+| Era | Tool | Merge rate | First-timer merge | PRs/month |
+|-----|------|-----------|-------------------|-----------|
+| Pre-Copilot | None | 66.7% | 47.6% | 726 |
+| Jun 2022 - Feb 2023 | Copilot | 68.9% | 45.9% | 1,611 |
+| Mar 2023 - Feb 2024 | ChatGPT / GPT-4 | 70.0% | 43.0% | 1,268 |
+| Mar 2024 - Jan 2025 | Cursor | 72.9% | 44.7% | 1,655 |
+| Feb 2025+ | Claude Code / Codex | **57.4%** | **27.5%** | **2,497** |
+
+During the Copilot and Cursor eras, merge rates actually *improved* (67% to 73%). But when agentic tools reached mainstream adoption in 2025, merge rates collapsed to 57% overall and 28% for first-timers, even though PR volume nearly doubled.
+
+We verified this is not a dataset artifact: comparing the same 70 repos present in both eras, merge rate still dropped from 73% to 61%.
+
+The pattern suggests that more powerful AI tools make it easier to *generate and submit* code, but don't proportionally improve the *quality* of that code relative to maintainer expectations. The gap between what AI can produce and what maintainers will accept may be widening, not closing.
+
+**Summary of the AI effect:** The story has three acts. First (2022-2024), autocomplete-style AI (Copilot, ChatGPT) modestly boosted productivity while merge rates held steady or improved. Second (2024-2025), AI-assisted editors (Cursor) maintained that balance. Third (2025+), fully agentic tools (Claude Code, Codex) unleashed a volume surge (+50% PRs) that overwhelmed the quality bar: merge rates dropped 15 points and first-timer acceptance fell to 28%. The tools that were supposed to democratize open source may instead be flooding it with contributions that don't meet the standard.
+
+#### 5j. Counterfactual: What Would Have Happened Without AI?
 
 We trained forecasting models (ETS) on pre-Copilot data only (2016 to May 2022), then predicted what the next 4 years would have looked like if the pre-AI trend had simply continued. The dashed red line is the "no AI" prediction; the solid blue is what actually happened.
 
