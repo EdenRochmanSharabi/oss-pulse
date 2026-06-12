@@ -1,6 +1,6 @@
 # oss-pulse
 
-**A time-series study of 156,000 Pull Requests across 82 top open-source GitHub projects (2016-2026).**
+**A time-series study of 142,000 Pull Requests across 62 top open-source software projects (2016-2026).**
 
 Open source runs the world, but how does it actually work? Who contributes, how fast do projects respond, and what happens to the thousands of developers who open their first PR? This study analyzes a decade of Pull Request activity to find out.
 
@@ -24,7 +24,7 @@ This project started with a simple question: if you had 10 years of Pull Request
 
 The answer turned out to be more interesting, and harder to get, than expected.
 
-We analyzed **155,962 Pull Requests** across **82 repositories**, spanning from January 2016 to June 2026. The dataset includes projects like Linux, React, PyTorch, Rust, Godot, Home Assistant, Playwright, and dozens more, covering languages from Python to Go to Rust.
+We analyzed **155,962 Pull Requests** across **62 software repositories**, spanning from January 2016 to June 2026. The dataset includes projects like Linux, React, PyTorch, Rust, Godot, Home Assistant, Playwright, and dozens more, covering languages from Python to Go to Rust.
 
 The analysis goes beyond descriptive statistics. We decompose time series into trend, seasonality, and residuals. We benchmark four forecasting models. We build a composite health index. We use survival analysis to model PR lifetimes. And we let an unsupervised changepoint detection algorithm tell us whether AI tools actually changed anything, without assuming the answer.
 
@@ -43,6 +43,8 @@ The analysis goes beyond descriptive statistics. We decompose time series into t
 - Author: username, classification (first-timer / regular / maintainer / bot)
 - Size: additions, deletions, changed files
 - Outcome: merged, closed without merge, abandoned (open > 90 days without activity), still open
+
+**Non-code repos excluded:** The top-200-by-stars list included awesome-lists, interview prep repos, book collections, and other non-software projects. We excluded 20 repos with no programming language (language=None or Markdown), reducing from 82 to 62 repos. These non-code repos have different PR dynamics (curation vs engineering) that would distort the analysis.
 
 **Bot detection:** 20 known bot patterns (dependabot, renovate, github-actions, codecov, etc.) plus any username containing `[bot]`. Bots represent ~7% of PRs in our dataset.
 
@@ -68,7 +70,7 @@ Getting the data was the hardest part of this project. We document our failures 
 
 **Attempt 2: GitHub GraphQL API.** Free and unlimited (within rate limits), but paginating through large repos proved unstable. GitHub returns 502 errors after ~200-300 consecutive requests to the same repository. Our first overnight run extracted 4 repos in 9 hours. The estimate had been 3-4 hours for all 200.
 
-**What worked:** Sorting repos by size (smallest first), adding 1-second delays between API pages, and deferring the 4 largest repos (>30k events each) for later. This let us extract 82 repos reliably. Per-repo parquet caching means the process is resumable; if it crashes, we restart without re-downloading completed repos.
+**What worked:** Sorting repos by size (smallest first), adding 1-second delays between API pages, and deferring the 4 largest repos (>30k events each) for later. This let us extract 62 software repos reliably. Per-repo parquet caching means the process is resumable; if it crashes, we restart without re-downloading completed repos.
 
 **What we learned:** BigQuery scans entire tables even when your query filters to 0.1% of the rows. "Free tier: 1TB" is less than it sounds. GitHub's API rate limits (5,000/hour) were never the bottleneck; stability was. And always start with the easy wins: 196 small repos downloaded cleanly while 4 mega-repos caused all the errors.
 
@@ -89,14 +91,14 @@ See `docs/process_log.md` for the complete project diary.
 
 ---
 
-## General Findings (First Draft, 82 repos)
+## General Findings (First Draft, 62 software repos)
 
-*These findings are based on the first 82 repos extracted. They will be updated when the full 200-repo dataset is available.*
+*These findings are based on the first 62 software repos extracted. They will be updated when the full 200-repo dataset is available.*
 
 ### The Dataset at a Glance
 
-- **155,962 PRs** across **82 repos**, spanning **2016-2026**
-- **46,302 unique contributors** (excluding bots)
+- **142,343 PRs** across **62 software repos**, spanning **2016-2026**
+- **37,795 unique contributors** (excluding bots)
 - Outcome distribution: **65% merged**, 33% closed, 1.4% abandoned, 1.4% still open
 - Author distribution: 49% maintainers, 23% regulars, 22% first-timers, 7% bots
 
@@ -350,7 +352,7 @@ The result reveals that **language is a weak signal for repo similarity**. The r
 - `fastapi` (Python) and `airbnb/javascript` (JavaScript) are neighbors: same web-developer community
 - `code-server` (TypeScript) and `rustdesk` (Rust) cluster together: remote-access tool users
 - `karpathy/autoresearch` (Python) and `papers-we-love` (Shell) are close: ML research community
-- 69 of 82 repos form one massive supercluster of "generalist GitHub participants" who star and browse across all languages
+- 69 of 62 software repos form one massive supercluster of "generalist GitHub participants" who star and browse across all languages
 
 The contributor overlap graph exposes communities of practice that language tags hide.
 
@@ -409,7 +411,7 @@ We trained a Random Forest on 33,389 first-timer PRs to predict which will get m
 
 ## What's Next
 
-This is a first draft based on 156 of 200 targeted repos. The extraction is running and will complete soon. Planned updates:
+This is a first draft based on 62 of 200 targeted repos. The extraction is running and will complete soon. Planned updates:
 
 - **Re-run all analyses** with the full 200-repo dataset
 - **Comparative by organization type**: company-backed vs community vs foundation
