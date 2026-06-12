@@ -387,23 +387,28 @@ We trained a Random Forest on 33,389 first-timer PRs to predict which will get m
 
 <img src="output/figures/firsttimer_success_features.svg" width="100%">
 
-**The ranking: best and worst repos for first-timers**
+**Important caveat**: Many top-by-stars repos are educational resources, curated lists, or study material, not real software projects. Their high first-timer merge rates reflect easy contributions (adding links, fixing typos), not welcoming engineering cultures. We separate the two:
+
+**Real software projects (ranked by first-timer merge rate):**
 
 | Repo | Language | First-timer merge rate | First-timer PRs |
 |------|----------|----------------------|-----------------|
-| swisskyrepo/PayloadsAllTheThings | Python | **66%** | 288 |
-| goldbergyoni/nodebestpractices | Dockerfile | **66%** | 232 |
 | coder/code-server | TypeScript | **59%** | 285 |
-| doocs/advanced-java | Java | **59%** | 39 |
-| nilbuild/developer-roadmap | TypeScript | **57%** | 1,620 |
+| puppeteer/puppeteer | TypeScript | **54%** | 538 |
+| microsoft/playwright | TypeScript | **54%** | 782 |
+| realworld-apps/realworld | TypeScript | **50%** | 94 |
+| nvm-sh/nvm | Shell | **50%** | 369 |
+| junegunn/fzf | Go | **46%** | 399 |
+| axios/axios | JavaScript | **42%** | 960 |
+| OpenHands/OpenHands | Python | **42%** | 507 |
+| syncthing/syncthing | Go | **41%** | 275 |
 | ... | | | |
-| macrozheng/mall | Java | **0%** | 95 |
-| karpathy/autoresearch | Python | **2%** | 178 |
-| TauricResearch/TradingAgents | Python | **4%** | 305 |
+| laravel/laravel | Blade | **19%** | 1,301 |
+| deepseek-ai/DeepSeek-V3 | Python | **9%** | 126 |
 
-<img src="output/figures/firsttimer_best_repos.svg" width="100%">
+The best real software repos for first-timers are TypeScript projects (code-server, puppeteer, playwright) with merge rates around 54-59%. The worst are large established frameworks (laravel 19%) and ML research repos (DeepSeek 9%) where the contribution bar is high.
 
-**The decision tree distilled**: Choose a repo with a >60% merge rate. Keep your PR under 23 lines of additions. That's it. Language, stars, and community size are secondary. The project's culture of acceptance matters more than anything about your code.
+**The decision tree distilled**: For real software projects, the merge rate ceiling is lower (59% vs 87% for resource repos). Choose a project with >40% overall merge rate. Keep your PR under 23 lines. TypeScript projects are the most welcoming ecosystem for newcomers.
 
 <img src="output/figures/firsttimer_decision_tree.png" width="100%">
 
