@@ -375,6 +375,36 @@ The GA nearly doubled the weight on response time (25% to 49%) and eliminated tr
 <img src="output/figures/ga_weights_comparison.svg" width="100%">
 <img src="output/figures/ga_convergence.svg" width="100%">
 
+### 15. Where Should You Submit Your First PR?
+
+We trained a Random Forest on 33,389 first-timer PRs to predict which will get merged. The model (AUC=0.761) reveals what matters most:
+
+1. **The repo's overall merge rate** (29% importance): the single strongest predictor. If a repo merges 60%+ of all PRs, first-timers have a chance. Below 30%, almost no first-timer gets through.
+2. **PR size** (additions 23% + deletions 13%): keep it small. The decision tree's clearest rule: PRs with fewer than 23 lines of additions in repos with >59% merge rate have the best odds.
+3. **Community size and response time** matter but less than expected.
+
+<img src="output/figures/firsttimer_success_features.svg" width="100%">
+
+**The ranking: best and worst repos for first-timers**
+
+| Repo | First-timer merge rate | First-timer PRs |
+|------|----------------------|-----------------|
+| papers-we-love/papers-we-love | **87%** | 138 |
+| jaywcjlove/awesome-mac | **74%** | 736 |
+| Snailclimb/JavaGuide | **74%** | 618 |
+| Developer-Y/cs-video-courses | **74%** | 118 |
+| yangshun/tech-interview-handbook | **72%** | 149 |
+| ... | | |
+| macrozheng/mall | **0%** | 95 |
+| karpathy/autoresearch | **2%** | 178 |
+| TauricResearch/TradingAgents | **4%** | 305 |
+
+<img src="output/figures/firsttimer_best_repos.svg" width="100%">
+
+**The decision tree distilled**: Choose a repo with a >60% merge rate. Keep your PR under 23 lines of additions. That's it. Language, stars, and community size are secondary. The project's culture of acceptance matters more than anything about your code.
+
+<img src="output/figures/firsttimer_decision_tree.png" width="100%">
+
 ---
 
 ## What's Next
