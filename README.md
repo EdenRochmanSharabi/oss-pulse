@@ -284,17 +284,55 @@ This has implications for contributor retention (Finding #4): if first-timers wa
 
 <img src="output/figures/08_survival_by_author_type.png" width="100%">
 
+### 8. The Hacktoberfest Effect
+
+October is Hacktoberfest month, when contributors are incentivized to open PRs. The effect is real and massive: October PR volume spikes up to **+260%** above the monthly average (2022). But the merge rate in October is consistently **lower** than other months, suggesting many Hacktoberfest PRs don't meet the quality bar.
+
+The spike peaked in 2022 and has moderated since, possibly reflecting the 2020 rule change requiring repos to opt-in and the general increase in baseline PR volume.
+
+<img src="output/figures/hacktoberfest_effect.svg" width="100%">
+
+### 9. How Do Language Ecosystems Compare?
+
+Not all open-source communities behave the same. Comparing merge rates and response times across programming languages reveals significant differences (Kruskal-Wallis H=264.2, p<0.0001).
+
+**TypeScript** projects have the highest merge rate (78.5%), while **Python** and **JavaScript** hover around 50%. This may reflect different community cultures, project maturity distributions, or the types of contributions each ecosystem attracts.
+
+<img src="output/figures/comparative_merge_by_language.svg" width="100%">
+<img src="output/figures/comparative_mergetime_by_language.svg" width="100%">
+
+### 10. What Predicts PR Abandonment?
+
+We trained Random Forest and XGBoost classifiers to predict which PRs will be abandoned (open >90 days without activity). The most important feature by far is **author type**: maintainer PRs almost never get abandoned, while first-timer PRs are at highest risk.
+
+PR size matters less than expected. The model achieves AUC=0.736, meaning author history is a moderate but meaningful predictor of whether a PR will be left to die.
+
+<img src="output/figures/abandonment_feature_importance.svg" width="100%">
+
+### 11. Forecasting: Which Model Predicts PR Volume Best?
+
+We benchmarked four time-series models on the aggregate monthly PR volume (80/20 temporal split):
+
+| Model | MAE | RMSE | MAPE |
+|-------|-----|------|------|
+| **ETS** | **550** | **991** | **17.7%** |
+| Prophet | 648 | 1,050 | 22.5% |
+| ARIMA | 829 | 1,235 | 30.2% |
+| XGBoost | 1,012 | 1,393 | 38.1% |
+
+ETS (Exponential Smoothing) wins with 17.7% MAPE. Prophet is a close second. The traditional ARIMA and ML-based XGBoost perform worse on this data, likely because the series has strong trend and seasonality that ETS handles natively.
+
+<img src="output/figures/forecast_benchmark.svg" width="100%">
+
 ---
 
 ## What's Next
 
-This is a first draft based on 82 of 200 targeted repos. Planned next steps:
+This is a first draft based on 156 of 200 targeted repos. The extraction is running and will complete soon. Planned updates:
 
-- **Complete extraction** for all 200 repos (extraction is running)
-- **Forecasting benchmark**: ARIMA vs Prophet vs ETS vs XGBoost on PR volume prediction
-- **Comparative analysis**: statistical tests (Kruskal-Wallis, Mann-Whitney) comparing ecosystems by language, organization type, and project size
-- **Abandonment classifier**: Random Forest and XGBoost models predicting which PRs will be abandoned, with feature importance analysis
-- **Event correlation**: Hacktoberfest effect, conference dates, major releases
+- **Re-run all analyses** with the full 200-repo dataset
+- **Comparative by organization type**: company-backed vs community vs foundation
+- **Cross-correlation**: do repos that respond faster retain more contributors?
 
 ---
 
