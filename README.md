@@ -426,6 +426,21 @@ This is a first draft based on 52 of 200 targeted repos. The extraction is runni
 
 ---
 
+## Limitations
+
+**GitHub PRs are not all of open source.** This study only captures projects that use GitHub Pull Requests as their contribution mechanism. Some of the most important open-source projects in history are invisible to this analysis:
+
+- **Linux kernel** (torvalds/linux): 0 PRs on GitHub. Development happens via email patches on the Linux Kernel Mailing List (LKML). Reviews are done by email. Merges are `git pull` commands, not GitHub PRs. The GitHub repo is a read-only mirror.
+- **Git** itself, **FFmpeg**, **QEMU**, and other foundational projects use similar mailing-list workflows.
+
+A study based on GitHub PRs inherently measures "GitHub-native open source," not all open source. Projects that predate GitHub or chose to resist its workflow are excluded by design. This biases the dataset toward newer, web-era projects and away from systems-level infrastructure.
+
+**Stars as a proxy for importance.** Our repo selection used GitHub stars, which measures developer audience, not software impact. ~30% of the top-200 by stars were curated lists, interview prep, and educational resources, not software projects. We filtered these out, but the remaining repos are still biased toward projects that are popular on social media rather than critical infrastructure.
+
+**Snapshot in time.** This analysis was run in June 2026. The AI-era findings (especially 2025-2026 data) may reflect early adoption patterns that will stabilize as tools mature.
+
+---
+
 ## Reproducibility
 
 ### Setup
