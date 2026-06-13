@@ -435,7 +435,7 @@ This is a first draft based on 52 of 200 targeted repos. The extraction is runni
 
 A study based on GitHub PRs inherently measures "GitHub-native open source," not all open source. Projects that predate GitHub or chose to resist its workflow are excluded by design. This biases the dataset toward newer, web-era projects and away from systems-level infrastructure.
 
-**Stars as a proxy for importance.** Our repo selection used GitHub stars, which measures developer audience, not software impact. ~30% of the top-200 by stars were curated lists, interview prep, and educational resources, not software projects. We filtered these out, but the remaining repos are still biased toward projects that are popular on social media rather than critical infrastructure.
+**Stars as a selection criterion.** We selected repos by GitHub stars, which is the best available proxy for "widely known open-source projects" but not a perfect one. Stars measure developer audience: how many people found a project interesting enough to bookmark. This correlates with but is not identical to software importance. ~30% of the top-200 by stars were curated lists and educational resources, not software projects. We filtered these out, but the remaining dataset is still biased toward projects with high visibility rather than critical infrastructure that runs quietly (e.g., OpenSSL has far fewer stars than many tutorial repos).
 
 **Snapshot in time.** This analysis was run in June 2026. The AI-era findings (especially 2025-2026 data) may reflect early adoption patterns that will stabilize as tools mature.
 
