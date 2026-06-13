@@ -221,8 +221,11 @@ without a cleaning step.
 | 19:00 | Retry running. Small/medium repos downloading fine. |
 | 22:00 | Pattern clear: 6 mega-repos (freeCodeCamp 45k, openclaw 50k, tensorflow 76k, kubernetes 90k, next.js 37k, langflow 10k) fail every time. They exhaust 10 retries at the same point (~200-300 pages in). |
 | 08:45 | electron (28k PRs) completed. vscode (59k) completed earlier. But the 6 mega-repos keep failing round after round. |
-| 09:00 | **Third extraction approach**: chunk by year. Instead of paginating 45k PRs in one session, make 11 separate queries (2016, 2017, ..., 2026). Each chunk is ~2k-8k PRs, well within GitHub's stability window. |
-| 09:01 | freeCodeCamp 2016 (1,972 PRs) downloaded in 3 minutes. 2017 (1,053 PRs) in 2 minutes. The approach works. |
+| 09:00 | **Third approach**: chunk by year with GraphQL. Early years (2016-2018) work. |
+| 09:01 | freeCodeCamp 2016 (1,972 PRs) in 3 min. 2017 (1,053) in 2 min. Looks promising. |
+| 14:30 | But 2024 takes 5+ hours: GraphQL has no date filter, paginates from first PR ever. 450 empty pages before reaching 2024 data. |
+| 14:47 | **Fourth approach**: REST Search API with `created:YYYY-MM-DD..YYYY-MM-DD`. |
+| 14:50 | freeCodeCamp 2024 (3,613 PRs) downloaded in **2.5 minutes**. 100x faster. Should have used this from the start. |
 
 ### Three Attempts at Data Extraction
 
@@ -241,19 +244,53 @@ consecutive paginated requests to the same repository. This is not
 documented; we discovered it empirically. Of 200 repos, 163 downloaded
 successfully. 37 failed, all with >10k PRs.
 
-**Attempt 3: Year-chunked extraction (solved the problem)**
-Instead of paginating through 45,000 PRs in one session, we split each
-mega-repo into 11 separate queries by year (2016-2026). Each chunk
-contains 1k-8k PRs, well within GitHub's stability window. The chunks
-are cached independently, so a failure in one year doesn't lose the others.
+**Attempt 3: Year-chunked GraphQL (wrong assumption)**
+The idea was sound: split each mega-repo into 11 queries by year to
+reduce the load per request. But we discovered that GitHub's GraphQL
+`pullRequests` endpoint has no date filter. It always paginates from
+the first PR ever created, regardless of what year you want. To get
+2024 data for freeCodeCamp, the query had to paginate through 450
+pages of 2016-2023 PRs first (all returning 0 results), burning
+API calls and hitting 502s before reaching the target year.
 
-This is the approach that finally worked for freeCodeCamp (45k PRs),
-vscode (59k PRs), kubernetes (90k PRs), and other mega-repos that the
-flat pagination approach couldn't handle.
+freeCodeCamp 2024 took 5+ hours with this approach and still failed.
+The method worked for early years (2016-2018) where few pages precede
+the target, but became increasingly wasteful for recent years.
 
-**The lesson**: When an API is unstable under sustained load, don't
-retry harder. Reduce the load per request. The total data is the same,
-but the access pattern determines success or failure.
+**Attempt 4: REST Search API (the solution we should have used first)**
+GitHub's REST Search API supports `created:YYYY-MM-DD..YYYY-MM-DD`
+natively. One query returns exactly the PRs in a date range, no
+pagination through irrelevant data. For years with >1000 PRs (the
+Search API limit), we split by month.
+
+freeCodeCamp 2024 (3,613 PRs): **2.5 minutes** with Search API vs
+**5+ hours** (and failing) with GraphQL year-chunking. The same data,
+the same year, 100x faster.
+
+We should have used this from the start. The mistake was assuming
+GraphQL was superior for everything because it's more flexible and
+returns more fields per request. For bulk historical extraction with
+date filtering, the simpler REST Search API is dramatically better.
+
+**The lessons:**
+1. The most powerful API is not always the best for your use case.
+   GraphQL is great for rich, targeted queries. REST Search is great
+   for filtered bulk extraction. We wasted two days learning this.
+2. When you hit a wall, question your assumptions about the tool,
+   not just the parameters. We kept tweaking retry logic and chunk
+   sizes when the real problem was the API choice itself.
+3. Read the docs for ALL available endpoints before committing to one.
+   The Search API docs clearly show date filtering. We never looked
+   because GraphQL seemed sufficient.
+
+8. **Linux has zero PRs**: torvalds/linux returned an empty parquet.
+   Not a bug: Linux doesn't use GitHub PRs. Patches go via LKML
+   (mailing list), reviewed by email, merged via `git pull`. The
+   GitHub repo is a read-only mirror. This means the most important
+   open-source project in history is invisible to any GitHub PR analysis.
+   Same for Git itself, FFmpeg, QEMU, and other pre-GitHub projects.
+   Our methodology has a structural blind spot for mailing-list-based
+   development. Documented as a limitation.
 
 ## Observations Log (for re-analysis with full 200 repos)
 
