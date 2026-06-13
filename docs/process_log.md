@@ -214,6 +214,46 @@ without a cleaning step.
 | 12:00 | First-timer success predictor with repo ranking. |
 | 13:00 | Discovered top-by-stars includes ~30% non-software repos. Excluded in two waves. |
 | 13:30 | 52 software repos, 119k PRs. All analyses updated. |
+| --- | **Day 3-4 (2026-06-12/13): The Mega-Repo Problem** |
+| 17:00 | First extraction pass completed: 163/200 repos, 853k PRs. |
+| 17:30 | 37 repos missing. Launched retry_until_done.py (loop until all done). |
+| 18:40 | DNS resolver broken in macOS. Python/curl couldn't resolve github.com but nslookup could. Fix: added IP to /etc/hosts manually. |
+| 19:00 | Retry running. Small/medium repos downloading fine. |
+| 22:00 | Pattern clear: 6 mega-repos (freeCodeCamp 45k, openclaw 50k, tensorflow 76k, kubernetes 90k, next.js 37k, langflow 10k) fail every time. They exhaust 10 retries at the same point (~200-300 pages in). |
+| 08:45 | electron (28k PRs) completed. vscode (59k) completed earlier. But the 6 mega-repos keep failing round after round. |
+| 09:00 | **Third extraction approach**: chunk by year. Instead of paginating 45k PRs in one session, make 11 separate queries (2016, 2017, ..., 2026). Each chunk is ~2k-8k PRs, well within GitHub's stability window. |
+| 09:01 | freeCodeCamp 2016 (1,972 PRs) downloaded in 3 minutes. 2017 (1,053 PRs) in 2 minutes. The approach works. |
+
+### Three Attempts at Data Extraction
+
+This project required three different extraction strategies, each one a
+response to a limitation discovered in the previous:
+
+**Attempt 1: BigQuery (failed in minutes)**
+GH Archive on BigQuery can scan a decade of GitHub data in seconds. But
+it scans entire daily tables (~5GB each) even when filtering to 200 repos.
+One year consumed our entire 1TB/month free quota. Cost to complete: $90.
+
+**Attempt 2: GitHub GraphQL API with pagination (partially succeeded)**
+Free and unlimited within rate limits. Works perfectly for repos with
+<20k PRs. But GitHub's GraphQL backend returns 502 errors after ~200-300
+consecutive paginated requests to the same repository. This is not
+documented; we discovered it empirically. Of 200 repos, 163 downloaded
+successfully. 37 failed, all with >10k PRs.
+
+**Attempt 3: Year-chunked extraction (solved the problem)**
+Instead of paginating through 45,000 PRs in one session, we split each
+mega-repo into 11 separate queries by year (2016-2026). Each chunk
+contains 1k-8k PRs, well within GitHub's stability window. The chunks
+are cached independently, so a failure in one year doesn't lose the others.
+
+This is the approach that finally worked for freeCodeCamp (45k PRs),
+vscode (59k PRs), kubernetes (90k PRs), and other mega-repos that the
+flat pagination approach couldn't handle.
+
+**The lesson**: When an API is unstable under sustained load, don't
+retry harder. Reduce the load per request. The total data is the same,
+but the access pattern determines success or failure.
 
 ## Observations Log (for re-analysis with full 200 repos)
 

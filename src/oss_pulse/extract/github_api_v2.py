@@ -88,7 +88,7 @@ def _run_query(
     query: str,
     variables: dict[str, Any],
     token: str,
-    max_retries: int = 5,
+    max_retries: int = 10,
 ) -> dict[str, Any]:
     headers = {"Authorization": f"bearer {token}"}
     for attempt in range(max_retries):
@@ -97,10 +97,10 @@ def _run_query(
                 GRAPHQL_URL,
                 json={"query": query, "variables": variables},
                 headers=headers,
-                timeout=30,
+                timeout=60,
             )
-            if resp.status_code in (502, 503, 429):
-                wait = 2 ** (attempt + 1)
+            if resp.status_code in (502, 503, 504, 429):
+                wait = min(2 ** (attempt + 1), 120)
                 _log(
                     f"  HTTP {resp.status_code}, retry "
                     f"{attempt + 1}/{max_retries} in {wait}s"
@@ -113,8 +113,11 @@ def _run_query(
                 msg = str(data["errors"])
                 raise RuntimeError(msg)
             return data
-        except requests.exceptions.ConnectionError:
-            wait = 2 ** (attempt + 1)
+        except (
+            requests.exceptions.ConnectionError,
+            requests.exceptions.ChunkedEncodingError,
+        ):
+            wait = min(2 ** (attempt + 1), 120)
             _log(f"  Connection error, retry {attempt + 1}/{max_retries} in {wait}s")
             time.sleep(wait)
     msg = f"Failed after {max_retries} retries"
@@ -158,7 +161,7 @@ def extract_repo_prs(
             _log(f"  Rate limit low ({remaining}), sleeping 60s (resets {reset_at})")
             time.sleep(60)
 
-        time.sleep(1.0)
+        time.sleep(2.0)
 
         for node in prs["nodes"]:
             created = node["createdAt"]

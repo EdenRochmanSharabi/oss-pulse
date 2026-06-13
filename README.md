@@ -70,9 +70,11 @@ Getting the data was the hardest part of this project. We document our failures 
 
 **Attempt 2: GitHub GraphQL API.** Free and unlimited (within rate limits), but paginating through large repos proved unstable. GitHub returns 502 errors after ~200-300 consecutive requests to the same repository. Our first overnight run extracted 4 repos in 9 hours. The estimate had been 3-4 hours for all 200.
 
-**What worked:** Sorting repos by size (smallest first), adding 1-second delays between API pages, and deferring the 4 largest repos (>30k events each) for later. This let us extract 52 software repos reliably. Per-repo parquet caching means the process is resumable; if it crashes, we restart without re-downloading completed repos.
+**What worked for most repos:** Sorting by size (smallest first), adding 1-second delays between pages, and per-repo parquet caching for resumability. This extracted 163 of 200 repos (853k PRs). But 6 mega-repos (freeCodeCamp 45k PRs, kubernetes 90k, vscode 59k, tensorflow 76k, next.js 37k) failed every time, exhausting all retries at the ~200-300 page mark.
 
-**What we learned:** BigQuery scans entire tables even when your query filters to 0.1% of the rows. "Free tier: 1TB" is less than it sounds. GitHub's API rate limits (5,000/hour) were never the bottleneck; stability was. And always start with the easy wins: 196 small repos downloaded cleanly while 4 mega-repos caused all the errors.
+**Attempt 3: Year-chunked extraction.** Instead of paginating through 45,000 PRs in one session, we split each mega-repo into 11 separate queries by year (2016-2026). Each chunk contains 1k-8k PRs, well within GitHub's stability window. Chunks are cached independently, so a failure in one year doesn't lose the others. This is what finally cracked repos like freeCodeCamp and vscode.
+
+**What we learned:** When an API is unstable under sustained load, don't retry harder; reduce the load per request. BigQuery scans entire tables even when filtering to 0.1% of rows. GitHub's rate limits (5,000/hour) were never the bottleneck; stability was. And "top repos by stars" is not the same as "top software projects" (30% of the list were curated resource pages, not code).
 
 See `docs/process_log.md` for the complete project diary.
 
