@@ -12,14 +12,24 @@
     "abandoned_rate": 1.7,
     "open_rate": 1.3
   },
+  "author_distribution": {
+    "maintainer_pct": 72.0,
+    "regular_pct": 15.0,
+    "firsttimer_pct": 7.0,
+    "bot_pct": 6.0
+  },
+  "bot_stats": {
+    "bot_pct": 6.0,
+    "ghost_pct": 0.5
+  },
   "merge_time": {
     "median_hours": 15.3
   },
   "funnel": {
     "total": 329142,
-    "2nd_pr": 136867,
+    "2nd_pr": 136868,
     "2nd_pr_pct": 41.6,
-    "5th_pr": 45448,
+    "5th_pr": 45449,
     "5th_pr_pct": 13.8,
     "regular": 11289,
     "regular_pct": 3.4,
@@ -30,42 +40,60 @@
       "contributors_per_month": 4429,
       "firsttimers_per_month": 1031,
       "ft_rejection_rate": 51.8,
+      "overall_rejection_rate": 30.9,
       "merge_rate": 69.1,
+      "median_pr_size_adds_gt0": 10,
+      "prs_per_author_month": 2.82,
       "prs_per_month": 12561
     },
     "2020_2021": {
       "contributors_per_month": 5192,
       "firsttimers_per_month": 1169,
       "ft_rejection_rate": 53.5,
+      "overall_rejection_rate": 29.1,
       "merge_rate": 70.9,
+      "median_pr_size_adds_gt0": 17,
+      "prs_per_author_month": 3.23,
       "prs_per_month": 16702
     },
     "2022_copilot": {
       "contributors_per_month": 5420,
       "firsttimers_per_month": 1222,
       "ft_rejection_rate": 55.7,
+      "overall_rejection_rate": 28.4,
       "merge_rate": 71.6,
+      "median_pr_size_adds_gt0": 16,
+      "prs_per_author_month": 3.48,
       "prs_per_month": 18868
     },
     "2023_chatgpt": {
       "contributors_per_month": 6687,
       "firsttimers_per_month": 1700,
       "ft_rejection_rate": 58.3,
+      "overall_rejection_rate": 27.6,
       "merge_rate": 72.4,
+      "median_pr_size_adds_gt0": 16,
+      "prs_per_author_month": 3.55,
       "prs_per_month": 23736
     },
     "2024_cursor": {
       "contributors_per_month": 7244,
       "firsttimers_per_month": 1775,
       "ft_rejection_rate": 58.6,
+      "overall_rejection_rate": 27.1,
       "merge_rate": 72.9,
+      "median_pr_size_adds_gt0": 19,
+      "prs_per_author_month": 3.78,
       "prs_per_month": 27388
     },
     "2025_agentic": {
       "contributors_per_month": 10608,
       "firsttimers_per_month": 3165,
       "ft_rejection_rate": 64.5,
+      "overall_rejection_rate": 34.8,
       "merge_rate": 60.1,
+      "median_pr_size_adds_gt0": 37,
+      "prs_per_author_month": 3.76,
       "prs_per_month": 39931
     }
   },
@@ -95,6 +123,88 @@
       "ft_merge_rate": 22.7,
       "prs_per_month": 40635
     }
+  },
+  "author_groups": {
+    "2016": {
+      "maintainer": {
+        "prs_per_person_month": 5.2,
+        "merge_rate_pct": 75
+      },
+      "regular": {
+        "prs_per_person_month": 1.5,
+        "merge_rate_pct": 55
+      },
+      "first-timer": {
+        "prs_per_person_month": 1.0,
+        "merge_rate_pct": 48
+      }
+    },
+    "2025": {
+      "maintainer": {
+        "prs_per_person_month": 7.9,
+        "merge_rate_pct": 70
+      },
+      "regular": {
+        "prs_per_person_month": 1.7,
+        "merge_rate_pct": 31
+      },
+      "first-timer": {
+        "prs_per_person_month": 1.0,
+        "merge_rate_pct": 23
+      }
+    }
+  },
+  "hacktoberfest": {
+    "max_spike_pct": 153,
+    "max_spike_year": 2018,
+    "by_year": {
+      "2016": 9.0,
+      "2017": 16.0,
+      "2018": 153.0,
+      "2019": 32.0,
+      "2020": 22.0,
+      "2021": 25.0,
+      "2022": 37.0,
+      "2023": 23.0,
+      "2024": 13.0,
+      "2025": 17.0
+    }
+  },
+  "firsttimer_model": {
+    "total_ft_prs": 187872
+  },
+  "mega_repos": {
+    "freeCodeCamp": 43932,
+    "kubernetes": 76669,
+    "vscode": 58206,
+    "tensorflow": 50605,
+    "next_js": 37199
+  },
+  "forecasting": {
+    "ETS": {
+      "mae": 5707,
+      "rmse": 11002,
+      "mape": 10.7
+    },
+    "Prophet": {
+      "mae": 8082,
+      "rmse": 10720,
+      "mape": 18.7
+    },
+    "ARIMA": {
+      "mae": 10453,
+      "rmse": 16811,
+      "mape": 20.9
+    },
+    "XGBoost": {
+      "mae": 10650,
+      "rmse": 17147,
+      "mape": 20.8
+    }
+  },
+  "repo_embeddings": {
+    "supercluster_count": 324,
+    "total_repos": 341
   },
   "languages": {
     "top_merge_rate_lang": "C#",
