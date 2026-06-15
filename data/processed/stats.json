@@ -1,0 +1,107 @@
+{
+  "dataset": {
+    "total_prs": 2563121,
+    "n_repos": 330,
+    "n_contributors": 309546,
+    "date_from": "2016-01-01",
+    "date_to": "2026-06-01"
+  },
+  "outcomes": {
+    "merge_rate": 66.9,
+    "closed_rate": 30.0,
+    "abandoned_rate": 1.7,
+    "open_rate": 1.4
+  },
+  "author_types": {
+    "maintainer_pct": 72,
+    "regular_pct": 15,
+    "firsttimer_pct": 7,
+    "bot_pct": 6
+  },
+  "merge_time": {
+    "median_hours": 14.5,
+    "p95_hours": 862
+  },
+  "funnel": {
+    "total": 309546,
+    "2nd_pr": 127723,
+    "2nd_pr_pct": 41.3,
+    "5th_pr": 42491,
+    "5th_pr_pct": 13.7,
+    "10th_pr": 19724,
+    "regular": 10777,
+    "regular_pct": 3.5,
+    "dropout_1st_pct": 59
+  },
+  "ai_eras": {
+    "2016_2019": {
+      "contributors_per_month": 3994,
+      "firsttimers_per_month": 942,
+      "ft_rejection_rate": 55.5,
+      "merge_rate": 68.2,
+      "prs_per_month": 11803
+    },
+    "2020_2021": {
+      "contributors_per_month": 4750,
+      "firsttimers_per_month": 1071,
+      "ft_rejection_rate": 56.8,
+      "merge_rate": 70.0,
+      "prs_per_month": 15717
+    },
+    "2022_copilot": {
+      "contributors_per_month": 5052,
+      "firsttimers_per_month": 1140,
+      "ft_rejection_rate": 58.2,
+      "merge_rate": 71.0,
+      "prs_per_month": 17973
+    },
+    "2023_chatgpt": {
+      "contributors_per_month": 6344,
+      "firsttimers_per_month": 1627,
+      "ft_rejection_rate": 59.8,
+      "merge_rate": 71.7,
+      "prs_per_month": 22624
+    },
+    "2024_cursor": {
+      "contributors_per_month": 6922,
+      "firsttimers_per_month": 1711,
+      "ft_rejection_rate": 59.7,
+      "merge_rate": 72.3,
+      "prs_per_month": 26260
+    },
+    "2025_agentic": {
+      "contributors_per_month": 10295,
+      "firsttimers_per_month": 3102,
+      "ft_rejection_rate": 64.7,
+      "merge_rate": 59.6,
+      "prs_per_month": 38703
+    }
+  },
+  "tool_eras": {
+    "pre_copilot": {
+      "merge_rate": 69.3,
+      "ft_merge_rate": 44.0,
+      "prs_per_month": 13316
+    },
+    "copilot": {
+      "merge_rate": 70.5,
+      "ft_merge_rate": 41.2,
+      "prs_per_month": 19352
+    },
+    "chatgpt_gpt4": {
+      "merge_rate": 71.3,
+      "ft_merge_rate": 39.9,
+      "prs_per_month": 23581
+    },
+    "cursor": {
+      "merge_rate": 72.4,
+      "ft_merge_rate": 40.0,
+      "prs_per_month": 26459
+    },
+    "agentic": {
+      "merge_rate": 59.1,
+      "ft_merge_rate": 22.2,
+      "prs_per_month": 39404
+    }
+  }
+}

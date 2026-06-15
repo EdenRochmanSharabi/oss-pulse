@@ -149,7 +149,7 @@ Breakdown by author type reveals that **maintainer PRs merge fastest** (often se
 ### 4. The Retention Crisis
 
 Of **309,546 contributors** who opened at least one PR:
-- **41%** came back for a second (127,723)
+- **41.3%** came back for a second (127,723)
 - **14%** reached their 5th PR (42,491)
 - **3.5%** became regulars with 20+ PRs (10,777)
 
