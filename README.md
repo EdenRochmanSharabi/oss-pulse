@@ -101,7 +101,7 @@ See `docs/process_log.md` for the complete project diary.
 
 - **2,563,121 PRs** across **330 software repos**, spanning **2016-2026**
 - **309,546 unique contributors** (excluding bots)
-- Outcome distribution: **67% merged**, 30% closed, 1.7% abandoned, 1.4% still open
+- Outcome distribution: **66.9% merged**, 30% closed, 1.7% abandoned, 1.4% still open
 - Author distribution: 72% maintainers, 15% regulars, 7% first-timers, 6% bots
 
 ### 1. Open Source Is Growing, But Unevenly
