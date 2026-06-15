@@ -27,14 +27,17 @@ from oss_pulse.extract.github_api_v2 import (
 OUTPUT_DIR = Path("data/raw/repos")
 YEARS = range(2016, 2027)
 
-MEGA_REPOS = [
-    "freeCodeCamp/freeCodeCamp",
-    "openclaw/openclaw",
-    "tensorflow/tensorflow",
-    "langflow-ai/langflow",
-    "vercel/next.js",
-    "kubernetes/kubernetes",
-]
+def get_missing_repos() -> list[str]:
+    """Get all repos not yet cached."""
+    import pandas as pd
+    from pathlib import Path
+    repos = pd.read_parquet("data/raw/top_repos.parquet")
+    cached = {
+        f.stem.replace("__", "/")
+        for f in Path("data/raw/repos").iterdir()
+        if f.suffix == ".parquet"
+    }
+    return [r for r in repos["repo_name"] if r not in cached]
 
 
 def extract_repo_year(
@@ -163,13 +166,15 @@ def download_mega_repo(repo_name: str, token: str) -> None:
 
 def main() -> None:
     token = _get_token()
+    missing = get_missing_repos()
+    _log(f"Downloading {len(missing)} missing repos by yearly chunks")
 
-    for repo in MEGA_REPOS:
+    for repo in missing:
         _log(f"\n{'='*50}")
         _log(f"Downloading {repo} by yearly chunks")
         download_mega_repo(repo, token)
 
-    _log("\nAll mega-repos processed!")
+    _log("\nAll repos processed!")
 
 
 if __name__ == "__main__":
