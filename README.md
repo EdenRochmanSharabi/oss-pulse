@@ -1,6 +1,6 @@
 # oss-pulse
 
-**A time-series study of 119,000 Pull Requests across 52 top open-source software projects (2016-2026).**
+**A time-series study of 2.5 million Pull Requests across 325 top open-source software projects (2016-2026).**
 
 Open source runs the world, but how does it actually work? Who contributes, how fast do projects respond, and what happens to the thousands of developers who open their first PR? This study analyzes a decade of Pull Request activity to find out.
 
@@ -24,7 +24,7 @@ This project started with a simple question: if you had 10 years of Pull Request
 
 The answer turned out to be more interesting, and harder to get, than expected.
 
-We analyzed **155,962 Pull Requests** across **52 software repositories**, spanning from January 2016 to June 2026. The dataset includes projects like Linux, React, PyTorch, Rust, Godot, Home Assistant, Playwright, and dozens more, covering languages from Python to Go to Rust.
+We analyzed **155,962 Pull Requests** across **325 software repositories**, spanning from January 2016 to June 2026. The dataset includes projects like Linux, React, PyTorch, Rust, Godot, Home Assistant, Playwright, and dozens more, covering languages from Python to Go to Rust.
 
 The analysis goes beyond descriptive statistics. We decompose time series into trend, seasonality, and residuals. We benchmark four forecasting models. We build a composite health index. We use survival analysis to model PR lifetimes. And we let an unsupervised changepoint detection algorithm tell us whether AI tools actually changed anything, without assuming the answer.
 
@@ -93,14 +93,14 @@ See `docs/process_log.md` for the complete project diary.
 
 ---
 
-## General Findings (First Draft, 52 software repos)
+## General Findings (First Draft, 325 software repos)
 
-*These findings are based on the first 52 software repos extracted. They will be updated when the full 200-repo dataset is available.*
+*These findings are based on the first 325 software repos extracted. They will be updated when the full 200-repo dataset is available.*
 
 ### The Dataset at a Glance
 
-- **119,325 PRs** across **52 software repos**, spanning **2016-2026**
-- **37,795 unique contributors** (excluding bots)
+- **2,544,116 PRs** across **325 software repos**, spanning **2016-2026**
+- **307,729 unique contributors** (excluding bots)
 - Outcome distribution: **65% merged**, 33% closed, 1.4% abandoned, 1.4% still open
 - Author distribution: 49% maintainers, 23% regulars, 22% first-timers, 7% bots
 
@@ -354,7 +354,7 @@ The result reveals that **language is a weak signal for repo similarity**. The r
 - `fastapi` (Python) and `airbnb/javascript` (JavaScript) are neighbors: same web-developer community
 - `code-server` (TypeScript) and `rustdesk` (Rust) cluster together: remote-access tool users
 - `karpathy/autoresearch` (Python) and `papers-we-love` (Shell) are close: ML research community
-- 69 of 52 software repos form one massive supercluster of "generalist GitHub participants" who star and browse across all languages
+- 69 of 325 software repos form one massive supercluster of "generalist GitHub participants" who star and browse across all languages
 
 The contributor overlap graph exposes communities of practice that language tags hide.
 
@@ -418,7 +418,7 @@ The best real software repos for first-timers are TypeScript projects (code-serv
 
 ## What's Next
 
-This is a first draft based on 52 of 200 targeted repos. The extraction is running and will complete soon. Planned updates:
+This is a first draft based on 325 of 1,537 targeted repos. The extraction is running and will complete soon. Planned updates:
 
 - **Re-run all analyses** with the full 200-repo dataset
 - **Comparative by organization type**: company-backed vs community vs foundation
@@ -452,22 +452,37 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-### Run the analysis
+### Extract data
 
 ```bash
-# With real data (requires extracted parquets in data/raw/repos/)
-make transform && make analyze && make figures
+make extract-search            # Download repos via GitHub Search API
+make extract-mega              # Year-chunked download for mega-repos
+make extract-status            # Check extraction progress
+```
 
-# Or run the narrative notebook
-jupyter notebook notebooks/00_narrative_analysis.ipynb
+### Run the full pipeline
+
+```bash
+make pipeline                  # combine + transform + analyze + figures + notebook
+```
+
+Or step by step:
+
+```bash
+make combine                   # Merge per-repo parquets into single dataset
+make transform                 # Clean, classify, feature engineering
+make analyze                   # Core analysis (seasonal, forecast, health, etc.)
+make analyze-advanced          # LSTM contributor return + repo embeddings
+make figures                   # Generate dashboard figures
+make notebook                  # Execute narrative notebook
 ```
 
 ### Run tests
 
 ```bash
-make test          # 134 tests, 85% coverage
-make lint          # ruff
-make typecheck     # mypy --strict
+make test                      # 134 tests, 85% coverage
+make lint                      # ruff check + format
+make typecheck                 # mypy --strict
 ```
 
 ---
@@ -476,10 +491,16 @@ make typecheck     # mypy --strict
 
 ```
 src/oss_pulse/
-  extract/       GitHub API client, BigQuery client, repo discovery
-  transform/     Cleaning, bot detection, classification, feature engineering
-  analyze/       Time series, forecasting, survival analysis, health index
-  visualize/     matplotlib plots, heatmaps, dashboards
+  extract/       GitHub Search API, GraphQL API, BigQuery, repo discovery, status monitor
+  transform/     Cleaning, bot detection, author classification, feature engineering
+  analyze/       Seasonal, forecasting, health index, abandonment, funnel,
+                 changepoint, comparative, LSTM contributor return, repo embeddings
+  visualize/     matplotlib/seaborn plots, heatmaps, survival curves, dashboards
+
+scripts/
+  download_search_api.py     Main extractor (Search API with date filtering)
+  download_mega_repos.py     Year-chunked extractor for mega-repos
+  retry_until_done.py        Persistent retry loop
 
 notebooks/
   00_narrative_analysis.ipynb   Main analysis (start here)
