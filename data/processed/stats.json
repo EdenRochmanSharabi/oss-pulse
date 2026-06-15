@@ -95,5 +95,14 @@
       "ft_merge_rate": 22.7,
       "prs_per_month": 40635
     }
+  },
+  "languages": {
+    "top_merge_rate_lang": "C#",
+    "top_merge_rate_value": 79.9,
+    "second_merge_rate_lang": "Rust",
+    "second_merge_rate_value": 77.7,
+    "bottom_merge_rate_lang": "Python",
+    "bottom_merge_rate_value": 55.7,
+    "kruskal_h": 72707.3
   }
 }
