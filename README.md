@@ -296,9 +296,9 @@ The spike peaked in 2022 and has moderated since, possibly reflecting the 2020 r
 
 ### 9. How Do Language Ecosystems Compare?
 
-Not all open-source communities behave the same. Comparing merge rates and response times across programming languages reveals significant differences (Kruskal-Wallis H=264.2, p<0.0001).
+Not all open-source communities behave the same. Comparing merge rates and response times across programming languages reveals significant differences (Kruskal-Wallis H=72,707, p<0.0001).
 
-**TypeScript** projects have the highest merge rate (78.5%), while **Python** and **JavaScript** hover around 50%. This may reflect different community cultures, project maturity distributions, or the types of contributions each ecosystem attracts.
+**C#** (79.9%) and **Rust** (77.7%) projects have the highest merge rates, while **Python** (55.7%) and **Shell** (44.6%) are at the bottom. This likely reflects different community cultures: Rust's strict compiler and strong review culture may filter contributions before they become PRs, while Python's lower barrier to entry attracts more speculative contributions.
 
 <img src="output/figures/comparative_merge_by_language.svg" width="100%">
 <img src="output/figures/comparative_mergetime_by_language.svg" width="100%">
