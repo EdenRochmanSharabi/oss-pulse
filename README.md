@@ -1,6 +1,6 @@
 # oss-pulse
 
-**A time-series study of 2.5 million Pull Requests across 330 top open-source software projects (2016-2026).**
+**A time-series study of 2.7 million Pull Requests across 341 top open-source software projects (2016-2026).**
 
 Open source runs the world, but how does it actually work? Who contributes, how fast do projects respond, and what happens to the thousands of developers who open their first PR? This study analyzes a decade of Pull Request activity to find out.
 
@@ -24,7 +24,7 @@ This project started with a simple question: if you had 10 years of Pull Request
 
 The answer turned out to be more interesting, and harder to get, than expected.
 
-We analyzed **2,563,121 Pull Requests** across **330 software repositories**, spanning from January 2016 to May 2026. The dataset includes projects like PyTorch, Rust, Godot, Home Assistant, Playwright, Kubernetes, VS Code, and hundreds more, covering languages from Python to Go to Rust.
+We analyzed **2,682,939 Pull Requests** across **341 software repositories**, spanning from January 2016 to May 2026. The dataset includes projects like PyTorch, Rust, Godot, Home Assistant, Playwright, Kubernetes, VS Code, and hundreds more, covering languages from Python to Go to Rust.
 
 The analysis goes beyond descriptive statistics. We decompose time series into trend, seasonality, and residuals. We benchmark four forecasting models. We build a composite health index. We use survival analysis to model PR lifetimes. And we let an unsupervised changepoint detection algorithm tell us whether AI tools actually changed anything, without assuming the answer.
 
@@ -99,9 +99,9 @@ See `docs/process_log.md` for the complete project diary.
 
 ### The Dataset at a Glance
 
-- **2,563,121 PRs** across **330 software repos**, spanning **2016-2026**
-- **309,546 unique contributors** (excluding bots)
-- Outcome distribution: **66.9% merged**, 30% closed, 1.7% abandoned, 1.4% still open
+- **2,682,939 PRs** across **341 software repos**, spanning **2016-2026**
+- **329,142 unique contributors** (excluding bots)
+- Outcome distribution: **67.6% merged**, 30% closed, 1.7% abandoned, 1.4% still open
 - Author distribution: 72% maintainers, 15% regulars, 7% first-timers, 6% bots
 
 ### 1. Open Source Is Growing, But Unevenly
@@ -140,7 +140,7 @@ December stands out as the month where holidays have the strongest impact, drive
 
 ### 3. The 5-Hour PR
 
-The median time from PR creation to merge is **14.5 hours**. But the distribution is heavily skewed: the 95th percentile is measured in weeks.
+The median time from PR creation to merge is **15.3 hours**. But the distribution is heavily skewed: the 95th percentile is measured in weeks.
 
 Breakdown by author type reveals that **maintainer PRs merge fastest** (often self-merged within minutes), while **first-timer PRs take significantly longer**. This isn't necessarily gatekeeping; it likely reflects the additional review needed for unfamiliar contributors.
 
@@ -148,12 +148,12 @@ Breakdown by author type reveals that **maintainer PRs merge fastest** (often se
 
 ### 4. The Retention Crisis
 
-Of **309,546 contributors** who opened at least one PR:
-- **41.3%** came back for a second (127,723)
+Of **329,142 contributors** who opened at least one PR:
+- **41.6%** came back for a second (127,723)
 - **14%** reached their 5th PR (42,491)
 - **3.5%** became regulars with 20+ PRs (10,777)
 
-The first-to-second PR transition is where open source loses most contributors. **59% of first-time contributors never return.** This is consistent across ecosystems and has not improved significantly over the decade.
+The first-to-second PR transition is where open source loses most contributors. **58% of first-time contributors never return.** This is consistent across ecosystems and has not improved significantly over the decade.
 
 <img src="output/figures/05_contributor_funnel.svg" width="100%">
 
@@ -165,9 +165,9 @@ Did LLM coding tools (Copilot, ChatGPT, GPT-4) change open-source contribution d
 
 | Metric | 2016-2019 | 2020-2021 | 2022 (Copilot) | 2023 (ChatGPT) | 2024 | 2025-2026 |
 |--------|-----------|-----------|----------------|-----------------|------|-----------|
-| Contributors/month | 3,994 | 4,750 | 5,052 | 6,344 | 6,922 | **10,295** |
-| First-timers/month | 942 | 1,071 | 1,140 | 1,627 | 1,711 | **3,102** |
-| First-timer rejection | 55.5% | 56.8% | 58.2% | 59.8% | 59.7% | **64.7%** |
+| Contributors/month | 4,429 | 5,192 | 5,420 | 6,687 | 7,244 | **10,608** |
+| First-timers/month | 1,031 | 1,169 | 1,222 | 1,700 | 1,775 | **3,165** |
+| First-timer rejection | 51.8% | 53.5% | 55.7% | 58.3% | 58.6% | **64.5%** |
 | Overall rejection | 31.9% | 30.0% | 29.0% | 28.3% | 27.6% | **40.5%** |
 | Median PR size (lines) | 4 | 9 | 8 | 10 | 16 | **39** |
 | PRs/author/month | 1.52 | 2.33 | 2.46 | 2.42 | 2.72 | **2.80** |
@@ -190,7 +190,7 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_03_rejected_contributors.svg" width="100%">
 
-**5e. First-timers are showing up in record numbers, but struggling more.** 3,102 first-timers/month in 2025-2026, up from 942 in 2016-2019. But their rejection rate climbed steadily: 55.5% (2016-2019) to 58.2% (2022) to 59.8% (2023) to **64.7%** (2025-2026). More people are trying, but the success rate is dropping, especially in the most recent period where AI adoption is highest.
+**5e. First-timers are showing up in record numbers, but struggling more.** 3,102 first-timers/month in 2025-2026, up from 942 in 2016-2019. But their rejection rate climbed steadily: 51.8% (2016-2019) to 55.7% (2022) to 58.3% (2023) to **64.5%** (2025-2026). More people are trying, but the success rate is dropping, especially in the most recent period where AI adoption is highest.
 
 <img src="output/figures/ai_04_firsttimer_analysis.svg" width="100%">
 
@@ -218,11 +218,11 @@ The productivity gains of AI tools are concentrated in those who already had exp
 
 | Era | Tool | Merge rate | First-timer merge | PRs/month |
 |-----|------|-----------|-------------------|-----------|
-| Pre-Copilot | None | 69.3% | 44.0% | 13,316 |
-| Jun 2022 - Feb 2023 | Copilot | 70.5% | 41.2% | 19,352 |
-| Mar 2023 - Feb 2024 | ChatGPT / GPT-4 | 71.3% | 39.9% | 23,581 |
-| Mar 2024 - Jan 2025 | Cursor | 72.4% | 40.0% | 26,459 |
-| Feb 2025+ | Claude Code / Codex | **59.1%** | **22.2%** | **39,404** |
+| Pre-Copilot | None | 70.1% | 47.5% | 14,154 |
+| Jun 2022 - Feb 2023 | Copilot | 71.2% | 43.5% | 20,271 |
+| Mar 2023 - Feb 2024 | ChatGPT / GPT-4 | 72.0% | 41.3% | 24,726 |
+| Mar 2024 - Jan 2025 | Cursor | 73.0% | 40.9% | 27,579 |
+| Feb 2025+ | Claude Code / Codex | **59.6%** | **22.7%** | **40,635** |
 
 During the Copilot and Cursor eras, merge rates actually *improved* (69% to 72%). But when agentic tools reached mainstream adoption in 2025, merge rates collapsed to 59% overall and 22% for first-timers, even though PR volume nearly doubled.
 
