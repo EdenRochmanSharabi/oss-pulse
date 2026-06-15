@@ -32,7 +32,7 @@ EPOCHS = 20
 LR = 1e-3
 BATCH_SIZE = 64
 SEED = 42
-XGBOOST_BASELINE_AUC = 0.736  # from abandonment classifier
+XGBOOST_BASELINE_AUC = 0.916  # from abandonment classifier (PR-centric features)
 
 
 def set_seed(seed: int = SEED) -> None:

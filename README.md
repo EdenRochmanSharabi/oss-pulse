@@ -305,15 +305,51 @@ Not all open-source communities behave the same. Comparing merge rates and respo
 <img src="output/figures/comparative_merge_by_language.svg" width="100%">
 <img src="output/figures/comparative_mergetime_by_language.svg" width="100%">
 
-### 10. What Predicts PR Abandonment?
+### 10. What Makes a PR Get Ignored?
 
-We trained Random Forest and XGBoost classifiers to predict which PRs will be abandoned (open >90 days without activity). The most important feature by far is **author type**: maintainer PRs almost never get abandoned, while first-timer PRs are at highest risk.
+The previous version of this analysis found that "maintainer PRs don't get abandoned." True, but useless: you can't change who you are. We rewrote it to ask a better question: **what about *my PR* makes it likely to be ignored?**
 
-PR size matters less than expected. The model achieves AUC=0.736, meaning author history is a moderate but meaningful predictor of whether a PR will be left to die.
+We trained Random Forest (AUC=0.868) and XGBoost (AUC=0.916) classifiers on 913,387 PRs with size data, using only features a contributor can control or observe before submitting. No author identity, no bot flags, nothing about *who* you are.
+
+**The top predictors of abandonment:**
+
+| Feature | Importance | What it means |
+|---------|-----------|---------------|
+| First PR to this repo | 0.578 | Whether the author has any prior PRs to this specific repo |
+| Repo historical merge rate | 0.139 | What fraction of the repo's past PRs were merged |
+| Repo PRs in prior 30 days | 0.100 | How active the repo was in the month before your PR |
+| Lines added | 0.057 | Size of the changeset |
+| Lines deleted | 0.034 | Size of the changeset (removals) |
 
 <img src="output/figures/abandonment_feature_importance.svg" width="100%">
 
-### 11. Forecasting: Which Model Predicts PR Volume Best?
+**The single biggest risk factor is being new to a repo.** First-time contributors to a repo see 5.2% of their PRs abandoned, vs 1.2% for authors who have submitted before (4.3x higher). This is not about experience in general; it is specifically about having no prior relationship with the project's maintainers.
+
+**Actionable advice based on the data:**
+
+1. **Pick repos that actually merge PRs.** Repos with a historical merge rate below 50% abandon 2.7% of PRs; those above 70% abandon only 1.6% (1.7x difference). Check a project's recent merged-vs-closed ratio before investing effort.
+2. **Pick active repos.** The number of PRs in the 30 days before yours is the third-strongest signal. A quiet repo means nobody is reviewing.
+3. **Avoid weekends.** PRs submitted on weekends are abandoned 2.7% of the time vs 1.8% on weekdays (50% more likely). Maintainers review during work hours.
+4. **Keep it small.** PRs over 500 lines are 1.5x more likely to be abandoned than PRs under 50 lines (2.4% vs 1.7%).
+5. **Build a relationship first.** The 4.3x gap between first-time and repeat contributors is the clearest signal in the data. Start with a small fix to introduce yourself, then propose larger changes once the maintainers recognize your name.
+
+### 11. Can We Predict Which Projects Will Decline?
+
+Section 10 predicts whether individual PRs will be abandoned. But can we predict something bigger: which *projects* will lose momentum?
+
+We defined "decline" as a repo whose average monthly PR count in H1-2025 (Jan-May) dropped more than 50% compared to H2-2024 (Jul-Dec). Of 287 repos with data in both periods, **28 are declining** and **259 are stable**. The declining repos include projects like gpt-engineer, private-gpt, gpt4all (AI hype-cycle casualties), TheAlgorithms/Python (educational repo fatigue), and localsend (post-launch plateau).
+
+We built a feature matrix from pre-2025 historical data: health-index components (response time, merge rate, diversity, trend, bus factor), stars, total PR count, contributor concentration (Gini), first-timer ratio, bot ratio, median merge time, and language (one-hot encoded). An XGBoost classifier achieved **AUC=0.766**, outperforming Random Forest (AUC=0.673).
+
+The top predictors of project decline:
+
+1. **Language ecosystem** (lang_Other, 17.9%): projects outside the top 8 languages are more likely to decline, possibly due to smaller contributor pools.
+2. **Total historical PRs** (11.9%): repos with fewer lifetime PRs are more vulnerable, suggesting that a deep contribution history acts as a buffer.
+3. **Bus factor score** (9.0%): projects with uneven contributor distributions (high Gini) are at greater risk. When one or two people drive most of the activity, their departure hits harder.
+
+<img src="output/figures/project_decline_features.svg" width="100%">
+
+### 12. Forecasting: Which Model Predicts PR Volume Best?
 
 We benchmarked four time-series models on the aggregate monthly PR volume (80/20 temporal split):
 
@@ -332,20 +368,15 @@ ETS (Exponential Smoothing) wins with 10.7% MAPE. Prophet is a close second on R
 
 ## Advanced Models
 
-### 12. Can We Predict If a Contributor Will Come Back? (LSTM)
+### 13. Can We Predict If a Contributor Will Come Back? (LSTM)
 
-The abandonment classifier (Section 10) used flat features and achieved AUC=0.736. But contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
+Section 10 predicts whether a *single PR* will be abandoned (AUC=0.916). This section asks a different question: will a *contributor* come back after their latest PR? Contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
 
-| Model | AUC | What it captures |
-|-------|-----|-----------------|
-| XGBoost (flat features) | 0.736 | PR size, author type |
-| **LSTM (sequence)** | **0.825** | Merge momentum, gap patterns, rejection streaks |
-
-The +0.089 AUC improvement confirms that the *order* of events matters. The LSTM learns patterns like "consecutive merges predict return" and "growing gaps between PRs predict churn" that flat features cannot express.
+The LSTM achieved **AUC=0.825** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
 
 <img src="output/figures/nn_contributor_return.svg" width="100%">
 
-### 13. The Hidden Map of Open Source (Repo Embeddings)
+### 14. The Hidden Map of Open Source (Repo Embeddings)
 
 We trained a neural network to learn 16-dimensional vector representations of repos, based solely on *who contributes to them*. Repos with overlapping contributor bases end up close in embedding space. We then projected these embeddings to 2D with t-SNE.
 
@@ -360,7 +391,7 @@ The contributor overlap graph exposes communities of practice that language tags
 
 <img src="output/figures/nn_repo_embeddings.svg" width="100%">
 
-### 14. Optimizing the Health Index with a Genetic Algorithm
+### 15. Optimizing the Health Index with a Genetic Algorithm
 
 The Health Index weights (Section 6) were hand-picked. But which weights actually predict future repo growth? We used a Genetic Algorithm to search for weights that maximize Spearman correlation between today's health score and PR growth 6 months later.
 
@@ -374,12 +405,12 @@ The Health Index weights (Section 6) were hand-picked. But which weights actuall
 
 The GA nearly doubled the weight on response time (25% to 49%) and eliminated trend (15% to 0.4%). The optimized weights improved Spearman correlation from 0.14 to 0.21.
 
-**The insight**: The single best predictor of whether a project will grow is **how fast it responds to contributions**. Not its current momentum, not its merge rate. Speed of response. This aligns with the contributor return finding (Section 12): contributors come back when they get fast feedback.
+**The insight**: The single best predictor of whether a project will grow is **how fast it responds to contributions**. Not its current momentum, not its merge rate. Speed of response. This aligns with the contributor return finding (Section 13): contributors come back when they get fast feedback.
 
 <img src="output/figures/ga_weights_comparison.svg" width="100%">
 <img src="output/figures/ga_convergence.svg" width="100%">
 
-### 15. Where Should You Submit Your First PR?
+### 16. Where Should You Submit Your First PR?
 
 We trained a Random Forest on 187,872 first-timer PRs to predict which will get merged. The model (AUC=0.761) reveals what matters most:
 

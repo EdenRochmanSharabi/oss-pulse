@@ -214,5 +214,62 @@
     "bottom_merge_rate_lang": "Python",
     "bottom_merge_rate_value": 55.7,
     "kruskal_h": 72707.3
+  },
+  "project_decline": {
+    "n_declining": 28,
+    "n_stable": 259,
+    "best_model": "xgboost",
+    "best_auc": 0.766,
+    "top_3_features": [
+      "lang_Other",
+      "total_prs",
+      "bus_factor_score"
+    ]
+  },
+  "pr_abandonment": {
+    "n_prs_analyzed": 913387,
+    "n_abandoned": 17837,
+    "abandon_rate_pct": 2.0,
+    "rf_auc": 0.868,
+    "xgb_auc": 0.916,
+    "best_model": "xgboost",
+    "best_auc": 0.916,
+    "top_features": [
+      {
+        "feature": "is_first_pr_to_repo",
+        "label": "First PR to this repo",
+        "importance": 0.578
+      },
+      {
+        "feature": "repo_merge_rate",
+        "label": "Repo historical merge rate",
+        "importance": 0.139
+      },
+      {
+        "feature": "repo_recent_prs",
+        "label": "Repo PRs in prior 30 days",
+        "importance": 0.1
+      },
+      {
+        "feature": "additions",
+        "label": "Lines added",
+        "importance": 0.057
+      },
+      {
+        "feature": "deletions",
+        "label": "Lines deleted",
+        "importance": 0.034
+      }
+    ],
+    "insights": {
+      "abandon_rate_under_50_lines": 0.0166,
+      "abandon_rate_over_500_lines": 0.0244,
+      "abandon_rate_weekend": 0.027,
+      "abandon_rate_weekday": 0.018,
+      "abandon_rate_first_pr": 0.0515,
+      "abandon_rate_repeat_author": 0.0119,
+      "abandon_rate_low_merge_repo": 0.027,
+      "abandon_rate_high_merge_repo": 0.016
+    }
   }
 }
