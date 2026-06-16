@@ -146,10 +146,10 @@ Breakdown by author type reveals that **maintainer PRs merge fastest** (often se
 
 ### 4. The Retention Crisis
 
-Of **429,956 contributors** who opened at least one PR:
-- **44.2%** came back for a second (190,145)
-- **15.6%** reached their 5th PR (67,282)
-- **4.1%** became regulars with 20+ PRs (17,720)
+Of **419,177 contributors** who opened at least one PR:
+- **44.1%** came back for a second (184,714)
+- **15.6%** reached their 5th PR (65,371)
+- **4.1%** became regulars with 20+ PRs (17,313)
 
 The first-to-second PR transition is where open source loses most contributors. **56% of first-time contributors never return.** This is consistent across ecosystems and has not improved significantly over the decade.
 
@@ -163,12 +163,12 @@ Did LLM coding tools (Copilot, ChatGPT, GPT-4) change open-source contribution d
 
 | Metric | 2016-2019 | 2020-2021 | 2022 (Copilot) | 2023 (ChatGPT) | 2024 | 2025-2026 |
 |--------|-----------|-----------|----------------|-----------------|------|-----------|
-| Contributors/month | 6,352 | 7,785 | 8,527 | 10,097 | 10,696 | **14,480** |
-| First-timers/month | 1,299 | 1,504 | 1,638 | 2,134 | 2,216 | **3,794** |
-| First-timer rejection | 53.0% | 53.2% | 54.9% | 56.7% | 57.1% | **63.1%** |
-| Overall rejection | 31.5% | 27.7% | 27.2% | 25.8% | 25.6% | **36.8%** |
+| Contributors/month | 6,249 | 7,607 | 8,344 | 9,819 | 10,442 | **14,268** |
+| First-timers/month | 1,283 | 1,459 | 1,577 | 2,038 | 2,129 | **3,708** |
+| First-timer rejection | 53.7% | 53.0% | 53.8% | 55.5% | 56.4% | **62.2%** |
+| Overall rejection | 31.7% | 27.6% | 27.0% | 25.4% | 25.5% | **36.6%** |
 | Median PR size (lines)* | 10 | 17 | 16 | 16 | 19 | **37** |
-| PRs/author/month | 2.92 | 3.41 | 3.59 | 3.79 | 3.95 | **3.98** |
+| PRs/author/month | 2.93 | 3.42 | 3.6 | 3.81 | 3.97 | **3.99** |
 
 *\*Median PR size uses only PRs with additions > 0 (25-46% per era). The Search API returns 0 additions for most PRs; these are excluded to avoid deflating the median.*
 
@@ -178,11 +178,11 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/06_changepoints.svg" width="100%">
 
-**5b. More people are contributing, including newcomers.** Monthly unique contributors grew from 6,352 (2016-2019) to 14,480 (2025-2026). First-timers per month nearly tripled: 1,299 to 3,794. In absolute terms, more newcomers than ever are attempting to contribute. However, their share of total PRs dropped because regular contributors grew even faster.
+**5b. More people are contributing, including newcomers.** Monthly unique contributors grew from 6,249 (2016-2019) to 14,268 (2025-2026). First-timers per month nearly tripled: 1,283 to 3,708. In absolute terms, more newcomers than ever are attempting to contribute. However, their share of total PRs dropped because regular contributors grew even faster.
 
 <img src="output/figures/ai_01_unique_contributors.svg" width="100%">
 
-**5c. The rejection rate shows a lag effect.** From 2020 to 2024, the overall rejection rate was stable around 27.7-27.2%. But in 2025-2026, it jumped to 36.8%. The effect wasn't immediate with AI tool launches; it took 2-3 years of adoption before the impact became visible in the data.
+**5c. The rejection rate shows a lag effect.** From 2020 to 2024, the overall rejection rate was stable around 27.6-27.0%. But in 2025-2026, it jumped to 36.6%. The effect wasn't immediate with AI tool launches; it took 2-3 years of adoption before the impact became visible in the data.
 
 <img src="output/figures/ai_02_rejection_rate.svg" width="100%">
 
@@ -190,7 +190,7 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_03_rejected_contributors.svg" width="100%">
 
-**5e. First-timers are showing up in record numbers, but struggling more.** 3,794 first-timers/month in 2025-2026, up from 1,299 in 2016-2019. But their rejection rate climbed steadily: 53.0% (2016-2019) to 54.9% (2022) to 56.7% (2023) to **63.1%** (2025-2026). More people are trying, but the success rate is dropping, especially in the most recent period where AI adoption is highest.
+**5e. First-timers are showing up in record numbers, but struggling more.** 3,708 first-timers/month in 2025-2026, up from 1,283 in 2016-2019. But their rejection rate climbed steadily: 53.7% (2016-2019) to 53.8% (2022) to 55.5% (2023) to **62.2%** (2025-2026). More people are trying, but the success rate is dropping, especially in the most recent period where AI adoption is highest.
 
 <img src="output/figures/ai_04_firsttimer_analysis.svg" width="100%">
 
@@ -198,19 +198,19 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_05_pr_size_trend.svg" width="100%">
 
-**5g. Individual productivity is up 33%.** Each contributor produces more PRs per month (2.92 to 3.98). Combined with the size increase, the total code output per person has grown substantially.
+**5g. Individual productivity is up 36%.** Each contributor produces more PRs per month (2.93 to 3.99). Combined with the size increase, the total code output per person has grown substantially.
 
 <img src="output/figures/ai_06_prs_per_contributor.svg" width="100%">
 
-**5h. Who benefits? Productivity and merge rate by author group.** The aggregate +33% masks a stark inequality. Maintainers went from 5.1 to 7.8 PRs/person/month while their merge rate declined from 74% to 72%. Regulars gained modestly (1.5 to 1.7) but their merge rate collapsed from 54% to 34%. First-timers are by definition at 1 PR/month, but their merge rate dropped from 47% to 25%.
+**5h. Who benefits? Productivity and merge rate by author group.** The aggregate +36% masks a stark inequality. Maintainers went from 5.42 to 6.91 PRs/person/month while their merge rate declined from 75% to 75%. Regulars gained modestly (1.4 to 1.47) but their merge rate collapsed from 54% to 42%. First-timers are by definition at 1 PR/month, but their merge rate dropped from 46% to 34%.
 
 | Group | PRs/person/month (2016-2019) | PRs/person/month (2025-2026) | Merge rate (2016-2019) | Merge rate (2025-2026) |
 |-------|------------------------|------------------------|-------------------|-------------------|
-| Maintainer | 5.1 | 7.8 | 74% | 72% |
-| Regular | 1.5 | 1.7 | 54% | 34% |
-| First-timer | 1.0 | 1.0 | 47% | 25% |
+| Maintainer | 5.42 | 6.91 | 75% | 75% |
+| Regular | 1.4 | 1.47 | 54% | 42% |
+| First-timer | 1.0 | 1.0 | 46% | 34% |
 
-The productivity gains are concentrated in those who already had expertise. For everyone else, the bar has risen: regulars' merge rate fell 20 percentage points, and first-timers' fell 22 points.
+The productivity gains are concentrated in those who already had expertise. For everyone else, the bar has risen: regulars' merge rate fell 12 percentage points, and first-timers' fell 12 points.
 
 <img src="output/figures/ai_07_productivity_by_group.svg" width="100%">
 
@@ -218,17 +218,17 @@ The productivity gains are concentrated in those who already had expertise. For 
 
 | Era | Tool | Merge rate | First-timer merge | PRs/month |
 |-----|------|-----------|-------------------|-----------|
-| Pre-Copilot | None | 70.4% | 47.0% | 21,672 |
-| Jun 2022 - Feb 2023 | Copilot | 72.7% | 44.0% | 32,773 |
-| Mar 2023 - Feb 2024 | ChatGPT / GPT-4 | 73.9% | 43.0% | 39,375 |
-| Mar 2024 - Jan 2025 | Cursor | 74.4% | 42.6% | 42,545 |
-| Feb 2025+ | Claude Code / Codex | **62.8%** | **24.8%** | **58,484** |
+| Pre-Copilot | None | 70.3% | 46.7% | 21,324 |
+| Jun 2022 - Feb 2023 | Copilot | 73.1% | 45.3% | 32,094 |
+| Mar 2023 - Feb 2024 | ChatGPT / GPT-4 | 74.2% | 44.1% | 38,524 |
+| Mar 2024 - Jan 2025 | Cursor | 74.5% | 43.2% | 41,766 |
+| Feb 2025+ | Claude Code / Codex | **63.0%** | **25.9%** | **57,730** |
 
-During the Copilot and Cursor eras, merge rates actually *improved* (70% to 73%). But when agentic tools reached mainstream adoption in 2025, merge rates collapsed to 62.8% overall and 24.8% for first-timers, even though PR volume nearly doubled.
+During the Copilot and Cursor eras, merge rates actually *improved* (70% to 73%). But when agentic tools reached mainstream adoption in 2025, merge rates collapsed to 63.0% overall and 25.9% for first-timers, even though PR volume nearly doubled.
 
 The pattern suggests that more powerful AI tools make it easier to *generate and submit* code, but don't proportionally improve the *quality* of that code relative to maintainer expectations. The gap between what AI can produce and what maintainers will accept may be widening, not closing.
 
-**Summary of the AI effect:** The story has three acts. First (2022-2024), autocomplete-style AI (Copilot, ChatGPT) modestly boosted productivity while merge rates held steady or improved. Second (2024-2025), AI-assisted editors (Cursor) maintained that balance. Third (2025+), fully agentic tools (Claude Code, Codex) unleashed a volume surge that overwhelmed the quality bar: merge rates dropped to 62.8% and first-timer acceptance fell to 24.8%. The tools that were supposed to democratize open source may instead be flooding it with contributions that don't meet the standard.
+**Summary of the AI effect:** The story has three acts. First (2022-2024), autocomplete-style AI (Copilot, ChatGPT) modestly boosted productivity while merge rates held steady or improved. Second (2024-2025), AI-assisted editors (Cursor) maintained that balance. Third (2025+), fully agentic tools (Claude Code, Codex) unleashed a volume surge that overwhelmed the quality bar: merge rates dropped to 63.0% and first-timer acceptance fell to 25.9%. The tools that were supposed to democratize open source may instead be flooding it with contributions that don't meet the standard.
 
 #### 5j. Counterfactual: What Would Have Happened Without AI?
 
@@ -307,28 +307,28 @@ Not all open-source communities behave the same. Comparing merge rates and respo
 
 The previous version of this analysis found that "maintainer PRs don't get abandoned." True, but useless: you can't change who you are. We rewrote it to ask a better question: **what about *my PR* makes it likely to be ignored?**
 
-We trained Random Forest (AUC=0.871) and XGBoost (AUC=0.919) classifiers on 913,277 PRs with size data, using only features a contributor can control or observe before submitting. No author identity, no bot flags, nothing about *who* you are.
+We trained Random Forest (AUC=0.865) and XGBoost (AUC=0.916) classifiers on 911,745 PRs with size data, using only features a contributor can control or observe before submitting. No author identity, no bot flags, nothing about *who* you are.
 
 **The top predictors of abandonment:**
 
 | Feature | Importance | What it means |
 |---------|-----------|---------------|
-| First PR to this repo | 0.573 | Whether the author has any prior PRs to this specific repo |
-| Repo historical merge rate | 0.139 | What fraction of the repo's past PRs were merged |
-| Repo PRs in prior 30 days | 0.103 | How active the repo was in the month before your PR |
-| Lines added | 0.064 | Size of the changeset |
-| Lines deleted | 0.034 | Size of the changeset (removals) |
+| First PR to this repo | 0.564 | Whether the author has any prior PRs to this specific repo |
+| Repo historical merge rate | 0.146 | What fraction of the repo's past PRs were merged |
+| Repo PRs in prior 30 days | 0.098 | How active the repo was in the month before your PR |
+| Lines added | 0.055 | Size of the changeset |
+| Lines deleted | 0.033 | Size of the changeset (removals) |
 
 <img src="output/figures/abandonment_feature_importance.svg" width="100%">
 
-**The single biggest risk factor is being new to a repo.** First-time contributors to a repo see 5.2% of their PRs abandoned, vs 1.2% for authors who have submitted before (4.3x higher). This is not about experience in general; it is specifically about having no prior relationship with the project's maintainers.
+**The single biggest risk factor is being new to a repo.** First-time contributors to a repo see 5.1% of their PRs abandoned, vs 1.2% for authors who have submitted before (4.3x higher). This is not about experience in general; it is specifically about having no prior relationship with the project's maintainers.
 
 **Actionable advice based on the data:**
 
-1. **Pick repos that actually merge PRs.** Repos with a historical merge rate below 50% abandon 2.7% of PRs; those above 70% abandon only 1.6% (1.7x difference). Check a project's recent merged-vs-closed ratio before investing effort.
+1. **Pick repos that actually merge PRs.** Repos with a historical merge rate below 50% abandon 3.2% of PRs; those above 70% abandon only 1.7% (1.9x difference). Check a project's recent merged-vs-closed ratio before investing effort.
 2. **Pick active repos.** The number of PRs in the 30 days before yours is the third-strongest signal. A quiet repo means nobody is reviewing.
-3. **Avoid weekends.** PRs submitted on weekends are abandoned 2.7% of the time vs 1.8% on weekdays (1.5x more likely). Maintainers review during work hours.
-4. **Keep it small.** PRs over 500 lines are 1.5x more likely to be abandoned than PRs under 50 lines (2.5% vs 1.7%).
+3. **Avoid weekends.** PRs submitted on weekends are abandoned 2.8% of the time vs 1.8% on weekdays (1.5x more likely). Maintainers review during work hours.
+4. **Keep it small.** PRs over 500 lines are 1.3x more likely to be abandoned than PRs under 50 lines (2.4% vs 1.8%).
 5. **Build a relationship first.** The 4.3x gap between first-time and repeat contributors is the clearest signal in the data. Start with a small fix to introduce yourself, then propose larger changes once the maintainers recognize your name.
 
 ### 11. Can We Predict Which Projects Will Decline?
@@ -353,11 +353,11 @@ We benchmarked four time-series models on the aggregate monthly PR volume (80/20
 
 | Model | MAE | RMSE | MAPE |
 |-------|-----|------|------|
-| **ETS** | **2,592** | **4,322** | **21.4%** |
-| ARIMA | 3,189 | 5,001 | 24.2% |
-| XGBoost | 3,173 | 5,061 | 23.8% |
+| **ETS** | **2,595** | **4,269** | **21.7%** |
+| ARIMA | 3,174 | 4,927 | 24.4% |
+| XGBoost | 3,177 | 5,024 | 24.1% |
 
-ETS wins with 21.4% MAPE. The traditional ARIMA and ML-based XGBoost perform similarly on this data, likely because the series has strong trend and seasonality that ETS handles natively.
+ETS wins with 21.7% MAPE. The traditional ARIMA and ML-based XGBoost perform similarly on this data, likely because the series has strong trend and seasonality that ETS handles natively.
 
 <img src="output/figures/forecast_benchmark.svg" width="100%">
 
@@ -367,9 +367,9 @@ ETS wins with 21.4% MAPE. The traditional ARIMA and ML-based XGBoost perform sim
 
 ### 13. Can We Predict If a Contributor Will Come Back? (LSTM)
 
-Section 10 predicts whether a *single PR* will be abandoned (AUC=0.919). This section asks a different question: will a *contributor* come back after their latest PR? Contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
+Section 10 predicts whether a *single PR* will be abandoned (AUC=0.916). This section asks a different question: will a *contributor* come back after their latest PR? Contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
 
-The LSTM achieved **AUC=0.845** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
+The LSTM achieved **AUC=0.847** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
 
 <img src="output/figures/nn_contributor_return.svg" width="100%">
 
@@ -417,25 +417,25 @@ Repos are ranked using the Wilson score lower bound, which penalizes small sampl
 
 | Language | AUC | Top predictor | Actionable rule | Best repo |
 |----------|-----|--------------|-----------------|-----------|
-| Python | 0.780 | repo_merge_rate (74%) | repo_merge_rate > 0.33 AND repo_merge_rate > 0.72 AND pr_size <= 88.50 AND additions <= 8.50 -> likely merged (65%) | swisskyrepo/PayloadsAllTheThings (65% FT merge) |
-| TypeScript | 0.751 | repo_merge_rate (48%) | repo_merge_rate > 0.59 AND additions <= 18.50 AND repo_total_prs <= 20586.50 AND repo_total_prs > 8898.50 -> likely merged (71%) | storybookjs/storybook (70% FT merge) |
-| Go | 0.763 | repo_merge_rate (56%) | repo_merge_rate > 0.30 AND pr_size <= 7.50 AND repo_merge_rate > 0.67 AND repo_merge_rate > 0.77 -> likely merged (75%) | jesseduffield/lazygit (54% FT merge) |
+| Python | 0.784 | repo_merge_rate (75%) | repo_merge_rate > 0.33 AND repo_merge_rate > 0.72 AND pr_size <= 88.50 AND additions <= 5.50 -> likely merged (67%) | bregman-arie/devops-exercises (71% FT merge) |
+| TypeScript | 0.745 | repo_merge_rate (54%) | repo_merge_rate > 0.59 AND additions <= 108.50 AND repo_total_prs <= 20586.50 AND repo_merge_rate > 0.80 -> likely merged (66%) | storybookjs/storybook (70% FT merge) |
+| Go | 0.808 | repo_merge_rate (76%) | repo_merge_rate > 0.70 AND additions <= 44.50 AND hour <= 18.50 AND deletions > 0.50 -> likely merged (75%) | avelino/awesome-go (65% FT merge) |
 | Rust | 0.725 | pr_size (46%) | pr_size <= 112.50 AND repo_merge_rate > 0.82 AND pr_size <= 26.50 AND repo_total_prs <= 6947.50 -> likely merged (79%) | tauri-apps/tauri (68% FT merge) |
 | C++ | 0.823 | repo_merge_rate (66%) | repo_merge_rate > 0.73 AND pr_size <= 157.50 AND deletions > 0.50 AND additions <= 3.50 -> likely merged (68%) | opencv/opencv (56% FT merge) |
-| Java | 0.873 | repo_merge_rate (82%) | repo_merge_rate > 0.29 AND deletions > 0.50 AND additions <= 21.50 AND deletions > 1.50 -> likely merged (74%) | krahets/hello-algo (57% FT merge) |
+| Java | 0.888 | repo_merge_rate (88%) | repo_merge_rate > 0.29 AND deletions > 0.50 AND day_of_week <= 3.50 -> likely merged (59%) | iluwatar/java-design-patterns (44% FT merge) |
 | C | 0.768 | repo_total_prs (98%) | repo_total_prs <= 629.00 -> likely not merged (38%) | ventoy/Ventoy (36% FT merge) |
-| JavaScript | 0.689 | repo_merge_rate (42%) | repo_merge_rate > 0.69 AND additions <= 185.50 AND changed_files > 1.50 AND additions <= 23.50 -> likely merged (68%) | sveltejs/svelte (52% FT merge) |
+| JavaScript | 0.747 | repo_merge_rate (62%) | repo_merge_rate > 0.69 AND repo_total_prs <= 2049.50 AND additions <= 4.50 AND hour <= 10.50 -> likely merged (86%) | Snailclimb/JavaGuide (80% FT merge) |
 | C# | 0.714 | repo_total_prs (60%) | repo_total_prs > 4348.50 AND pr_size <= 131.50 AND changed_files > 1.50 -> likely merged (71%) | microsoft/PowerToys (55% FT merge) |
 
 **If you write Python, start here** (ranked by Wilson score, min 20 FT PRs):
 
 | Repo | First-timer merge rate | First-timer PRs | Wilson score |
 |------|----------------------|-----------------|--------------|
-| swisskyrepo/PayloadsAllTheThings | **65%** | 210 | 0.586 |
+| bregman-arie/devops-exercises | **71%** | 168 | 0.636 |
 | langchain-ai/langchain | **58%** | 2494 | 0.564 |
 | infiniflow/ragflow | **59%** | 291 | 0.530 |
 | huggingface/transformers | **54%** | 2312 | 0.522 |
-| d2l-ai/d2l-zh | **51%** | 205 | 0.444 |
+| EbookFoundation/free-programming-books | **54%** | 1361 | 0.513 |
 
 **If you write TypeScript, start here** (ranked by Wilson score, min 20 FT PRs):
 
@@ -444,18 +444,18 @@ Repos are ranked using the Wilson score lower bound, which penalizes small sampl
 | storybookjs/storybook | **70%** | 936 | 0.672 |
 | Stirling-Tools/Stirling-PDF | **70%** | 170 | 0.627 |
 | ant-design/ant-design | **64%** | 1246 | 0.609 |
+| yangshun/tech-interview-handbook | **70%** | 102 | 0.601 |
 | mermaid-js/mermaid | **64%** | 398 | 0.587 |
-| nilbuild/developer-roadmap | **57%** | 1290 | 0.547 |
 
 **If you write Go, start here** (ranked by Wilson score, min 20 FT PRs):
 
 | Repo | First-timer merge rate | First-timer PRs | Wilson score |
 |------|----------------------|-----------------|--------------|
+| avelino/awesome-go | **65%** | 965 | 0.616 |
 | jesseduffield/lazygit | **54%** | 237 | 0.481 |
 | junegunn/fzf | **45%** | 166 | 0.378 |
 | gin-gonic/gin | **40%** | 291 | 0.341 |
 | ollama/ollama | **31%** | 636 | 0.277 |
-| syncthing/syncthing | **33%** | 137 | 0.255 |
 
 **If you write Rust, start here** (ranked by Wilson score, min 20 FT PRs):
 
@@ -481,7 +481,6 @@ Repos are ranked using the Wilson score lower bound, which penalizes small sampl
 
 | Repo | First-timer merge rate | First-timer PRs | Wilson score |
 |------|----------------------|-----------------|--------------|
-| krahets/hello-algo | **57%** | 154 | 0.492 |
 | iluwatar/java-design-patterns | **44%** | 397 | 0.393 |
 | spring-projects/spring-boot | **1%** | 948 | 0.008 |
 | macrozheng/mall | **0%** | 67 | 0.000 |
@@ -497,11 +496,11 @@ Repos are ranked using the Wilson score lower bound, which penalizes small sampl
 
 | Repo | First-timer merge rate | First-timer PRs | Wilson score |
 |------|----------------------|-----------------|--------------|
+| Snailclimb/JavaGuide | **80%** | 477 | 0.760 |
 | sveltejs/svelte | **52%** | 483 | 0.471 |
 | louislam/uptime-kuma | **51%** | 439 | 0.466 |
-| ryanmcdermott/clean-code-javascript | **43%** | 117 | 0.341 |
 | axios/axios | **38%** | 442 | 0.336 |
-| affaan-m/ECC | **34%** | 234 | 0.280 |
+| trekhleb/javascript-algorithms | **32%** | 297 | 0.266 |
 
 **If you write C#, start here** (ranked by Wilson score, min 20 FT PRs):
 
