@@ -369,7 +369,7 @@ ETS wins with 21.7% MAPE. The traditional ARIMA and ML-based XGBoost perform sim
 
 Section 10 predicts whether a *single PR* will be abandoned (AUC=0.916). This section asks a different question: will a *contributor* come back after their latest PR? Contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
 
-The LSTM achieved **AUC=0.847** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
+The LSTM achieved **AUC=0.85** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
 
 <img src="output/figures/nn_contributor_return.svg" width="100%">
 
