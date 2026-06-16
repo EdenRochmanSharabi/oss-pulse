@@ -70,6 +70,7 @@ def main() -> None:
     merge_time = stats["merge_time"]
     forecast = stats.get("forecast_benchmark", {})
     contrib_return = stats.get("contributor_return", {})
+    ft_trees = stats.get("first_timer_trees", {})
 
     author_groups = load_author_groups(stats)
 
@@ -587,6 +588,63 @@ def main() -> None:
             ),
         ),
     ]
+
+    # ── Generate Section 16 (first-timer decision trees) from stats.json ────
+    if ft_trees:
+        lang_order = ["Java", "C++", "Python", "C", "Go", "TypeScript", "Rust", "JavaScript"]
+        available = [l for l in lang_order if l in ft_trees]
+
+        table_rows = []
+        for lang in available:
+            d = ft_trees[lang]
+            top_feat = d["feature_importances"][0]
+            best = d["recommended_repos"][0] if d.get("recommended_repos") else None
+            best_repo = best["repo"] if best else "N/A"
+            best_rate = f'{best["ft_merge_rate"]:.0f}%' if best else "N/A"
+            rule = d.get("decision_rules", "")
+            table_rows.append(
+                f"| {lang} | {d['auc']:.3f} | {top_feat['feature']} ({top_feat['importance']:.0%}) "
+                f"| {rule} | {best_repo} ({best_rate} FT merge) |"
+            )
+
+        recs_lines = []
+        for lang in available:
+            repos = ft_trees[lang].get("recommended_repos", [])[:3]
+            if repos:
+                items = ", ".join(
+                    f"{r['repo']} ({r['ft_merge_rate']:.0f}%)" for r in repos
+                )
+                recs_lines.append(f"**{lang}:** {items}")
+
+        section_16 = (
+            "### 16. Where Should You Submit Your First PR? (Decision Trees by Language)\n\n"
+            "We trained decision trees on first-timer PRs for each major programming language "
+            "to predict which contributions get merged. The models reveal what matters most, "
+            "and which repos are the most welcoming.\n\n"
+            "**The universal finding:** across all languages, the repo's overall merge rate is the "
+            "dominant predictor (typically 50-98% of feature importance). PR size is the second factor, "
+            "especially in Rust where it accounts for 46% of importance. Weekend vs weekday, time of day, "
+            "and other features barely register.\n\n"
+            "**Per-language decision tree results:**\n\n"
+            "| Language | AUC | Top predictor (importance) | Actionable rule | Best repo for first-timers |\n"
+            "|----------|-----|--------------------------|-----------------|---------------------------|\n"
+            + "\n".join(table_rows) + "\n\n"
+            "<img src=\"output/figures/first_timer_tree_python.svg\" width=\"100%\">\n\n"
+            "**Top 3 recommended repos per language (ranked by first-timer merge rate, min 20 FT PRs):**\n\n"
+            + "\n\n".join(recs_lines) + "\n\n"
+            "<img src=\"output/figures/first_timer_recommendations.svg\" width=\"100%\">\n\n"
+            "**The decision tree distilled:** Rust is the only language where PR size matters more than "
+            "the repo itself. Everywhere else, choosing the right repo is the single most important "
+            "decision a first-timer can make. Check the repo's merged-vs-closed ratio before investing effort."
+        )
+
+        section_16_pattern = (
+            r"### 16\. Where Should You Submit Your First PR\?.*?"
+            r"(?=\n---\n|\n### |\Z)"
+        )
+        if re.search(section_16_pattern, text, re.DOTALL):
+            text = re.sub(section_16_pattern, section_16, text, count=1, flags=re.DOTALL)
+            print("  Section 16 (first-timer trees) regenerated from stats.json")
 
     # ── Apply literal replacements ──────────────────────────────────────────
     replaced = 0

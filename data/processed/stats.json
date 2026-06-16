@@ -304,5 +304,687 @@
         "merge_rate": 25
       }
     }
+  },
+  "first_timer_trees": {
+    "Python": {
+      "accuracy": 0.753,
+      "auc": 0.78,
+      "n_samples": 25154,
+      "feature_importances": [
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.738
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.164
+        },
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.045
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.022
+        },
+        {
+          "feature": "additions",
+          "importance": 0.019
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.012
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_merge_rate > 0.33 AND repo_merge_rate > 0.72 AND pr_size <= 88.50 AND additions <= 8.50 -> likely merged (65%)",
+      "recommended_repos": [
+        {
+          "repo": "swisskyrepo/PayloadsAllTheThings",
+          "ft_merge_rate": 65.2,
+          "overall_merge_rate": 77.0,
+          "ft_prs": 210,
+          "stars": 78314
+        },
+        {
+          "repo": "infiniflow/ragflow",
+          "ft_merge_rate": 58.8,
+          "overall_merge_rate": 89.3,
+          "ft_prs": 291,
+          "stars": 82440
+        },
+        {
+          "repo": "langchain-ai/langchain",
+          "ft_merge_rate": 58.3,
+          "overall_merge_rate": 73.9,
+          "ft_prs": 2494,
+          "stars": 139019
+        },
+        {
+          "repo": "huggingface/transformers",
+          "ft_merge_rate": 54.2,
+          "overall_merge_rate": 77.2,
+          "ft_prs": 2312,
+          "stars": 161496
+        },
+        {
+          "repo": "d2l-ai/d2l-zh",
+          "ft_merge_rate": 51.2,
+          "overall_merge_rate": 79.8,
+          "ft_prs": 205,
+          "stars": 78283
+        }
+      ]
+    },
+    "TypeScript": {
+      "accuracy": 0.701,
+      "auc": 0.751,
+      "n_samples": 21112,
+      "feature_importances": [
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.485
+        },
+        {
+          "feature": "additions",
+          "importance": 0.265
+        },
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.157
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.049
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.034
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.011
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_merge_rate > 0.59 AND additions <= 18.50 AND repo_total_prs <= 20586.50 AND repo_total_prs > 8898.50 -> likely merged (71%)",
+      "recommended_repos": [
+        {
+          "repo": "storybookjs/storybook",
+          "ft_merge_rate": 70.2,
+          "overall_merge_rate": 82.8,
+          "ft_prs": 936,
+          "stars": 90276
+        },
+        {
+          "repo": "Stirling-Tools/Stirling-PDF",
+          "ft_merge_rate": 70.0,
+          "overall_merge_rate": 84.0,
+          "ft_prs": 170,
+          "stars": 80613
+        },
+        {
+          "repo": "ant-design/ant-design",
+          "ft_merge_rate": 63.6,
+          "overall_merge_rate": 81.8,
+          "ft_prs": 1246,
+          "stars": 98323
+        },
+        {
+          "repo": "mermaid-js/mermaid",
+          "ft_merge_rate": 63.6,
+          "overall_merge_rate": 80.7,
+          "ft_prs": 398,
+          "stars": 88582
+        },
+        {
+          "repo": "nilbuild/developer-roadmap",
+          "ft_merge_rate": 57.4,
+          "overall_merge_rate": 67.9,
+          "ft_prs": 1290,
+          "stars": 356743
+        }
+      ]
+    },
+    "Go": {
+      "accuracy": 0.742,
+      "auc": 0.763,
+      "n_samples": 2578,
+      "feature_importances": [
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.56
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.315
+        },
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.119
+        },
+        {
+          "feature": "additions",
+          "importance": 0.007
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.0
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.0
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_merge_rate > 0.30 AND pr_size <= 7.50 AND repo_merge_rate > 0.67 AND repo_merge_rate > 0.77 -> likely merged (75%)",
+      "recommended_repos": [
+        {
+          "repo": "jesseduffield/lazygit",
+          "ft_merge_rate": 54.4,
+          "overall_merge_rate": 83.2,
+          "ft_prs": 237,
+          "stars": 79221
+        },
+        {
+          "repo": "junegunn/fzf",
+          "ft_merge_rate": 45.2,
+          "overall_merge_rate": 61.9,
+          "ft_prs": 166,
+          "stars": 80969
+        },
+        {
+          "repo": "gin-gonic/gin",
+          "ft_merge_rate": 39.5,
+          "overall_merge_rate": 60.4,
+          "ft_prs": 291,
+          "stars": 88666
+        },
+        {
+          "repo": "syncthing/syncthing",
+          "ft_merge_rate": 32.8,
+          "overall_merge_rate": 64.6,
+          "ft_prs": 137,
+          "stars": 85216
+        },
+        {
+          "repo": "ollama/ollama",
+          "ft_merge_rate": 31.1,
+          "overall_merge_rate": 70.1,
+          "ft_prs": 636,
+          "stars": 173829
+        }
+      ]
+    },
+    "Rust": {
+      "accuracy": 0.674,
+      "auc": 0.725,
+      "n_samples": 3009,
+      "feature_importances": [
+        {
+          "feature": "pr_size",
+          "importance": 0.46
+        },
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.346
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.121
+        },
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.033
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.023
+        },
+        {
+          "feature": "additions",
+          "importance": 0.018
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "pr_size <= 112.50 AND repo_merge_rate > 0.82 AND pr_size <= 26.50 AND repo_total_prs <= 6947.50 -> likely merged (79%)",
+      "recommended_repos": [
+        {
+          "repo": "tauri-apps/tauri",
+          "ft_merge_rate": 68.2,
+          "overall_merge_rate": 91.1,
+          "ft_prs": 214,
+          "stars": 107732
+        },
+        {
+          "repo": "denoland/deno",
+          "ft_merge_rate": 65.5,
+          "overall_merge_rate": 83.4,
+          "ft_prs": 330,
+          "stars": 107022
+        },
+        {
+          "repo": "astral-sh/uv",
+          "ft_merge_rate": 52.1,
+          "overall_merge_rate": 89.5,
+          "ft_prs": 213,
+          "stars": 86265
+        },
+        {
+          "repo": "zed-industries/zed",
+          "ft_merge_rate": 49.0,
+          "overall_merge_rate": 86.2,
+          "ft_prs": 992,
+          "stars": 84994
+        },
+        {
+          "repo": "oven-sh/bun",
+          "ft_merge_rate": 41.5,
+          "overall_merge_rate": 67.6,
+          "ft_prs": 480,
+          "stars": 93086
+        }
+      ]
+    },
+    "C++": {
+      "accuracy": 0.742,
+      "auc": 0.823,
+      "n_samples": 5564,
+      "feature_importances": [
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.66
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.179
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.063
+        },
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.061
+        },
+        {
+          "feature": "additions",
+          "importance": 0.032
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.006
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_merge_rate > 0.73 AND pr_size <= 157.50 AND deletions > 0.50 AND additions <= 3.50 -> likely merged (68%)",
+      "recommended_repos": [
+        {
+          "repo": "opencv/opencv",
+          "ft_merge_rate": 55.5,
+          "overall_merge_rate": 80.6,
+          "ft_prs": 1004,
+          "stars": 88881
+        },
+        {
+          "repo": "electron/electron",
+          "ft_merge_rate": 50.1,
+          "overall_merge_rate": 88.9,
+          "ft_prs": 686,
+          "stars": 121595
+        },
+        {
+          "repo": "microsoft/terminal",
+          "ft_merge_rate": 47.7,
+          "overall_merge_rate": 86.7,
+          "ft_prs": 283,
+          "stars": 103555
+        },
+        {
+          "repo": "ggml-org/llama.cpp",
+          "ft_merge_rate": 42.4,
+          "overall_merge_rate": 78.8,
+          "ft_prs": 1026,
+          "stars": 116016
+        },
+        {
+          "repo": "nomic-ai/gpt4all",
+          "ft_merge_rate": 32.9,
+          "overall_merge_rate": 81.0,
+          "ft_prs": 85,
+          "stars": 77356
+        }
+      ]
+    },
+    "Java": {
+      "accuracy": 0.853,
+      "auc": 0.873,
+      "n_samples": 1597,
+      "feature_importances": [
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.824
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.093
+        },
+        {
+          "feature": "additions",
+          "importance": 0.056
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.02
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.007
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.0
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_merge_rate > 0.29 AND deletions > 0.50 AND additions <= 21.50 AND deletions > 1.50 -> likely merged (74%)",
+      "recommended_repos": [
+        {
+          "repo": "krahets/hello-algo",
+          "ft_merge_rate": 57.1,
+          "overall_merge_rate": 79.8,
+          "ft_prs": 154,
+          "stars": 126652
+        },
+        {
+          "repo": "iluwatar/java-design-patterns",
+          "ft_merge_rate": 44.1,
+          "overall_merge_rate": 56.1,
+          "ft_prs": 397,
+          "stars": 94121
+        },
+        {
+          "repo": "spring-projects/spring-boot",
+          "ft_merge_rate": 1.4,
+          "overall_merge_rate": 1.3,
+          "ft_prs": 948,
+          "stars": 80870
+        },
+        {
+          "repo": "macrozheng/mall",
+          "ft_merge_rate": 0.0,
+          "overall_merge_rate": 0.6,
+          "ft_prs": 67,
+          "stars": 83843
+        }
+      ]
+    },
+    "C": {
+      "accuracy": 0.873,
+      "auc": 0.768,
+      "n_samples": 273,
+      "feature_importances": [
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.984
+        },
+        {
+          "feature": "additions",
+          "importance": 0.014
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.002
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.0
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.0
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.0
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_total_prs <= 629.00 -> likely not merged (38%)",
+      "recommended_repos": [
+        {
+          "repo": "ventoy/Ventoy",
+          "ft_merge_rate": 36.0,
+          "overall_merge_rate": 63.6,
+          "ft_prs": 86,
+          "stars": 77154
+        },
+        {
+          "repo": "Genymobile/scrcpy",
+          "ft_merge_rate": 2.7,
+          "overall_merge_rate": 25.1,
+          "ft_prs": 187,
+          "stars": 143337
+        }
+      ]
+    },
+    "C#": {
+      "accuracy": 0.655,
+      "auc": 0.714,
+      "n_samples": 420,
+      "feature_importances": [
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.604
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.287
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.085
+        },
+        {
+          "feature": "additions",
+          "importance": 0.023
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.0
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.0
+        },
+        {
+          "feature": "hour",
+          "importance": 0.0
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_total_prs > 4348.50 AND pr_size <= 131.50 AND changed_files > 1.50 -> likely merged (71%)",
+      "recommended_repos": [
+        {
+          "repo": "microsoft/PowerToys",
+          "ft_merge_rate": 55.4,
+          "overall_merge_rate": 85.7,
+          "ft_prs": 314,
+          "stars": 134066
+        },
+        {
+          "repo": "2dust/v2rayN",
+          "ft_merge_rate": 23.6,
+          "overall_merge_rate": 61.0,
+          "ft_prs": 106,
+          "stars": 108653
+        }
+      ]
+    },
+    "JavaScript": {
+      "accuracy": 0.709,
+      "auc": 0.689,
+      "n_samples": 5157,
+      "feature_importances": [
+        {
+          "feature": "repo_merge_rate",
+          "importance": 0.421
+        },
+        {
+          "feature": "deletions",
+          "importance": 0.364
+        },
+        {
+          "feature": "additions",
+          "importance": 0.105
+        },
+        {
+          "feature": "repo_total_prs",
+          "importance": 0.086
+        },
+        {
+          "feature": "changed_files",
+          "importance": 0.022
+        },
+        {
+          "feature": "hour",
+          "importance": 0.003
+        },
+        {
+          "feature": "pr_size",
+          "importance": 0.0
+        },
+        {
+          "feature": "is_weekend",
+          "importance": 0.0
+        },
+        {
+          "feature": "day_of_week",
+          "importance": 0.0
+        }
+      ],
+      "decision_rules": "repo_merge_rate > 0.69 AND additions <= 185.50 AND changed_files > 1.50 AND additions <= 23.50 -> likely merged (68%)",
+      "recommended_repos": [
+        {
+          "repo": "sveltejs/svelte",
+          "ft_merge_rate": 51.6,
+          "overall_merge_rate": 80.8,
+          "ft_prs": 483,
+          "stars": 87166
+        },
+        {
+          "repo": "louislam/uptime-kuma",
+          "ft_merge_rate": 51.3,
+          "overall_merge_rate": 70.7,
+          "ft_prs": 439,
+          "stars": 87859
+        },
+        {
+          "repo": "ryanmcdermott/clean-code-javascript",
+          "ft_merge_rate": 42.7,
+          "overall_merge_rate": 57.3,
+          "ft_prs": 117,
+          "stars": 94432
+        },
+        {
+          "repo": "axios/axios",
+          "ft_merge_rate": 38.0,
+          "overall_merge_rate": 53.3,
+          "ft_prs": 442,
+          "stars": 109072
+        },
+        {
+          "repo": "affaan-m/ECC",
+          "ft_merge_rate": 33.8,
+          "overall_merge_rate": 48.8,
+          "ft_prs": 234,
+          "stars": 213021
+        }
+      ]
+    }
   }
 }

@@ -407,41 +407,48 @@ The GA nearly doubled the weight on response time (25% to 49%) and eliminated tr
 <img src="output/figures/ga_weights_comparison.svg" width="100%">
 <img src="output/figures/ga_convergence.svg" width="100%">
 
-### 16. Where Should You Submit Your First PR?
+### 16. Where Should You Submit Your First PR? (Decision Trees by Language)
 
-We trained a Random Forest on 187,872 first-timer PRs to predict which will get merged. The model (AUC=0.761) reveals what matters most:
+We trained decision trees on first-timer PRs for each major programming language to predict which contributions get merged. The models reveal what matters most, and which repos are the most welcoming.
 
-1. **The repo's overall merge rate** (29% importance): the single strongest predictor. If a repo merges 60%+ of all PRs, first-timers have a chance. Below 30%, almost no first-timer gets through.
-2. **PR size** (additions 23% + deletions 13%): keep it small. The decision tree's clearest rule: PRs with fewer than 23 lines of additions in repos with >59% merge rate have the best odds.
-3. **Community size and response time** matter but less than expected.
+**The universal finding:** across all languages, the repo's overall merge rate is the dominant predictor (typically 50-98% of feature importance). PR size is the second factor, especially in Rust where it accounts for 46% of importance. Weekend vs weekday, time of day, and other features barely register.
 
-<img src="output/figures/firsttimer_success_features.svg" width="100%">
+**Per-language decision tree results:**
 
-**Important caveat**: Many top-by-stars repos are educational resources, curated lists, or study material, not real software projects. Their high first-timer merge rates reflect easy contributions (adding links, fixing typos), not welcoming engineering cultures. We separate the two:
+| Language | AUC | Top predictor (importance) | Actionable rule | Best repo for first-timers |
+|----------|-----|--------------------------|-----------------|---------------------------|
+| Java | 0.873 | repo_merge_rate (82%) | repo_merge_rate > 0.29 AND deletions > 0.50 AND additions <= 21.50 AND deletions > 1.50 -> likely merged (74%) | krahets/hello-algo (57% FT merge) |
+| C++ | 0.823 | repo_merge_rate (66%) | repo_merge_rate > 0.73 AND pr_size <= 157.50 AND deletions > 0.50 AND additions <= 3.50 -> likely merged (68%) | opencv/opencv (56% FT merge) |
+| Python | 0.780 | repo_merge_rate (74%) | repo_merge_rate > 0.33 AND repo_merge_rate > 0.72 AND pr_size <= 88.50 AND additions <= 8.50 -> likely merged (65%) | swisskyrepo/PayloadsAllTheThings (65% FT merge) |
+| C | 0.768 | repo_total_prs (98%) | repo_total_prs <= 629.00 -> likely not merged (38%) | ventoy/Ventoy (36% FT merge) |
+| Go | 0.763 | repo_merge_rate (56%) | repo_merge_rate > 0.30 AND pr_size <= 7.50 AND repo_merge_rate > 0.67 AND repo_merge_rate > 0.77 -> likely merged (75%) | jesseduffield/lazygit (54% FT merge) |
+| TypeScript | 0.751 | repo_merge_rate (48%) | repo_merge_rate > 0.59 AND additions <= 18.50 AND repo_total_prs <= 20586.50 AND repo_total_prs > 8898.50 -> likely merged (71%) | storybookjs/storybook (70% FT merge) |
+| Rust | 0.725 | pr_size (46%) | pr_size <= 112.50 AND repo_merge_rate > 0.82 AND pr_size <= 26.50 AND repo_total_prs <= 6947.50 -> likely merged (79%) | tauri-apps/tauri (68% FT merge) |
+| JavaScript | 0.689 | repo_merge_rate (42%) | repo_merge_rate > 0.69 AND additions <= 185.50 AND changed_files > 1.50 AND additions <= 23.50 -> likely merged (68%) | sveltejs/svelte (52% FT merge) |
 
-**Real software projects (ranked by first-timer merge rate):**
+<img src="output/figures/first_timer_tree_python.svg" width="100%">
 
-| Repo | Language | First-timer merge rate | First-timer PRs |
-|------|----------|----------------------|-----------------|
-| localstack/localstack | Python | **87%** | 196 |
-| remotion-dev/remotion | TypeScript | **81%** | 146 |
-| DefinitelyTyped/DefinitelyTyped | TypeScript | **79%** | 9,273 |
-| Eugeny/tabby | TypeScript | **77%** | 105 |
-| gatsbyjs/gatsby | JavaScript | **73%** | 1,952 |
-| sharkdp/bat | Rust | **73%** | 167 |
-| AppFlowy-IO/AppFlowy | Dart | **73%** | 238 |
-| netdata/netdata | C | **73%** | 335 |
-| pmndrs/zustand | TypeScript | **72%** | 188 |
-| ... | | | |
-| laravel/laravel | Blade | **18%** | 1,108 |
-| deepseek-ai/DeepSeek-V3 | Python | **6%** | 97 |
+**Top 3 recommended repos per language (ranked by first-timer merge rate, min 20 FT PRs):**
 
-The best real software repos for first-timers span multiple ecosystems: localstack (Python, 87%), remotion (TypeScript, 81%), and DefinitelyTyped (TypeScript, 79%). The worst are large established frameworks (laravel 18%) and ML research repos (DeepSeek 6%) where the contribution bar is high. Repos matching curated-list patterns (awesome-*, interview, exercises, etc.) are excluded from this ranking.
+**Java:** krahets/hello-algo (57%), iluwatar/java-design-patterns (44%), spring-projects/spring-boot (1%)
 
-**The decision tree distilled**: For real software projects, choose a project with >40% overall merge rate. Keep your PR under 23 lines. TypeScript and Python projects are the most welcoming ecosystems for newcomers.
+**C++:** opencv/opencv (56%), electron/electron (50%), microsoft/terminal (48%)
 
-<img src="output/figures/firsttimer_decision_tree.png" width="100%">
+**Python:** swisskyrepo/PayloadsAllTheThings (65%), infiniflow/ragflow (59%), langchain-ai/langchain (58%)
 
+**C:** ventoy/Ventoy (36%), Genymobile/scrcpy (3%)
+
+**Go:** jesseduffield/lazygit (54%), junegunn/fzf (45%), gin-gonic/gin (40%)
+
+**TypeScript:** storybookjs/storybook (70%), Stirling-Tools/Stirling-PDF (70%), ant-design/ant-design (64%)
+
+**Rust:** tauri-apps/tauri (68%), denoland/deno (66%), astral-sh/uv (52%)
+
+**JavaScript:** sveltejs/svelte (52%), louislam/uptime-kuma (51%), ryanmcdermott/clean-code-javascript (43%)
+
+<img src="output/figures/first_timer_recommendations.svg" width="100%">
+
+**The decision tree distilled:** Rust is the only language where PR size matters more than the repo itself. Everywhere else, choosing the right repo is the single most important decision a first-timer can make. Check the repo's merged-vs-closed ratio before investing effort.
 ---
 
 ## What's Next
