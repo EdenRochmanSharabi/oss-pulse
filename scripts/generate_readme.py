@@ -70,6 +70,7 @@ def main() -> None:
     merge_time = stats["merge_time"]
     forecast = stats.get("forecast_benchmark", {})
     contrib_return = stats.get("contributor_return", {})
+    ft_trees = stats.get("first_timer_trees", {})
 
     author_groups = load_author_groups(stats)
 
@@ -587,6 +588,72 @@ def main() -> None:
             ),
         ),
     ]
+
+    # ── Generate Section 16 (first-timer decision trees by language) ────────
+    if ft_trees:
+        main_langs = ["Python", "TypeScript", "Go", "Rust", "C++", "Java", "C", "JavaScript", "C#"]
+        available = [l for l in main_langs if l in ft_trees]
+
+        tree_table_rows = []
+        for lang in available:
+            d = ft_trees[lang]
+            top_feat = d["feature_importances"][0]
+            best = d["recommended_repos"][0] if d.get("recommended_repos") else None
+            best_name = best["repo"] if best else "N/A"
+            best_rate = f'{best["ft_merge_rate"]:.0f}%' if best else "N/A"
+            rule = d.get("decision_rules", "")
+            tree_table_rows.append(
+                f"| {lang} | {d['auc']:.3f} | {top_feat['feature']} ({top_feat['importance']:.0%}) "
+                f"| {rule} | {best_name} ({best_rate} FT merge) |"
+            )
+
+        per_lang_tables = []
+        for lang in available:
+            repos = ft_trees[lang].get("recommended_repos", [])[:5]
+            if not repos:
+                continue
+            rows = []
+            for r in repos:
+                ws = f"{r.get('wilson_score', 0):.3f}"
+                rows.append(
+                    f"| {r['repo']} | **{r['ft_merge_rate']:.0f}%** | {r['ft_prs']} | {ws} |"
+                )
+            per_lang_tables.append(
+                f"**If you write {lang}, start here** (ranked by Wilson score, min 20 FT PRs):\n\n"
+                f"| Repo | First-timer merge rate | First-timer PRs | Wilson score |\n"
+                f"|------|----------------------|-----------------|--------------|\n"
+                + "\n".join(rows)
+            )
+
+        section_16 = (
+            "### 16. Where Should You Submit Your First PR? (Decision Trees by Language)\n\n"
+            "We trained decision trees on first-timer PRs for each major programming language "
+            "to predict which contributions get merged. The question is simple: **if you program "
+            "in Python, Rust, Go, or any other language, where should you start contributing "
+            "to maximize your chances of getting merged?**\n\n"
+            "Repos are ranked using the Wilson score lower bound, which penalizes small samples: "
+            "a repo with 5/5 merges ranks lower than one with 200/300, because we need statistical "
+            "confidence, not lucky streaks.\n\n"
+            "**Per-language model results:**\n\n"
+            "| Language | AUC | Top predictor | Actionable rule | Best repo |\n"
+            "|----------|-----|--------------|-----------------|-----------|\n"
+            + "\n".join(tree_table_rows) + "\n\n"
+            + "\n\n".join(per_lang_tables) + "\n\n"
+            "<img src=\"output/figures/first_timer_tree_python.svg\" width=\"100%\">\n\n"
+            "<img src=\"output/figures/first_timer_recommendations.svg\" width=\"100%\">\n\n"
+            "**The decision tree distilled:** Rust is the only language where PR size matters more "
+            "than the repo itself. Everywhere else, choosing the right repo is the single most "
+            "important decision a first-timer can make. Check the repo's merged-vs-closed ratio "
+            "before investing effort."
+        )
+
+        section_16_pattern = (
+            r"### 16\. Where Should You Submit Your First PR\?.*?"
+            r"(?=\n---\n)"
+        )
+        if re.search(section_16_pattern, text, re.DOTALL):
+            text = re.sub(section_16_pattern, section_16, text, count=1, flags=re.DOTALL)
+            print("  Section 16 regenerated from stats.json")
 
     # ── Apply literal replacements ──────────────────────────────────────────
     replaced = 0

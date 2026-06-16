@@ -1,4 +1,5 @@
-"""Comparison and distribution plots: box, violin, funnel, survival, ROC."""
+"""Comparison and distribution plots: box, violin, funnel, survival, ROC,
+first-timer recommendations."""
 
 from __future__ import annotations
 
@@ -180,4 +181,76 @@ def plot_roc_curve(
     ax.set_ylabel("True Positive Rate")
     ax.set_title(title, fontsize=14, fontweight="bold")
     ax.legend(loc="lower right")
+    return fig
+
+
+def plot_first_timer_recommendations(
+    tree_results: dict[str, Any],
+    languages: list[str] | None = None,
+) -> mfigure.Figure:
+    """Horizontal bar chart of top repos for first-time contributors per language.
+
+    ``tree_results`` is the ``first_timer_trees`` dict from stats.json.
+    Each language panel shows up to 5 repos coloured by first-timer merge rate.
+    """
+    setup_style()
+
+    if languages is None:
+        languages = [
+            lang for lang in [
+                "Python", "TypeScript", "Go", "Rust", "C++",
+                "Java", "C", "Ruby", "C#", "JavaScript",
+            ]
+            if lang in tree_results and tree_results[lang].get("recommended_repos")
+        ]
+
+    n_langs = len(languages)
+    if n_langs == 0:
+        fig, ax = plt.subplots()
+        ax.text(0.5, 0.5, "No data", transform=ax.transAxes, ha="center")
+        return fig
+
+    fig, axes = plt.subplots(
+        n_langs, 1,
+        figsize=(14, max(6, n_langs * 2.5)),
+        squeeze=False,
+    )
+
+    cmap = plt.cm.RdYlGn  # type: ignore[attr-defined]
+
+    for idx, lang in enumerate(languages):
+        ax = axes[idx, 0]
+        recs = tree_results[lang]["recommended_repos"]
+
+        repos = [r["repo"] for r in recs]
+        rates = [r["ft_merge_rate"] for r in recs]
+        stars = [r["stars"] for r in recs]
+
+        norm_rates = [r / 100.0 for r in rates]
+        colors = [cmap(nr) for nr in norm_rates]
+
+        bars = ax.barh(repos[::-1], rates[::-1], color=colors[::-1], edgecolor="none")
+
+        for bar, star_count in zip(bars, stars[::-1]):
+            ax.text(
+                bar.get_width() + 0.5,
+                bar.get_y() + bar.get_height() / 2,
+                f"{star_count:,} stars",
+                va="center",
+                fontsize=8,
+                color=PALETTE["secondary"],
+            )
+
+        ax.set_xlim(0, 105)
+        ax.set_xlabel("First-Timer Merge Rate (%)" if idx == n_langs - 1 else "")
+        ax.set_title(f"{lang}", fontsize=11, fontweight="bold", loc="left")
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    fig.suptitle(
+        "Best Repos for First-Time Contributors by Language",
+        fontsize=14,
+        fontweight="bold",
+        y=1.01,
+    )
     return fig
