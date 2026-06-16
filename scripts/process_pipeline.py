@@ -25,20 +25,8 @@ REPO_DIR = Path("data/raw/repos")
 PROCESSED_DIR = Path("data/processed")
 
 NON_CODE_LANGUAGES = {None, "Markdown"}
-CURATED_REPOS = [
-    "papers-we-love/papers-we-love",
-    "jaywcjlove/awesome-mac",
-    "Snailclimb/JavaGuide",
-    "yangshun/tech-interview-handbook",
-    "EbookFoundation/free-programming-books",
-    "ripienaar/free-for-dev",
-    "GrowingGit/GitHub-Chinese-Top-Charts",
-    "mattpocock/skills",
-    "bregman-arie/devops-exercises",
-    "avelino/awesome-go",
-    "awesome-selfhosted/awesome-selfhosted",
-    "torvalds/linux",
-]
+
+CLASSIFICATION_PATH = PROCESSED_DIR / "repo_classification.json"
 
 
 def main() -> None:
@@ -82,12 +70,20 @@ def main() -> None:
     print(f"  Filtered to before {cutoff.date()}: {len(featured):,} PRs")
 
     print("\n=== 6. Filter non-code repos ===")
-    repos = pd.read_parquet("data/raw/top_repos.parquet")
-    non_code = repos[
-        repos["language"].isin(NON_CODE_LANGUAGES)
-        | repos["language"].isna()
-    ]["repo_name"].tolist()
-    exclude = set(non_code + CURATED_REPOS)
+    if CLASSIFICATION_PATH.exists():
+        import json as _json
+        with open(CLASSIFICATION_PATH) as f:
+            classification = _json.load(f)
+        exclude = set(classification.get("non_code", []))
+        print(f"  Loaded {len(exclude)} non-code repos from repo_classification.json")
+    else:
+        repos = pd.read_parquet("data/raw/top_repos.parquet")
+        non_code = repos[
+            repos["language"].isin(NON_CODE_LANGUAGES)
+            | repos["language"].isna()
+        ]["repo_name"].tolist()
+        exclude = set(non_code)
+        print(f"  No classification file; falling back to language filter ({len(exclude)} repos)")
     before = featured["repo_name"].nunique()
     featured = featured[~featured["repo_name"].isin(exclude)]
     after = featured["repo_name"].nunique()

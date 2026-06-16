@@ -1,6 +1,6 @@
 # oss-pulse
 
-**A time-series study of 4.1 million Pull Requests across 625 top open-source software projects (2016-2026).**
+**A time-series study of 4.0 million Pull Requests across 580 top open-source software projects (2016-2026).**
 
 Open source runs the world, but how does it actually work? Who contributes, how fast do projects respond, and what happens to the thousands of developers who open their first PR? This study analyzes a decade of Pull Request activity to find out.
 
@@ -24,7 +24,7 @@ This project started with a simple question: if you had 10 years of Pull Request
 
 The answer turned out to be more interesting, and harder to get, than expected.
 
-We analyzed **4,115,282 Pull Requests** across **625 software repositories**, spanning from January 2016 to May 2026. The dataset includes projects like PyTorch, Rust, Godot, Home Assistant, Playwright, Kubernetes, VS Code, and hundreds more, covering languages from Python to Go to Rust.
+We analyzed **4,048,297 Pull Requests** across **580 software repositories**, spanning from January 2016 to May 2026. The dataset includes projects like PyTorch, Rust, Godot, Home Assistant, Playwright, Kubernetes, VS Code, and hundreds more, covering languages from Python to Go to Rust.
 
 The analysis goes beyond descriptive statistics. We decompose time series into trend, seasonality, and residuals. We benchmark four forecasting models. We build a composite health index. We use survival analysis to model PR lifetimes. And we let an unsupervised changepoint detection algorithm tell us whether AI tools actually changed anything, without assuming the answer.
 
@@ -36,7 +36,7 @@ The analysis goes beyond descriptive statistics. We decompose time series into t
 
 **Source:** GitHub GraphQL API, extracting the complete PR history for each repository.
 
-**Target population:** The 200 most-starred active repositories on GitHub (stars > 5,000, pushed after 2024-01-01). Of these, 625 repos were collected for analysis. Extraction continues for the remaining repos.
+**Target population:** The 200 most-starred active repositories on GitHub (stars > 5,000, pushed after 2024-01-01). Of these, 580 software repos were collected for analysis. Extraction continues for the remaining repos.
 
 **Variables collected per PR:**
 - Timestamps: created, merged, closed, last updated, first review
@@ -93,12 +93,12 @@ See `docs/process_log.md` for the complete project diary.
 
 ---
 
-## General Findings (625 software repos)
+## General Findings (580 software repos)
 
 ### The Dataset at a Glance
 
-- **4,115,282 PRs** across **625 software repos**, spanning **2016-2026**
-- **429,956 unique contributors** (excluding bots)
+- **4,048,297 PRs** across **580 software repos**, spanning **2016-2026**
+- **419,177 unique contributors** (excluding bots)
 - Outcome distribution: **69.5% merged**, 27.9% closed, 1.5% abandoned, 1.1% still open
 - Author distribution: 72% maintainers, 15% regulars, 7% first-timers, 6% bots (by PR count)
 
@@ -519,7 +519,7 @@ Repos are ranked using the Wilson score lower bound, which penalizes small sampl
 
 ## What's Next
 
-Dataset covers 625 repos spanning 2016-2026. Planned updates:
+Dataset covers 580 repos spanning 2016-2026. Planned updates:
 
 - **Comparative by organization type**: company-backed vs community vs foundation
 - **Cross-correlation**: do repos that respond faster retain more contributors?
