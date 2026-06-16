@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -152,3 +153,30 @@ if __name__ == "__main__":
         print(f"\nAnnotated changepoints:\n{annotation_results.to_string(index=False)}")
     else:
         print(f"\nEvents file not found at {events_path}, skipping annotation.")
+
+    # Update stats.json
+    primary_cp = cps[0] if cps else None
+    primary_stats: dict[str, Any] = {}
+    if primary_cp is not None:
+        primary_stats = compute_pre_post_stats(series, primary_cp)
+        primary_date = str(series.index[primary_cp])
+    else:
+        primary_date = None
+
+    stats_path = Path("data/processed/stats.json")
+    stats_data: dict[str, Any] = {}
+    if stats_path.exists():
+        with open(stats_path) as f:
+            stats_data = json.load(f)
+
+    stats_data["changepoint"] = {
+        "n_changepoints": len(cps),
+        "primary_changepoint_date": primary_date,
+        "pre_mean": round(primary_stats.get("pre_mean", float("nan")), 3),
+        "post_mean": round(primary_stats.get("post_mean", float("nan")), 3),
+        "cohens_d": round(primary_stats.get("effect_size", float("nan")), 3),
+    }
+
+    with open(stats_path, "w") as f:
+        json.dump(stats_data, f, indent=2)
+    print(f"\nUpdated {stats_path}")

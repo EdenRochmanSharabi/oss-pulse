@@ -1,6 +1,6 @@
 # oss-pulse
 
-**A time-series study of 2.7 million Pull Requests across 341 top open-source software projects (2016-2026).**
+**A time-series study of 4.1 million Pull Requests across 625 top open-source software projects (2016-2026).**
 
 Open source runs the world, but how does it actually work? Who contributes, how fast do projects respond, and what happens to the thousands of developers who open their first PR? This study analyzes a decade of Pull Request activity to find out.
 
@@ -24,7 +24,7 @@ This project started with a simple question: if you had 10 years of Pull Request
 
 The answer turned out to be more interesting, and harder to get, than expected.
 
-We analyzed **2,682,939 Pull Requests** across **341 software repositories**, spanning from January 2016 to May 2026. The dataset includes projects like PyTorch, Rust, Godot, Home Assistant, Playwright, Kubernetes, VS Code, and hundreds more, covering languages from Python to Go to Rust.
+We analyzed **4,115,282 Pull Requests** across **625 software repositories**, spanning from January 2016 to May 2026. The dataset includes projects like PyTorch, Rust, Godot, Home Assistant, Playwright, Kubernetes, VS Code, and hundreds more, covering languages from Python to Go to Rust.
 
 The analysis goes beyond descriptive statistics. We decompose time series into trend, seasonality, and residuals. We benchmark four forecasting models. We build a composite health index. We use survival analysis to model PR lifetimes. And we let an unsupervised changepoint detection algorithm tell us whether AI tools actually changed anything, without assuming the answer.
 
@@ -36,7 +36,7 @@ The analysis goes beyond descriptive statistics. We decompose time series into t
 
 **Source:** GitHub GraphQL API, extracting the complete PR history for each repository.
 
-**Target population:** The 200 most-starred active repositories on GitHub (stars > 5,000, pushed after 2024-01-01). Of these, 82 had sufficient PR data for analysis at the time of this first draft. Extraction continues for the remaining repos.
+**Target population:** The 200 most-starred active repositories on GitHub (stars > 5,000, pushed after 2024-01-01). Of these, 625 repos were collected for analysis. Extraction continues for the remaining repos.
 
 **Variables collected per PR:**
 - Timestamps: created, merged, closed, last updated, first review
@@ -44,7 +44,7 @@ The analysis goes beyond descriptive statistics. We decompose time series into t
 - Size: additions, deletions, changed files
 - Outcome: merged, closed without merge, abandoned (open > 90 days without activity), still open
 
-**Non-code repos excluded:** The top-200-by-stars list included awesome-lists, interview prep repos, book collections, and other non-software projects. We excluded 20 repos with no programming language (language=None or Markdown), reducing from 82 to 62 repos. These non-code repos have different PR dynamics (curation vs engineering) that would distort the analysis.
+**Non-code repos excluded:** The top-200-by-stars list included awesome-lists, interview prep repos, book collections, and other non-software projects. We excluded repos with no programming language (language=None or Markdown). These non-code repos have different PR dynamics (curation vs engineering) that would distort the analysis.
 
 **Bot detection:** 20 known bot patterns (dependabot, renovate, github-actions, codecov, etc.) plus any username containing `[bot]`. Bots represent ~6% of PRs in our dataset.
 
@@ -93,15 +93,13 @@ See `docs/process_log.md` for the complete project diary.
 
 ---
 
-## General Findings (First Draft, 341 software repos)
-
-*These findings are based on the first 341 software repos extracted. They will be updated when the full 200-repo dataset is available.*
+## General Findings (625 software repos)
 
 ### The Dataset at a Glance
 
-- **2,682,939 PRs** across **341 software repos**, spanning **2016-2026**
-- **329,142 unique contributors** (excluding bots)
-- Outcome distribution: **67.6% merged**, 29.4% closed, 1.7% abandoned, 1.3% still open
+- **4,115,282 PRs** across **625 software repos**, spanning **2016-2026**
+- **429,956 unique contributors** (excluding bots)
+- Outcome distribution: **69.5% merged**, 27.9% closed, 1.5% abandoned, 1.1% still open
 - Author distribution: 72% maintainers, 15% regulars, 7% first-timers, 6% bots (by PR count)
 
 ### 1. Open Source Is Growing, But Unevenly
@@ -148,12 +146,12 @@ Breakdown by author type reveals that **maintainer PRs merge fastest** (often se
 
 ### 4. The Retention Crisis
 
-Of **329,142 contributors** who opened at least one PR:
-- **41.6%** came back for a second (136,868)
-- **13.8%** reached their 5th PR (45,449)
-- **3.4%** became regulars with 20+ PRs (11,289)
+Of **429,956 contributors** who opened at least one PR:
+- **44.2%** came back for a second (190,145)
+- **15.6%** reached their 5th PR (67,282)
+- **4.1%** became regulars with 20+ PRs (17,720)
 
-The first-to-second PR transition is where open source loses most contributors. **58% of first-time contributors never return.** This is consistent across ecosystems and has not improved significantly over the decade.
+The first-to-second PR transition is where open source loses most contributors. **56% of first-time contributors never return.** This is consistent across ecosystems and has not improved significantly over the decade.
 
 <img src="output/figures/05_contributor_funnel.svg" width="100%">
 
@@ -165,12 +163,12 @@ Did LLM coding tools (Copilot, ChatGPT, GPT-4) change open-source contribution d
 
 | Metric | 2016-2019 | 2020-2021 | 2022 (Copilot) | 2023 (ChatGPT) | 2024 | 2025-2026 |
 |--------|-----------|-----------|----------------|-----------------|------|-----------|
-| Contributors/month | 4,429 | 5,192 | 5,420 | 6,687 | 7,244 | **10,608** |
-| First-timers/month | 1,031 | 1,169 | 1,222 | 1,700 | 1,775 | **3,165** |
-| First-timer rejection | 51.8% | 53.5% | 55.7% | 58.3% | 58.6% | **64.5%** |
-| Overall rejection | 30.9% | 29.1% | 28.4% | 27.6% | 27.1% | **34.8%** |
+| Contributors/month | 6,352 | 7,785 | 8,527 | 10,097 | 10,696 | **14,480** |
+| First-timers/month | 1,299 | 1,504 | 1,638 | 2,134 | 2,216 | **3,794** |
+| First-timer rejection | 53.0% | 53.2% | 54.9% | 56.7% | 57.1% | **63.1%** |
+| Overall rejection | 31.5% | 27.7% | 27.2% | 25.8% | 25.6% | **36.8%** |
 | Median PR size (lines)* | 10 | 17 | 16 | 16 | 19 | **37** |
-| PRs/author/month | 2.82 | 3.23 | 3.48 | 3.55 | 3.78 | **3.76** |
+| PRs/author/month | 2.92 | 3.41 | 3.59 | 3.79 | 3.95 | **3.98** |
 
 *\*Median PR size uses only PRs with additions > 0 (25-46% per era). The Search API returns 0 additions for most PRs; these are excluded to avoid deflating the median.*
 
@@ -180,11 +178,11 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/06_changepoints.svg" width="100%">
 
-**5b. More people are contributing, including newcomers.** Monthly unique contributors grew from 4,429 (2016-2019) to 10,608 (2025-2026). First-timers per month tripled: 1,031 to 3,165. In absolute terms, more newcomers than ever are attempting to contribute. However, their share of total PRs dropped because regular contributors grew even faster.
+**5b. More people are contributing, including newcomers.** Monthly unique contributors grew from 6,352 (2016-2019) to 14,480 (2025-2026). First-timers per month nearly tripled: 1,299 to 3,794. In absolute terms, more newcomers than ever are attempting to contribute. However, their share of total PRs dropped because regular contributors grew even faster.
 
 <img src="output/figures/ai_01_unique_contributors.svg" width="100%">
 
-**5c. The rejection rate shows a lag effect.** From 2020 to 2024, the overall rejection rate was stable around 27-29%. But in 2025-2026, it jumped to 34.8%. The effect wasn't immediate with AI tool launches; it took 2-3 years of adoption before the impact became visible in the data.
+**5c. The rejection rate shows a lag effect.** From 2020 to 2024, the overall rejection rate was stable around 27.7-27.2%. But in 2025-2026, it jumped to 36.8%. The effect wasn't immediate with AI tool launches; it took 2-3 years of adoption before the impact became visible in the data.
 
 <img src="output/figures/ai_02_rejection_rate.svg" width="100%">
 
@@ -192,7 +190,7 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_03_rejected_contributors.svg" width="100%">
 
-**5e. First-timers are showing up in record numbers, but struggling more.** 3,165 first-timers/month in 2025-2026, up from 1,031 in 2016-2019. But their rejection rate climbed steadily: 51.8% (2016-2019) to 55.7% (2022) to 58.3% (2023) to **64.5%** (2025-2026). More people are trying, but the success rate is dropping, especially in the most recent period where AI adoption is highest.
+**5e. First-timers are showing up in record numbers, but struggling more.** 3,794 first-timers/month in 2025-2026, up from 1,299 in 2016-2019. But their rejection rate climbed steadily: 53.0% (2016-2019) to 54.9% (2022) to 56.7% (2023) to **63.1%** (2025-2026). More people are trying, but the success rate is dropping, especially in the most recent period where AI adoption is highest.
 
 <img src="output/figures/ai_04_firsttimer_analysis.svg" width="100%">
 
@@ -200,19 +198,19 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_05_pr_size_trend.svg" width="100%">
 
-**5g. Individual productivity is up 33%.** Each contributor produces more PRs per month (2.8 to 3.8). Combined with the size increase, the total code output per person has grown substantially.
+**5g. Individual productivity is up 33%.** Each contributor produces more PRs per month (2.92 to 3.98). Combined with the size increase, the total code output per person has grown substantially.
 
 <img src="output/figures/ai_06_prs_per_contributor.svg" width="100%">
 
-**5h. Who benefits? Productivity and merge rate by author group.** The aggregate +33% masks a stark inequality. Maintainers went from 5.2 to 7.9 PRs/person/month while their merge rate declined from 75% to 70%. Regulars gained modestly (1.5 to 1.7) but their merge rate collapsed from 55% to 31%. First-timers are by definition at 1 PR/month, but their merge rate dropped from 48% to 23%.
+**5h. Who benefits? Productivity and merge rate by author group.** The aggregate +33% masks a stark inequality. Maintainers went from 5.1 to 7.8 PRs/person/month while their merge rate declined from 74% to 72%. Regulars gained modestly (1.5 to 1.7) but their merge rate collapsed from 54% to 34%. First-timers are by definition at 1 PR/month, but their merge rate dropped from 47% to 25%.
 
 | Group | PRs/person/month (2016-2019) | PRs/person/month (2025-2026) | Merge rate (2016-2019) | Merge rate (2025-2026) |
 |-------|------------------------|------------------------|-------------------|-------------------|
-| Maintainer | 5.2 | 7.9 | 75% | 70% |
-| Regular | 1.5 | 1.7 | 55% | 31% |
-| First-timer | 1.0 | 1.0 | 48% | 23% |
+| Maintainer | 5.1 | 7.8 | 74% | 72% |
+| Regular | 1.5 | 1.7 | 54% | 34% |
+| First-timer | 1.0 | 1.0 | 47% | 25% |
 
-The productivity gains are concentrated in those who already had expertise. For everyone else, the bar has risen: regulars' merge rate fell 24 percentage points, and first-timers' fell 25 points.
+The productivity gains are concentrated in those who already had expertise. For everyone else, the bar has risen: regulars' merge rate fell 20 percentage points, and first-timers' fell 22 points.
 
 <img src="output/figures/ai_07_productivity_by_group.svg" width="100%">
 
@@ -220,17 +218,17 @@ The productivity gains are concentrated in those who already had expertise. For 
 
 | Era | Tool | Merge rate | First-timer merge | PRs/month |
 |-----|------|-----------|-------------------|-----------|
-| Pre-Copilot | None | 70.1% | 47.5% | 14,154 |
-| Jun 2022 - Feb 2023 | Copilot | 71.2% | 43.5% | 20,271 |
-| Mar 2023 - Feb 2024 | ChatGPT / GPT-4 | 72.0% | 41.3% | 24,726 |
-| Mar 2024 - Jan 2025 | Cursor | 73.0% | 40.9% | 27,579 |
-| Feb 2025+ | Claude Code / Codex | **59.6%** | **22.7%** | **40,635** |
+| Pre-Copilot | None | 70.4% | 47.0% | 21,672 |
+| Jun 2022 - Feb 2023 | Copilot | 72.7% | 44.0% | 32,773 |
+| Mar 2023 - Feb 2024 | ChatGPT / GPT-4 | 73.9% | 43.0% | 39,375 |
+| Mar 2024 - Jan 2025 | Cursor | 74.4% | 42.6% | 42,545 |
+| Feb 2025+ | Claude Code / Codex | **62.8%** | **24.8%** | **58,484** |
 
-During the Copilot and Cursor eras, merge rates actually *improved* (70% to 73%). But when agentic tools reached mainstream adoption in 2025, merge rates collapsed to 60% overall and 23% for first-timers, even though PR volume nearly doubled.
+During the Copilot and Cursor eras, merge rates actually *improved* (70% to 73%). But when agentic tools reached mainstream adoption in 2025, merge rates collapsed to 62.8% overall and 24.8% for first-timers, even though PR volume nearly doubled.
 
 The pattern suggests that more powerful AI tools make it easier to *generate and submit* code, but don't proportionally improve the *quality* of that code relative to maintainer expectations. The gap between what AI can produce and what maintainers will accept may be widening, not closing.
 
-**Summary of the AI effect:** The story has three acts. First (2022-2024), autocomplete-style AI (Copilot, ChatGPT) modestly boosted productivity while merge rates held steady or improved. Second (2024-2025), AI-assisted editors (Cursor) maintained that balance. Third (2025+), fully agentic tools (Claude Code, Codex) unleashed a volume surge (+47% PRs) that overwhelmed the quality bar: merge rates dropped 13 points and first-timer acceptance fell to 23%. The tools that were supposed to democratize open source may instead be flooding it with contributions that don't meet the standard.
+**Summary of the AI effect:** The story has three acts. First (2022-2024), autocomplete-style AI (Copilot, ChatGPT) modestly boosted productivity while merge rates held steady or improved. Second (2024-2025), AI-assisted editors (Cursor) maintained that balance. Third (2025+), fully agentic tools (Claude Code, Codex) unleashed a volume surge that overwhelmed the quality bar: merge rates dropped to 62.8% and first-timer acceptance fell to 24.8%. The tools that were supposed to democratize open source may instead be flooding it with contributions that don't meet the standard.
 
 #### 5j. Counterfactual: What Would Have Happened Without AI?
 
@@ -309,16 +307,16 @@ Not all open-source communities behave the same. Comparing merge rates and respo
 
 The previous version of this analysis found that "maintainer PRs don't get abandoned." True, but useless: you can't change who you are. We rewrote it to ask a better question: **what about *my PR* makes it likely to be ignored?**
 
-We trained Random Forest (AUC=0.868) and XGBoost (AUC=0.916) classifiers on 913,387 PRs with size data, using only features a contributor can control or observe before submitting. No author identity, no bot flags, nothing about *who* you are.
+We trained Random Forest (AUC=0.871) and XGBoost (AUC=0.919) classifiers on 913,277 PRs with size data, using only features a contributor can control or observe before submitting. No author identity, no bot flags, nothing about *who* you are.
 
 **The top predictors of abandonment:**
 
 | Feature | Importance | What it means |
 |---------|-----------|---------------|
-| First PR to this repo | 0.578 | Whether the author has any prior PRs to this specific repo |
+| First PR to this repo | 0.573 | Whether the author has any prior PRs to this specific repo |
 | Repo historical merge rate | 0.139 | What fraction of the repo's past PRs were merged |
-| Repo PRs in prior 30 days | 0.100 | How active the repo was in the month before your PR |
-| Lines added | 0.057 | Size of the changeset |
+| Repo PRs in prior 30 days | 0.103 | How active the repo was in the month before your PR |
+| Lines added | 0.064 | Size of the changeset |
 | Lines deleted | 0.034 | Size of the changeset (removals) |
 
 <img src="output/figures/abandonment_feature_importance.svg" width="100%">
@@ -329,8 +327,8 @@ We trained Random Forest (AUC=0.868) and XGBoost (AUC=0.916) classifiers on 913,
 
 1. **Pick repos that actually merge PRs.** Repos with a historical merge rate below 50% abandon 2.7% of PRs; those above 70% abandon only 1.6% (1.7x difference). Check a project's recent merged-vs-closed ratio before investing effort.
 2. **Pick active repos.** The number of PRs in the 30 days before yours is the third-strongest signal. A quiet repo means nobody is reviewing.
-3. **Avoid weekends.** PRs submitted on weekends are abandoned 2.7% of the time vs 1.8% on weekdays (50% more likely). Maintainers review during work hours.
-4. **Keep it small.** PRs over 500 lines are 1.5x more likely to be abandoned than PRs under 50 lines (2.4% vs 1.7%).
+3. **Avoid weekends.** PRs submitted on weekends are abandoned 2.7% of the time vs 1.8% on weekdays (1.5x more likely). Maintainers review during work hours.
+4. **Keep it small.** PRs over 500 lines are 1.5x more likely to be abandoned than PRs under 50 lines (2.5% vs 1.7%).
 5. **Build a relationship first.** The 4.3x gap between first-time and repeat contributors is the clearest signal in the data. Start with a small fix to introduce yourself, then propose larger changes once the maintainers recognize your name.
 
 ### 11. Can We Predict Which Projects Will Decline?
@@ -355,12 +353,11 @@ We benchmarked four time-series models on the aggregate monthly PR volume (80/20
 
 | Model | MAE | RMSE | MAPE |
 |-------|-----|------|------|
-| **ETS** | **5,707** | **11,002** | **10.7%** |
-| Prophet | 8,082 | 10,720 | 18.7% |
-| ARIMA | 10,453 | 16,811 | 20.9% |
-| XGBoost | 10,650 | 17,147 | 20.8% |
+| **ETS** | **2,592** | **4,322** | **21.4%** |
+| ARIMA | 3,189 | 5,001 | 24.2% |
+| XGBoost | 3,173 | 5,061 | 23.8% |
 
-ETS (Exponential Smoothing) wins with 10.7% MAPE. Prophet is a close second on RMSE. The traditional ARIMA and ML-based XGBoost perform worse on this data, likely because the series has strong trend and seasonality that ETS handles natively.
+ETS wins with 21.4% MAPE. The traditional ARIMA and ML-based XGBoost perform similarly on this data, likely because the series has strong trend and seasonality that ETS handles natively.
 
 <img src="output/figures/forecast_benchmark.svg" width="100%">
 
@@ -370,9 +367,9 @@ ETS (Exponential Smoothing) wins with 10.7% MAPE. Prophet is a close second on R
 
 ### 13. Can We Predict If a Contributor Will Come Back? (LSTM)
 
-Section 10 predicts whether a *single PR* will be abandoned (AUC=0.916). This section asks a different question: will a *contributor* come back after their latest PR? Contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
+Section 10 predicts whether a *single PR* will be abandoned (AUC=0.919). This section asks a different question: will a *contributor* come back after their latest PR? Contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
 
-The LSTM achieved **AUC=0.825** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
+The LSTM achieved **AUC=0.845** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
 
 <img src="output/figures/nn_contributor_return.svg" width="100%">
 
@@ -449,9 +446,8 @@ The best real software repos for first-timers span multiple ecosystems: localsta
 
 ## What's Next
 
-This is a first draft based on 341 of 1,537 targeted repos. The extraction is running and will complete soon. Planned updates:
+Dataset covers 625 repos spanning 2016-2026. Planned updates:
 
-- **Re-run all analyses** with the full 200-repo dataset
 - **Comparative by organization type**: company-backed vs community vs foundation
 - **Cross-correlation**: do repos that respond faster retain more contributors?
 
