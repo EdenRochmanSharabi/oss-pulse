@@ -1,5 +1,5 @@
 .PHONY: install extract extract-search extract-mega extract-synthetic \
-       combine transform analyze analyze-advanced figures \
+       combine transform analyze analyze-advanced figures readme \
        demo test lint typecheck clean all
 
 # ── Setup ──────────────────────────────────────────────
@@ -55,6 +55,7 @@ analyze:
 	python -m oss_pulse.analyze.health_index
 	python -m oss_pulse.analyze.abandonment
 	python -m oss_pulse.analyze.funnel
+	python -m oss_pulse.analyze.productivity
 
 # ── Analyze (advanced: NN, GA) ─────────────────────────
 analyze-advanced:
@@ -72,8 +73,12 @@ notebook:
 		--output 00_narrative_analysis_executed.ipynb \
 		--ExecutePreprocessor.timeout=600
 
+# ── Generate README from stats.json ───────────────────
+readme:
+	python scripts/generate_readme.py
+
 # ── Full pipeline (real data) ──────────────────────────
-pipeline: process analyze analyze-advanced figures notebook
+pipeline: process analyze analyze-advanced figures notebook readme
 	@echo "Full pipeline complete."
 
 # ── Demo (synthetic data) ─────────────────────────────

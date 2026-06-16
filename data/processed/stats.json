@@ -1,244 +1,114 @@
 {
   "dataset": {
-    "total_prs": 2682939,
-    "n_repos": 341,
-    "n_contributors": 329142,
+    "total_prs": 4115282,
+    "n_repos": 625,
+    "n_contributors": 429956,
     "date_from": "2016-01-01",
     "date_to": "2026-06-01"
   },
   "outcomes": {
-    "merge_rate": 67.6,
-    "closed_rate": 29.4,
-    "abandoned_rate": 1.7,
-    "open_rate": 1.3
-  },
-  "author_distribution": {
-    "maintainer_pct": 72.0,
-    "regular_pct": 15.0,
-    "firsttimer_pct": 7.0,
-    "bot_pct": 6.0
-  },
-  "bot_stats": {
-    "bot_pct": 6.0,
-    "ghost_pct": 0.5
+    "merge_rate": 69.5,
+    "closed_rate": 27.9,
+    "abandoned_rate": 1.5,
+    "open_rate": 1.1
   },
   "merge_time": {
     "median_hours": 15.3
   },
   "funnel": {
-    "total": 329142,
-    "2nd_pr": 136868,
-    "2nd_pr_pct": 41.6,
-    "5th_pr": 45449,
-    "5th_pr_pct": 13.8,
-    "regular": 11289,
-    "regular_pct": 3.4,
-    "dropout_1st_pct": 58
+    "total": 429956,
+    "2nd_pr": 190145,
+    "2nd_pr_pct": 44.2,
+    "5th_pr": 67282,
+    "5th_pr_pct": 15.6,
+    "regular": 17720,
+    "regular_pct": 4.1,
+    "dropout_1st_pct": 56
   },
   "ai_eras": {
     "2016_2019": {
-      "contributors_per_month": 4429,
-      "firsttimers_per_month": 1031,
-      "ft_rejection_rate": 51.8,
-      "overall_rejection_rate": 30.9,
-      "merge_rate": 69.1,
-      "median_pr_size_adds_gt0": 10,
-      "prs_per_author_month": 2.82,
-      "prs_per_month": 12561
+      "contributors_per_month": 6352,
+      "firsttimers_per_month": 1299,
+      "ft_rejection_rate": 53.0,
+      "merge_rate": 68.5,
+      "prs_per_month": 18551
     },
     "2020_2021": {
-      "contributors_per_month": 5192,
-      "firsttimers_per_month": 1169,
-      "ft_rejection_rate": 53.5,
-      "overall_rejection_rate": 29.1,
-      "merge_rate": 70.9,
-      "median_pr_size_adds_gt0": 17,
-      "prs_per_author_month": 3.23,
-      "prs_per_month": 16702
+      "contributors_per_month": 7785,
+      "firsttimers_per_month": 1504,
+      "ft_rejection_rate": 53.2,
+      "merge_rate": 72.3,
+      "prs_per_month": 26524
     },
     "2022_copilot": {
-      "contributors_per_month": 5420,
-      "firsttimers_per_month": 1222,
-      "ft_rejection_rate": 55.7,
-      "overall_rejection_rate": 28.4,
-      "merge_rate": 71.6,
-      "median_pr_size_adds_gt0": 16,
-      "prs_per_author_month": 3.48,
-      "prs_per_month": 18868
+      "contributors_per_month": 8527,
+      "firsttimers_per_month": 1638,
+      "ft_rejection_rate": 54.9,
+      "merge_rate": 72.8,
+      "prs_per_month": 30575
     },
     "2023_chatgpt": {
-      "contributors_per_month": 6687,
-      "firsttimers_per_month": 1700,
-      "ft_rejection_rate": 58.3,
-      "overall_rejection_rate": 27.6,
-      "merge_rate": 72.4,
-      "median_pr_size_adds_gt0": 16,
-      "prs_per_author_month": 3.55,
-      "prs_per_month": 23736
+      "contributors_per_month": 10097,
+      "firsttimers_per_month": 2134,
+      "ft_rejection_rate": 56.7,
+      "merge_rate": 74.2,
+      "prs_per_month": 38230
     },
     "2024_cursor": {
-      "contributors_per_month": 7244,
-      "firsttimers_per_month": 1775,
-      "ft_rejection_rate": 58.6,
-      "overall_rejection_rate": 27.1,
-      "merge_rate": 72.9,
-      "median_pr_size_adds_gt0": 19,
-      "prs_per_author_month": 3.78,
-      "prs_per_month": 27388
+      "contributors_per_month": 10696,
+      "firsttimers_per_month": 2216,
+      "ft_rejection_rate": 57.1,
+      "merge_rate": 74.4,
+      "prs_per_month": 42281
     },
     "2025_agentic": {
-      "contributors_per_month": 10608,
-      "firsttimers_per_month": 3165,
-      "ft_rejection_rate": 64.5,
-      "overall_rejection_rate": 34.8,
-      "merge_rate": 60.1,
-      "median_pr_size_adds_gt0": 37,
-      "prs_per_author_month": 3.76,
-      "prs_per_month": 39931
+      "contributors_per_month": 14480,
+      "firsttimers_per_month": 3794,
+      "ft_rejection_rate": 63.1,
+      "merge_rate": 63.2,
+      "prs_per_month": 57639
     }
   },
   "tool_eras": {
     "pre_copilot": {
-      "merge_rate": 70.1,
-      "ft_merge_rate": 47.5,
-      "prs_per_month": 14154
+      "merge_rate": 70.4,
+      "ft_merge_rate": 47.0,
+      "prs_per_month": 21672
     },
     "copilot": {
-      "merge_rate": 71.2,
-      "ft_merge_rate": 43.5,
-      "prs_per_month": 20271
+      "merge_rate": 72.7,
+      "ft_merge_rate": 44.0,
+      "prs_per_month": 32773
     },
     "chatgpt_gpt4": {
-      "merge_rate": 72.0,
-      "ft_merge_rate": 41.3,
-      "prs_per_month": 24726
+      "merge_rate": 73.9,
+      "ft_merge_rate": 43.0,
+      "prs_per_month": 39375
     },
     "cursor": {
-      "merge_rate": 73.0,
-      "ft_merge_rate": 40.9,
-      "prs_per_month": 27579
+      "merge_rate": 74.4,
+      "ft_merge_rate": 42.6,
+      "prs_per_month": 42545
     },
     "agentic": {
-      "merge_rate": 59.6,
-      "ft_merge_rate": 22.7,
-      "prs_per_month": 40635
+      "merge_rate": 62.8,
+      "ft_merge_rate": 24.8,
+      "prs_per_month": 58484
     }
-  },
-  "author_groups": {
-    "2016": {
-      "maintainer": {
-        "prs_per_person_month": 5.2,
-        "merge_rate_pct": 75
-      },
-      "regular": {
-        "prs_per_person_month": 1.5,
-        "merge_rate_pct": 55
-      },
-      "first-timer": {
-        "prs_per_person_month": 1.0,
-        "merge_rate_pct": 48
-      }
-    },
-    "2025": {
-      "maintainer": {
-        "prs_per_person_month": 7.9,
-        "merge_rate_pct": 70
-      },
-      "regular": {
-        "prs_per_person_month": 1.7,
-        "merge_rate_pct": 31
-      },
-      "first-timer": {
-        "prs_per_person_month": 1.0,
-        "merge_rate_pct": 23
-      }
-    }
-  },
-  "hacktoberfest": {
-    "max_spike_pct": 153,
-    "max_spike_year": 2018,
-    "by_year": {
-      "2016": 9.0,
-      "2017": 16.0,
-      "2018": 153.0,
-      "2019": 32.0,
-      "2020": 22.0,
-      "2021": 25.0,
-      "2022": 37.0,
-      "2023": 23.0,
-      "2024": 13.0,
-      "2025": 17.0
-    }
-  },
-  "firsttimer_model": {
-    "total_ft_prs": 187872
-  },
-  "mega_repos": {
-    "freeCodeCamp": 43932,
-    "kubernetes": 76669,
-    "vscode": 58206,
-    "tensorflow": 50605,
-    "next_js": 37199
-  },
-  "forecasting": {
-    "ETS": {
-      "mae": 5707,
-      "rmse": 11002,
-      "mape": 10.7
-    },
-    "Prophet": {
-      "mae": 8082,
-      "rmse": 10720,
-      "mape": 18.7
-    },
-    "ARIMA": {
-      "mae": 10453,
-      "rmse": 16811,
-      "mape": 20.9
-    },
-    "XGBoost": {
-      "mae": 10650,
-      "rmse": 17147,
-      "mape": 20.8
-    }
-  },
-  "repo_embeddings": {
-    "supercluster_count": 324,
-    "total_repos": 341
-  },
-  "languages": {
-    "top_merge_rate_lang": "C#",
-    "top_merge_rate_value": 79.9,
-    "second_merge_rate_lang": "Rust",
-    "second_merge_rate_value": 77.7,
-    "bottom_merge_rate_lang": "Python",
-    "bottom_merge_rate_value": 55.7,
-    "kruskal_h": 72707.3
-  },
-  "project_decline": {
-    "n_declining": 28,
-    "n_stable": 259,
-    "best_model": "xgboost",
-    "best_auc": 0.766,
-    "top_3_features": [
-      "lang_Other",
-      "total_prs",
-      "bus_factor_score"
-    ]
   },
   "pr_abandonment": {
-    "n_prs_analyzed": 913387,
-    "n_abandoned": 17837,
+    "n_prs_analyzed": 913277,
+    "n_abandoned": 17963,
     "abandon_rate_pct": 2.0,
-    "rf_auc": 0.868,
-    "xgb_auc": 0.916,
+    "rf_auc": 0.871,
+    "xgb_auc": 0.919,
     "best_model": "xgboost",
-    "best_auc": 0.916,
+    "best_auc": 0.919,
     "top_features": [
       {
         "feature": "is_first_pr_to_repo",
         "label": "First PR to this repo",
-        "importance": 0.578
+        "importance": 0.573
       },
       {
         "feature": "repo_merge_rate",
@@ -248,12 +118,12 @@
       {
         "feature": "repo_recent_prs",
         "label": "Repo PRs in prior 30 days",
-        "importance": 0.1
+        "importance": 0.103
       },
       {
         "feature": "additions",
         "label": "Lines added",
-        "importance": 0.057
+        "importance": 0.064
       },
       {
         "feature": "deletions",
@@ -262,14 +132,177 @@
       }
     ],
     "insights": {
-      "abandon_rate_under_50_lines": 0.0166,
-      "abandon_rate_over_500_lines": 0.0244,
+      "abandon_rate_under_50_lines": 0.0167,
+      "abandon_rate_over_500_lines": 0.0245,
       "abandon_rate_weekend": 0.027,
-      "abandon_rate_weekday": 0.018,
-      "abandon_rate_first_pr": 0.0515,
-      "abandon_rate_repeat_author": 0.0119,
-      "abandon_rate_low_merge_repo": 0.027,
-      "abandon_rate_high_merge_repo": 0.016
+      "abandon_rate_weekday": 0.0182,
+      "abandon_rate_first_pr": 0.0519,
+      "abandon_rate_repeat_author": 0.012,
+      "abandon_rate_low_merge_repo": 0.0271,
+      "abandon_rate_high_merge_repo": 0.0162
+    }
+  },
+  "productivity_by_author_type": {
+    "first-timer": {
+      "pre_2023": {
+        "prs_per_person_month": 1.0,
+        "merge_rate_pct": 46.6
+      },
+      "post_2023": {
+        "prs_per_person_month": 1.0,
+        "merge_rate_pct": 33.2
+      },
+      "productivity_change_pct": 0.0
+    },
+    "regular": {
+      "pre_2023": {
+        "prs_per_person_month": 1.41,
+        "merge_rate_pct": 54.2
+      },
+      "post_2023": {
+        "prs_per_person_month": 1.48,
+        "merge_rate_pct": 41.9
+      },
+      "productivity_change_pct": 4.7
+    },
+    "maintainer": {
+      "pre_2023": {
+        "prs_per_person_month": 5.41,
+        "merge_rate_pct": 75.9
+      },
+      "post_2023": {
+        "prs_per_person_month": 6.9,
+        "merge_rate_pct": 75.7
+      },
+      "productivity_change_pct": 27.7
+    }
+  },
+  "changepoint": {
+    "n_changepoints": 1,
+    "primary_changepoint_date": "2023-W08",
+    "pre_mean": 7.45,
+    "post_mean": 30.24,
+    "cohens_d": 1.629
+  },
+  "health_index": {
+    "median_score": 34.054,
+    "min_score": 5.988,
+    "max_score": 66.376,
+    "top5": [
+      {
+        "repo": "NousResearch/hermes-agent",
+        "score": 66.376
+      },
+      {
+        "repo": "opendatalab/MinerU",
+        "score": 62.403
+      },
+      {
+        "repo": "IceWhaleTech/CasaOS",
+        "score": 58.928
+      },
+      {
+        "repo": "sxyazi/yazi",
+        "score": 57.213
+      },
+      {
+        "repo": "doocs/leetcode",
+        "score": 56.121
+      }
+    ],
+    "bottom5": [
+      {
+        "repo": "jackfrued/Python-100-Days",
+        "score": 14.887
+      },
+      {
+        "repo": "FoundationAgents/OpenManus",
+        "score": 13.72
+      },
+      {
+        "repo": "blueimp/jQuery-File-Upload",
+        "score": 13.482
+      },
+      {
+        "repo": "nginx/nginx",
+        "score": 13.276
+      },
+      {
+        "repo": "twitter/the-algorithm",
+        "score": 5.988
+      }
+    ]
+  },
+  "seasonal": {
+    "adf_stat": -9.2329,
+    "adf_pvalue": 0.0,
+    "kpss_stat": 0.7501,
+    "kpss_pvalue": 0.01,
+    "is_stationary": false
+  },
+  "forecast_benchmark": {
+    "models": [
+      {
+        "model": "ARIMA",
+        "mae": 3189.0361,
+        "rmse": 5000.673,
+        "mape": 24.2104
+      },
+      {
+        "model": "ETS",
+        "mae": 2592.4666,
+        "rmse": 4322.1633,
+        "mape": 21.4256
+      },
+      {
+        "model": "XGBoost",
+        "mae": 3172.7844,
+        "rmse": 5060.8259,
+        "mape": 23.8137
+      }
+    ],
+    "best_model": "ETS"
+  },
+  "contributor_return": {
+    "lstm_auc": 0.845,
+    "lstm_accuracy": 0.835,
+    "xgboost_baseline_auc": 0.916,
+    "delta_auc": -0.071
+  },
+  "repo_embeddings": {
+    "n_repos_embedded": 624,
+    "n_multi_repo_authors": 82742,
+    "n_clusters": 6,
+    "final_loss": 0.0415
+  },
+  "author_groups": {
+    "2016": {
+      "maintainer": {
+        "prs_per_person_month": 5.1,
+        "merge_rate": 74
+      },
+      "regular": {
+        "prs_per_person_month": 1.5,
+        "merge_rate": 54
+      },
+      "first-timer": {
+        "prs_per_person_month": 1.0,
+        "merge_rate": 47
+      }
+    },
+    "2025": {
+      "maintainer": {
+        "prs_per_person_month": 7.8,
+        "merge_rate": 72
+      },
+      "regular": {
+        "prs_per_person_month": 1.7,
+        "merge_rate": 34
+      },
+      "first-timer": {
+        "prs_per_person_month": 1.0,
+        "merge_rate": 25
+      }
     }
   }
 }

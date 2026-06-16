@@ -8,8 +8,10 @@ burnout patterns) that flat-feature classifiers miss.
 
 from __future__ import annotations
 
+import json
 import random
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -381,6 +383,24 @@ def main() -> None:
             " provide enough additional signal to overcome the LSTM's"
             " higher capacity requirements."
         )
+
+    # Update stats.json
+    stats_path = Path("data/processed/stats.json")
+    stats_data: dict[str, Any] = {}
+    if stats_path.exists():
+        with open(stats_path) as f:
+            stats_data = json.load(f)
+
+    stats_data["contributor_return"] = {
+        "lstm_auc": round(lstm_auc, 3),
+        "lstm_accuracy": round(lstm_acc, 3),
+        "xgboost_baseline_auc": round(XGBOOST_BASELINE_AUC, 3),
+        "delta_auc": round(lstm_auc - XGBOOST_BASELINE_AUC, 3),
+    }
+
+    with open(stats_path, "w") as f:
+        json.dump(stats_data, f, indent=2)
+    print(f"\nUpdated {stats_path}")
 
     # Plot
     setup_style()

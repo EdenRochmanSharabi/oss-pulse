@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from itertools import combinations
 from pathlib import Path
 from typing import Any, cast
@@ -87,8 +88,9 @@ if __name__ == "__main__":
     df = pd.read_parquet(data_path)
 
     if repos_path.exists():
-        repos = pd.read_parquet(repos_path)[["repo_name", "org_type"]]
-        df = df.merge(repos, on="repo_name", how="left")
+        repos = pd.read_parquet(repos_path)
+        if "org_type" in repos.columns:
+            df = df.merge(repos[["repo_name", "org_type"]], on="repo_name", how="left")
 
     if "org_type" not in df.columns:
         print("No org_type column, skipping.")
@@ -110,3 +112,31 @@ if __name__ == "__main__":
             f"p = {pair['pvalue']:.4f}, "
             f"p_corrected = {pair['pvalue_corrected']:.4f}"
         )
+
+    # Update stats.json
+    stats_path = Path("data/processed/stats.json")
+    stats_data: dict[str, Any] = {}
+    if stats_path.exists():
+        with open(stats_path) as f:
+            stats_data = json.load(f)
+
+    stats_data["comparative"] = {
+        "metric": "merge_rate",
+        "group_col": "org_type",
+        "kruskal_stat": round(comparison["kruskal_stat"], 4),
+        "kruskal_pvalue": round(comparison["kruskal_pvalue"], 4),
+        "pairwise": [
+            {
+                "group1": p["group1"],
+                "group2": p["group2"],
+                "u_stat": round(p["u_stat"], 2),
+                "pvalue": round(p["pvalue"], 4),
+                "pvalue_corrected": round(p["pvalue_corrected"], 4),
+            }
+            for p in comparison["pairwise"]
+        ],
+    }
+
+    with open(stats_path, "w") as f:
+        json.dump(stats_data, f, indent=2)
+    print(f"\nUpdated {stats_path}")

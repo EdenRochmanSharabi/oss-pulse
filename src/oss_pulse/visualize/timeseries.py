@@ -79,6 +79,44 @@ def plot_forecast(
     return fig
 
 
+def plot_grouped_trend(
+    df: pd.DataFrame,
+    date_col: str,
+    value_col: str,
+    group_col: str,
+    title: str,
+    ylabel: str,
+    smoothing: int = 3,
+    ylim: tuple[float, float] | None = None,
+) -> mfigure.Figure:
+    """Plot smoothed time series lines for each group on shared axes."""
+    setup_style()
+
+    group_colors = {
+        "first-timer": PALETTE["accent"],
+        "regular": PALETTE["warning"],
+        "maintainer": PALETTE["primary"],
+    }
+    fallback_colors = [PALETTE["primary"], PALETTE["accent"], PALETTE["success"],
+                       PALETTE["warning"], PALETTE["secondary"]]
+
+    fig, ax = plt.subplots(figsize=(16, 6))
+    for i, group in enumerate(df[group_col].unique()):
+        subset = df[df[group_col] == group].sort_values(date_col)
+        dates = pd.to_datetime(subset[date_col].astype(str))
+        values = subset[value_col].rolling(smoothing, min_periods=1).mean()
+        color = group_colors.get(group, fallback_colors[i % len(fallback_colors)])
+        ax.plot(dates, values, color=color, linewidth=1.5, label=group)
+
+    ax.set_title(title, fontsize=14, fontweight="bold")
+    ax.set_xlabel("Date")
+    ax.set_ylabel(ylabel)
+    if ylim is not None:
+        ax.set_ylim(ylim)
+    ax.legend()
+    return fig
+
+
 def plot_acf_pacf(
     acf_vals: Any, pacf_vals: Any, title: str = "Autocorrelation"
 ) -> mfigure.Figure:

@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import json
 import random
 from collections import defaultdict
 from itertools import combinations
+from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -386,6 +389,34 @@ def main() -> None:
 
     # Analysis
     analyze_clusters(embeddings, all_repos, language_map)
+
+    # Compute cluster count for stats (mirrors analyze_clusters logic)
+    from scipy.spatial.distance import cdist
+    from sklearn.cluster import DBSCAN
+
+    distances = cdist(embeddings, embeddings, metric="cosine")
+    median_dist = float(np.median(distances[np.triu_indices(len(all_repos), k=1)]))
+    db = DBSCAN(eps=median_dist * 0.6, min_samples=2, metric="precomputed")
+    cluster_labels = db.fit_predict(distances)
+    n_clusters = int(len(set(cluster_labels) - {-1}))
+
+    # Update stats.json
+    stats_path = Path("data/processed/stats.json")
+    stats_data: dict[str, Any] = {}
+    if stats_path.exists():
+        with open(stats_path) as f:
+            stats_data = json.load(f)
+
+    stats_data["repo_embeddings"] = {
+        "n_repos_embedded": len(all_repos),
+        "n_multi_repo_authors": len(author_repos),
+        "n_clusters": n_clusters,
+        "final_loss": round(losses[-1], 4),
+    }
+
+    with open(stats_path, "w") as f:
+        json.dump(stats_data, f, indent=2)
+    print(f"\nUpdated {stats_path}")
 
 
 if __name__ == "__main__":

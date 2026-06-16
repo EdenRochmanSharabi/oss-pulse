@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -218,12 +219,40 @@ if __name__ == "__main__":
     data_path = Path("data/processed/repo_weekly.parquet")
     df = pd.read_parquet(data_path)
 
-    first_repo: str = df["repo_name"].iloc[0]
-    repo_df = df[df["repo_name"] == first_repo].sort_values("week")
-    series = repo_df.set_index("week")["pr_count"]
+    # Aggregate across all repos: sum pr_count per week
+    agg = df.groupby("year_week")["pr_count"].sum().sort_index()
+    agg.index.name = "year_week"
 
-    print(f"Benchmarking models for: {first_repo}")
-    print(f"Series length: {len(series)}\n")
+    print(f"Benchmarking models on AGGREGATE weekly PR volume ({len(agg)} weeks, "
+          f"{df['repo_name'].nunique()} repos)\n")
 
-    comparison = benchmark_models(series)
+    comparison = benchmark_models(agg)
     print(comparison.to_string(index=False))
+
+    # Update stats.json
+    stats_path = Path("data/processed/stats.json")
+    stats_data: dict[str, Any] = {}
+    if stats_path.exists():
+        with open(stats_path) as f:
+            stats_data = json.load(f)
+
+    models_list = [
+        {
+            "model": row["model"],
+            "mae": round(float(row["mae"]), 4),
+            "rmse": round(float(row["rmse"]), 4),
+            "mape": round(float(row["mape"]), 4),
+        }
+        for _, row in comparison.iterrows()
+    ]
+    best_row = comparison.loc[comparison["mae"].idxmin()] if not comparison.empty else None
+    best_model = str(best_row["model"]) if best_row is not None else None
+
+    stats_data["forecast_benchmark"] = {
+        "models": models_list,
+        "best_model": best_model,
+    }
+
+    with open(stats_path, "w") as f:
+        json.dump(stats_data, f, indent=2)
+    print(f"\nUpdated {stats_path}")

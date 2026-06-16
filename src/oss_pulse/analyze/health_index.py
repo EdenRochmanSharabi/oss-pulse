@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -141,3 +143,31 @@ if __name__ == "__main__":
     print("\nTop 10 repos by health index:")
     display_cols = ["rank", "repo_name", "health_index"]
     print(ranked[display_cols].head(10).to_string(index=False))
+
+    # Update stats.json
+    stats_path = Path("data/processed/stats.json")
+    stats_data: dict[str, Any] = {}
+    if stats_path.exists():
+        with open(stats_path) as f:
+            stats_data = json.load(f)
+
+    top5 = [
+        {"repo": row["repo_name"], "score": round(row["health_index"], 3)}
+        for _, row in ranked.head(5).iterrows()
+    ]
+    bottom5 = [
+        {"repo": row["repo_name"], "score": round(row["health_index"], 3)}
+        for _, row in ranked.tail(5).iterrows()
+    ]
+
+    stats_data["health_index"] = {
+        "median_score": round(float(ranked["health_index"].median()), 3),
+        "min_score": round(float(ranked["health_index"].min()), 3),
+        "max_score": round(float(ranked["health_index"].max()), 3),
+        "top5": top5,
+        "bottom5": bottom5,
+    }
+
+    with open(stats_path, "w") as f:
+        json.dump(stats_data, f, indent=2)
+    print(f"\nUpdated {stats_path}")

@@ -76,7 +76,7 @@ def compute_retention_rates(funnel_df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    data_path = Path("data/processed/pr_events_classified.parquet")
+    data_path = Path("data/processed/pr_events_featured.parquet")
     df = pd.read_parquet(data_path)
 
     print(f"Loaded {len(df)} classified PR events")

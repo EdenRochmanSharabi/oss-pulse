@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -74,3 +75,22 @@ if __name__ == "__main__":
     print("\nStationarity results:")
     for key, value in stationarity.items():
         print(f"  {key}: {value}")
+
+    # Update stats.json
+    stats_path = Path("data/processed/stats.json")
+    stats_data: dict[str, Any] = {}
+    if stats_path.exists():
+        with open(stats_path) as f:
+            stats_data = json.load(f)
+
+    stats_data["seasonal"] = {
+        "adf_stat": round(stationarity["adf_stat"], 4),
+        "adf_pvalue": round(stationarity["adf_pvalue"], 4),
+        "kpss_stat": round(stationarity["kpss_stat"], 4),
+        "kpss_pvalue": round(stationarity["kpss_pvalue"], 4),
+        "is_stationary": bool(stationarity["is_stationary"]),
+    }
+
+    with open(stats_path, "w") as f:
+        json.dump(stats_data, f, indent=2)
+    print(f"\nUpdated {stats_path}")
