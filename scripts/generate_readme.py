@@ -662,6 +662,166 @@ def main() -> None:
         "whats next",
     ))
 
+    # ── J. Hacktoberfest (Section 8) ─────────────────────────────────────
+
+    hacktoberfest = stats.get("hacktoberfest", {})
+    if hacktoberfest:
+        hf_spike = hacktoberfest["peak_spike_pct"]
+        hf_year = hacktoberfest["peak_year"]
+
+        # "+153%" and "(2018)" in the Hacktoberfest paragraph
+        replacements.append((
+            r"October PR volume spiked up to \*\*\+" + FLOAT + r"%\*\* above the monthly average \(" + NUM + r"\)\.",
+            (
+                f"October PR volume spiked up to **+{hf_spike}%** above the monthly "
+                f"average ({hf_year})."
+            ),
+            "hacktoberfest spike",
+        ))
+
+        # "The spike peaked in 2018"
+        replacements.append((
+            r"The spike peaked in " + NUM + r" and has moderated since",
+            f"The spike peaked in {hf_year} and has moderated since",
+            "hacktoberfest peak year",
+        ))
+
+    # ── K. Language Ecosystems (Section 9) ──────────────────────────────
+
+    lang_comp = stats.get("language_comparison", {})
+    if lang_comp:
+        langs = lang_comp["languages"]
+        kh = lang_comp["kruskal_h"]
+
+        # Build a map for quick lookup
+        lang_map = {l["lang"]: l["merge_rate"] for l in langs}
+
+        # "Kruskal-Wallis H=72,707"
+        replacements.append((
+            r"Kruskal-Wallis H=" + NUM,
+            f"Kruskal-Wallis H={fmt_int(round(kh))}",
+            "language kruskal H",
+        ))
+
+        # "**C#** (79.9%) and **Rust** (77.7%) projects have the highest merge rates"
+        # Match the two highest languages with their rates
+        top2 = langs[:2]
+        replacements.append((
+            r"\*\*\w[^*]*\*\* \(" + PCT + r"\) and \*\*\w[^*]*\*\* \(" + PCT + r"\) projects have the highest merge rates",
+            (
+                f"**{top2[0]['lang']}** ({top2[0]['merge_rate']}%) and "
+                f"**{top2[1]['lang']}** ({top2[1]['merge_rate']}%) projects have the highest merge rates"
+            ),
+            "language top merge rates",
+        ))
+
+        # "while **Python** (55.7%) and **Shell** (44.6%) are at the bottom"
+        # Get the bottom two (excluding languages with 0% or very niche ones)
+        # Use the last two with > 0 merge rate from the list
+        bottom_langs = [l for l in langs if l["merge_rate"] > 0]
+        bot2 = bottom_langs[-2:]
+        replacements.append((
+            r"while \*\*\w[^*]*\*\* \(" + PCT + r"\) and \*\*\w[^*]*\*\* \(" + PCT + r"\) are at the bottom",
+            (
+                f"while **{bot2[0]['lang']}** ({bot2[0]['merge_rate']}%) and "
+                f"**{bot2[1]['lang']}** ({bot2[1]['merge_rate']}%) are at the bottom"
+            ),
+            "language bottom merge rates",
+        ))
+
+    # ── L. Project Decline (Section 11) ─────────────────────────────────
+
+    proj_decline = stats.get("project_decline", {})
+    if proj_decline:
+        n_dec = proj_decline["n_declining"]
+        n_stab = proj_decline["n_stable"]
+        total_decline_repos = n_dec + n_stab
+        best_decline_model = proj_decline["best_model"]
+        best_decline_auc = proj_decline["best_auc"]
+        top3 = proj_decline["top_3_features"]
+
+        # "Of 287 repos with data in both periods, **28 are declining** and **259 are stable**."
+        replacements.append((
+            r"Of " + NUM + r" repos with data in both periods, \*\*" + NUM + r" are declining\*\* and \*\*" + NUM + r" are stable\*\*",
+            (
+                f"Of {total_decline_repos} repos with data in both periods, "
+                f"**{n_dec} are declining** and **{n_stab} are stable**"
+            ),
+            "decline counts",
+        ))
+
+        # "An XGBoost classifier achieved **AUC=0.766**, outperforming Random Forest (AUC=0.673)."
+        # The models could be in either order depending on which won, so match generically
+        replacements.append((
+            r"An? [\w ]+classifier achieved \*\*AUC=" + FLOAT + r"\*\*, outperforming [\w ]+ \(AUC=" + FLOAT + r"\)\.",
+            (
+                f"An XGBoost classifier achieved **AUC={best_decline_auc:.3f}**, "
+                f"outperforming Random Forest (AUC={best_decline_auc:.3f})."
+                if best_decline_model == "xgboost" else
+                f"A Random Forest classifier achieved **AUC={best_decline_auc:.3f}**, "
+                f"outperforming XGBoost (AUC={best_decline_auc:.3f})."
+            ),
+            "decline AUC",
+        ))
+
+    # ── M. GA Weights (Section 15) ──────────────────────────────────────
+
+    ga = stats.get("ga_weights", stats.get("ga_optimization", {}))
+    if ga:
+        ga_w = ga["weights"]
+        orig_spearman = ga["original_spearman"]
+        opt_spearman = ga["optimized_spearman"]
+
+        # Table rows: "| Response time | 25% | **48.6%** |"
+        # Each component row in the table
+        component_labels = {
+            "response_time": "Response time",
+            "bus_factor": "Bus factor",
+            "diversity": "Diversity",
+            "merge_rate": "Merge rate",
+            "trend": "Trend",
+        }
+
+        for key, label in component_labels.items():
+            if key not in ga_w:
+                continue
+            orig_pct = ga_w[key]["original_pct"]
+            opt_pct = ga_w[key]["optimized_pct"]
+            # Match the row, allowing for optional bold markers on the optimized weight
+            replacements.append((
+                rf"\| {label} \| " + PCT + r" \| (?:\*\*)?" + PCT + r"(?:\*\*)? \|",
+                f"| {label} | {orig_pct}% | {opt_pct}% |",
+                f"GA table {label}",
+            ))
+
+        # "The optimized weights improved Spearman correlation from 0.14 to 0.21."
+        SIGNED_FLOAT = r"-?" + FLOAT
+        replacements.append((
+            r"improved Spearman correlation from " + SIGNED_FLOAT + r" to " + SIGNED_FLOAT + r"\.",
+            f"improved Spearman correlation from {orig_spearman} to {opt_spearman}.",
+            "GA spearman improvement",
+        ))
+
+        # "25% to 49%" in the prose (response time change)
+        if "response_time" in ga_w:
+            rt_orig = ga_w["response_time"]["original_pct"]
+            rt_opt = ga_w["response_time"]["optimized_pct"]
+            replacements.append((
+                r"nearly doubled the weight on response time \(" + PCT + r" to " + FLOAT + r"%\)",
+                f"nearly doubled the weight on response time ({rt_orig}% to {round(rt_opt)}%)",
+                "GA prose response time",
+            ))
+
+        # "eliminated trend (15% to 0.4%)"
+        if "trend" in ga_w:
+            tr_orig = ga_w["trend"]["original_pct"]
+            tr_opt = ga_w["trend"]["optimized_pct"]
+            replacements.append((
+                r"eliminated trend \(" + PCT + r" to " + PCT + r"\)",
+                f"eliminated trend ({tr_orig}% to {tr_opt}%)",
+                "GA prose trend",
+            ))
+
     # ── H. Generate Section 16 (first-timer decision trees) ─────────────
     if ft_trees:
         main_langs = ["Python", "TypeScript", "Go", "Rust", "C++", "Java", "C", "JavaScript", "C#"]

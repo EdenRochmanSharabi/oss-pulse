@@ -56,6 +56,7 @@ analyze:
 	python -m oss_pulse.analyze.abandonment
 	python -m oss_pulse.analyze.funnel
 	python -m oss_pulse.analyze.productivity
+	python -m oss_pulse.analyze.project_decline
 
 # ── Analyze (advanced: NN, GA) ─────────────────────────
 analyze-advanced:

@@ -288,17 +288,17 @@ This has implications for contributor retention (Finding #4): if first-timers wa
 
 ### 8. The Hacktoberfest Effect
 
-October is Hacktoberfest month, when contributors are incentivized to open PRs. The effect is real and massive: October PR volume spiked up to **+153%** above the monthly average (2018). But the merge rate in October is consistently **lower** than other months, suggesting many Hacktoberfest PRs don't meet the quality bar.
+October is Hacktoberfest month, when contributors are incentivized to open PRs. The effect is real and massive: October PR volume spiked up to **+85%** above the monthly average (2025). But the merge rate in October is consistently **lower** than other months, suggesting many Hacktoberfest PRs don't meet the quality bar.
 
-The spike peaked in 2018 and has moderated since, possibly reflecting the 2020 rule change requiring repos to opt-in and the general increase in baseline PR volume.
+The spike peaked in 2025 and has moderated since, possibly reflecting the 2020 rule change requiring repos to opt-in and the general increase in baseline PR volume.
 
 <img src="output/figures/hacktoberfest_effect.svg" width="100%">
 
 ### 9. How Do Language Ecosystems Compare?
 
-Not all open-source communities behave the same. Comparing merge rates and response times across programming languages reveals significant differences (Kruskal-Wallis H=72,707, p<0.0001).
+Not all open-source communities behave the same. Comparing merge rates and response times across programming languages reveals significant differences (Kruskal-Wallis H=95 p<0.0001).
 
-**C#** (79.9%) and **Rust** (77.7%) projects have the highest merge rates, while **Python** (55.7%) and **Shell** (44.6%) are at the bottom. This likely reflects different community cultures: Rust's strict compiler and strong review culture may filter contributions before they become PRs, while Python's lower barrier to entry attracts more speculative contributions.
+**Swift** (86.4%) and **C#** (83.1%) projects have the highest merge rates, while **Blade** (30.6%) and **Batchfile** (11.5%) are at the bottom. This likely reflects different community cultures: Rust's strict compiler and strong review culture may filter contributions before they become PRs, while Python's lower barrier to entry attracts more speculative contributions.
 
 <img src="output/figures/comparative_merge_by_language.svg" width="100%">
 <img src="output/figures/comparative_mergetime_by_language.svg" width="100%">
@@ -335,9 +335,9 @@ We trained Random Forest (AUC=0.865) and XGBoost (AUC=0.916) classifiers on 911,
 
 Section 10 predicts whether individual PRs will be abandoned. But can we predict something bigger: which *projects* will lose momentum?
 
-We defined "decline" as a repo whose average monthly PR count in H1-2025 (Jan-May) dropped more than 50% compared to H2-2024 (Jul-Dec). Of 287 repos with data in both periods, **28 are declining** and **259 are stable**. The declining repos include projects like gpt-engineer, private-gpt, gpt4all (AI hype-cycle casualties), TheAlgorithms/Python (educational repo fatigue), and localsend (post-launch plateau).
+We defined "decline" as a repo whose average monthly PR count in H1-2025 (Jan-May) dropped more than 50% compared to H2-2024 (Jul-Dec). Of 503 repos with data in both periods, **42 are declining** and **461 are stable**. The declining repos include projects like gpt-engineer, private-gpt, gpt4all (AI hype-cycle casualties), TheAlgorithms/Python (educational repo fatigue), and localsend (post-launch plateau).
 
-We built a feature matrix from pre-2025 historical data: health-index components (response time, merge rate, diversity, trend, bus factor), stars, total PR count, contributor concentration (Gini), first-timer ratio, bot ratio, median merge time, and language (one-hot encoded). An XGBoost classifier achieved **AUC=0.766**, outperforming Random Forest (AUC=0.673).
+We built a feature matrix from pre-2025 historical data: health-index components (response time, merge rate, diversity, trend, bus factor), stars, total PR count, contributor concentration (Gini), first-timer ratio, bot ratio, median merge time, and language (one-hot encoded). A Random Forest classifier achieved **AUC=0.615**, outperforming XGBoost (AUC=0.615).
 
 The top predictors of project decline:
 
@@ -394,13 +394,13 @@ The Health Index weights (Section 6) were hand-picked. But which weights actuall
 
 | Component | Original weight | GA-optimized weight |
 |-----------|----------------|-------------------|
-| Response time | 25% | **48.6%** |
-| Bus factor | 20% | **26.6%** |
-| Diversity | 20% | 18.2% |
-| Merge rate | 20% | 6.1% |
-| Trend | 15% | **0.4%** |
+| Response time | 25.0% | 0.0% |
+| Bus factor | 20.0% | 26.8% |
+| Diversity | 20.0% | 0.3% |
+| Merge rate | 20.0% | 0.0% |
+| Trend | 15.0% | 72.8% |
 
-The GA nearly doubled the weight on response time (25% to 49%) and eliminated trend (15% to 0.4%). The optimized weights improved Spearman correlation from 0.14 to 0.21.
+The GA nearly doubled the weight on response time (25.0% to 0%) and eliminated trend (15.0% to 72.8%). The optimized weights improved Spearman correlation from -0.0492 to 0.0669.
 
 **The insight**: The single best predictor of whether a project will grow is **how fast it responds to contributions**. Not its current momentum, not its merge rate. Speed of response. This aligns with the contributor return finding (Section 13): contributors come back when they get fast feedback.
 

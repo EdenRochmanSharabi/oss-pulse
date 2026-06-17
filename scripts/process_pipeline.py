@@ -102,12 +102,18 @@ def main() -> None:
     weekly.to_parquet(PROCESSED_DIR / "repo_weekly.parquet", index=False)
 
     print("\n=== 8. Generating stats.json ===")
-    _generate_stats(featured, PROCESSED_DIR / "stats.json")
+    top_repos_path = Path("data/raw/top_repos.parquet")
+    top_repos = pd.read_parquet(top_repos_path) if top_repos_path.exists() else None
+    _generate_stats(featured, PROCESSED_DIR / "stats.json", top_repos=top_repos)
 
     print("\n=== Done ===")
 
 
-def _generate_stats(featured: pd.DataFrame, out_path: Path) -> None:
+def _generate_stats(
+    featured: pd.DataFrame,
+    out_path: Path,
+    top_repos: pd.DataFrame | None = None,
+) -> None:
     """Generate stats.json: the single source of truth for all numbers."""
     import json
 
@@ -208,6 +214,102 @@ def _generate_stats(featured: pd.DataFrame, out_path: Path) -> None:
             "agentic": _tool_era("2025-02-01", "2026-06-01"),
         },
     }
+
+    # ── Hacktoberfest: October spike vs non-October average ───────────
+    featured_with_month = featured.copy()
+    featured_with_month["_year"] = featured_with_month["pr_created_at"].dt.year
+    featured_with_month["_month"] = featured_with_month["pr_created_at"].dt.month
+
+    monthly_counts = (
+        featured_with_month.groupby(["_year", "_month"])
+        .size()
+        .reset_index(name="pr_count")
+    )
+    oct_counts = monthly_counts[monthly_counts["_month"] == 10]
+    non_oct_counts = monthly_counts[monthly_counts["_month"] != 10]
+    non_oct_avg = non_oct_counts["pr_count"].mean()
+
+    if non_oct_avg > 0 and len(oct_counts) > 0:
+        oct_counts = oct_counts.copy()
+        oct_counts["spike_pct"] = (
+            (oct_counts["pr_count"] - non_oct_avg) / non_oct_avg * 100
+        )
+        peak_row = oct_counts.loc[oct_counts["spike_pct"].idxmax()]
+        peak_spike_pct = round(float(peak_row["spike_pct"]))
+        peak_year = int(peak_row["_year"])
+    else:
+        peak_spike_pct = 0
+        peak_year = 0
+
+    oct_prs = featured_with_month[featured_with_month["_month"] == 10]
+    non_oct_prs = featured_with_month[featured_with_month["_month"] != 10]
+    oct_merge_rate = round(
+        (oct_prs["pr_outcome"] == "merged").mean() * 100, 1
+    ) if len(oct_prs) > 0 else 0.0
+    non_oct_merge_rate = round(
+        (non_oct_prs["pr_outcome"] == "merged").mean() * 100, 1
+    ) if len(non_oct_prs) > 0 else 0.0
+
+    stats["hacktoberfest"] = {
+        "peak_spike_pct": peak_spike_pct,
+        "peak_year": peak_year,
+        "oct_merge_rate": oct_merge_rate,
+        "non_oct_merge_rate": non_oct_merge_rate,
+    }
+
+    # ── Language comparison: merge rate per language ────────────────────
+    if top_repos is not None and "language" in top_repos.columns:
+        lang_map = top_repos[["repo_name", "language"]].drop_duplicates("repo_name")
+        with_lang = featured.merge(lang_map, on="repo_name", how="left")
+        with_lang = with_lang[with_lang["language"].notna()]
+
+        lang_merge = (
+            with_lang.groupby("language")
+            .apply(
+                lambda g: pd.Series({
+                    "merge_rate": round(
+                        (g["pr_outcome"] == "merged").mean() * 100, 1
+                    ),
+                    "n_prs": len(g),
+                }),
+                include_groups=False,
+            )
+            .reset_index()
+        )
+        lang_merge = lang_merge.sort_values("merge_rate", ascending=False)
+
+        # Kruskal-Wallis test on per-repo merge rates across languages
+        from scipy import stats as scipy_stats  # type: ignore[import-untyped]
+
+        repo_merge = (
+            with_lang.groupby(["repo_name", "language"])
+            .apply(
+                lambda g: (g["pr_outcome"] == "merged").mean(),
+                include_groups=False,
+            )
+            .reset_index(name="repo_merge_rate")
+        )
+        groups = [
+            grp["repo_merge_rate"].values
+            for _, grp in repo_merge.groupby("language")
+            if len(grp) >= 2
+        ]
+        if len(groups) >= 2:
+            kw_stat, kw_p = scipy_stats.kruskal(*groups)
+        else:
+            kw_stat, kw_p = float("nan"), float("nan")
+
+        languages_list = [
+            {"lang": row["language"], "merge_rate": row["merge_rate"]}
+            for _, row in lang_merge.iterrows()
+        ]
+        stats["language_comparison"] = {
+            "top_language": languages_list[0]["lang"] if languages_list else "",
+            "top_merge_rate": languages_list[0]["merge_rate"] if languages_list else 0,
+            "kruskal_h": round(kw_stat, 1) if not pd.isna(kw_stat) else None,
+            "kruskal_p": round(kw_p, 6) if not pd.isna(kw_p) else None,
+            "languages": languages_list,
+        }
 
     with open(out_path, "w") as fp:
         json.dump(stats, fp, indent=2)
