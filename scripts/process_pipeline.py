@@ -311,6 +311,81 @@ def _generate_stats(
             "languages": languages_list,
         }
 
+    # ── Counterfactual: ETS forecast from pre-Copilot data ──────────────
+    from statsmodels.tsa.holtwinters import ExponentialSmoothing as _ETS
+
+    COPILOT_DATE = pd.Timestamp("2022-06-01", tz="UTC")
+
+    unique_prs = h.drop_duplicates(subset=["repo_name", "pr_number"])
+    unique_prs_ym = unique_prs.copy()
+    unique_prs_ym["ym"] = unique_prs_ym["pr_created_at"].dt.to_period("M").dt.to_timestamp("s", how="S").dt.tz_localize("UTC")
+
+    cf_monthly = unique_prs_ym.groupby("ym").agg(
+        pr_count=("pr_number", "count"),
+        unique_authors=("author", "nunique"),
+    ).sort_index()
+    cf_monthly.index = pd.DatetimeIndex(cf_monthly.index, freq="MS")
+
+    ft_ym = unique_prs_ym[unique_prs_ym["author_class"] == "first-timer"]
+    ft_monthly = ft_ym.groupby("ym").agg(ft_count=("pr_number", "count")).sort_index()
+    ft_monthly.index = pd.DatetimeIndex(ft_monthly.index, freq="MS")
+
+    rej_monthly = unique_prs_ym.groupby("ym").agg(
+        total=("pr_number", "count"),
+        rejected=("pr_outcome", lambda x: (x == "closed").sum()),
+    ).sort_index()
+    rej_monthly.index = pd.DatetimeIndex(rej_monthly.index, freq="MS")
+    rej_monthly["rejection_rate"] = rej_monthly["rejected"] / rej_monthly["total"]
+
+    ft_rej = ft_ym.groupby("ym").agg(
+        total=("pr_number", "count"),
+        rejected=("pr_outcome", lambda x: (x == "closed").sum()),
+    ).sort_index()
+    ft_rej.index = pd.DatetimeIndex(ft_rej.index, freq="MS")
+    ft_rej["ft_rejection"] = ft_rej["rejected"] / ft_rej["total"]
+
+    size_monthly = unique_prs_ym[unique_prs_ym["additions"] > 0].groupby("ym").agg(
+        median_size=("additions", "median"),
+    ).sort_index()
+    size_monthly.index = pd.DatetimeIndex(size_monthly.index, freq="MS")
+
+    cf_specs = [
+        ("pr_volume", cf_monthly["pr_count"]),
+        ("unique_contributors", cf_monthly["unique_authors"]),
+        ("first_timers", ft_monthly["ft_count"]),
+        ("rejection_rate", rej_monthly["rejection_rate"]),
+        ("ft_rejection_rate", ft_rej["ft_rejection"]),
+        ("median_pr_size", size_monthly["median_size"]),
+    ]
+
+    counterfactual = {}
+    for name, series in cf_specs:
+        s = series.dropna().asfreq("MS").ffill()
+        pre = s[s.index < COPILOT_DATE]
+        post = s[s.index >= COPILOT_DATE]
+        if len(pre) < 12 or len(post) < 3:
+            continue
+        try:
+            model = _ETS(pre, trend="add", seasonal=None, initialization_method="estimated")
+            fitted = model.fit(optimized=True)
+            forecast = fitted.forecast(steps=len(post))
+            predicted_mean = float(forecast.mean())
+            actual_mean = float(post.mean())
+            if predicted_mean > 0:
+                excess_pct = round((actual_mean / predicted_mean - 1) * 100)
+            else:
+                excess_pct = 0
+            counterfactual[name] = {
+                "predicted": round(predicted_mean, 1),
+                "actual": round(actual_mean, 1),
+                "excess_pct": excess_pct,
+            }
+        except Exception:
+            pass
+
+    if counterfactual:
+        stats["counterfactual"] = counterfactual
+
     with open(out_path, "w") as fp:
         json.dump(stats, fp, indent=2)
 

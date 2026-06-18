@@ -73,6 +73,9 @@ def main() -> None:
     forecast = stats.get("forecast_benchmark", {})
     contrib_return = stats.get("contributor_return", {})
     ft_trees = stats.get("first_timer_trees", {})
+    counterfactual = stats.get("counterfactual", {})
+    decline = stats.get("project_decline", {})
+    ga = stats.get("ga_weights", {})
 
     # ── Derived values ──────────────────────────────────────────────────────
 
@@ -822,7 +825,115 @@ def main() -> None:
                 "GA prose trend",
             ))
 
-    # ── H. Generate Section 16 (first-timer decision trees) ─────────────
+    # ── H. Counterfactual table (Section 5j) ────────────────────────────
+    if counterfactual:
+        cf_map = {
+            "pr_volume": "PR volume/month",
+            "unique_contributors": "Unique contributors/month",
+            "first_timers": "First-timers/month",
+            "rejection_rate": "Rejection rate",
+            "ft_rejection_rate": "First-timer rejection rate",
+            "median_pr_size": "Median PR size (lines)",
+        }
+        for key, label in cf_map.items():
+            if key not in counterfactual:
+                continue
+            cf = counterfactual[key]
+            pred = cf["predicted"]
+            actual = cf["actual"]
+            excess = cf["excess_pct"]
+            pred_str = fmt_int(int(pred)) if pred > 10 else f"{pred:.0f}%"
+            act_str = fmt_int(int(actual)) if actual > 10 else f"{actual:.0f}%"
+            if key == "rejection_rate":
+                pred_str = f"{pred * 100:.0f}%"
+                act_str = f"{actual * 100:.0f}%"
+            elif key == "ft_rejection_rate":
+                pred_str = f"{pred * 100:.0f}%"
+                act_str = f"{actual * 100:.0f}%"
+            elif key == "median_pr_size":
+                pred_str = str(int(pred))
+                act_str = str(int(actual))
+
+            escaped_label = re.escape(label)
+            replacements.append((
+                r"\| " + escaped_label + r" \| " + FLOAT + r" \| " + FLOAT + r" \| \*\*\+" + NUM + r"%\*\* \|",
+                f"| {label} | {pred_str} | {act_str} | **+{excess}%** |",
+                f"counterfactual {key}",
+            ))
+
+        # Narrative prose: "N% above what the pre-AI trend predicted"
+        if "pr_volume" in counterfactual:
+            pv = counterfactual["pr_volume"]["excess_pct"]
+            replacements.append((
+                r"PR volume is " + NUM + r"% above",
+                f"PR volume is {pv}% above",
+                "counterfactual PR volume prose",
+            ))
+        if "unique_contributors" in counterfactual:
+            uc = counterfactual["unique_contributors"]["excess_pct"]
+            replacements.append((
+                NUM + r"% more unique contributors than expected",
+                f"{uc}% more unique contributors than expected",
+                "counterfactual contributors prose",
+            ))
+        if "first_timers" in counterfactual:
+            ft_ex = counterfactual["first_timers"]["excess_pct"]
+            replacements.append((
+                NUM + r"% more first-timers than the model predicted",
+                f"{ft_ex}% more first-timers than the model predicted",
+                "counterfactual first-timers prose",
+            ))
+        if "rejection_rate" in counterfactual:
+            rr = counterfactual["rejection_rate"]["excess_pct"]
+            replacements.append((
+                r"rejection rate diverged.*?" + NUM + r"% higher than expected",
+                f"rejection rate diverged the most from the prediction: {rr}% higher than expected",
+                "counterfactual rejection prose",
+            ))
+        if "ft_rejection_rate" in counterfactual:
+            ftr = counterfactual["ft_rejection_rate"]["excess_pct"]
+            replacements.append((
+                r"First-timer rejection is " + NUM + r"% above the counterfactual",
+                f"First-timer rejection is {ftr}% above the counterfactual",
+                "counterfactual FT rejection prose",
+            ))
+
+    # ── I. Project decline (Section 11) ───────────────────────────────
+    if decline and isinstance(decline.get("top_3_features"), list) and decline["top_3_features"]:
+        n_dec = decline["n_declining"]
+        n_sta = decline["n_stable"]
+        n_tot = decline.get("n_total", n_dec + n_sta)
+        best_auc_d = decline["best_auc"]
+
+        replacements.append((
+            r"Of " + NUM + r" repos with data in both periods, \*\*" + NUM + r" are declining\*\* and \*\*" + NUM + r" are stable\*\*",
+            f"Of {n_tot} repos with data in both periods, **{n_dec} are declining** and **{n_sta} are stable**",
+            "decline counts",
+        ))
+
+        top3 = decline["top_3_features"]
+        if isinstance(top3[0], dict):
+            f1 = top3[0]
+            f2 = top3[1] if len(top3) > 1 else {"feature": "?", "importance": 0}
+            f3 = top3[2] if len(top3) > 2 else {"feature": "?", "importance": 0}
+
+            replacements.append((
+                r"1\. \*\*.*?\*\* \(.*?, " + FLOAT + r"%\)",
+                f"1. **{f1['feature']}** ({f1['importance']*100:.1f}%)",
+                "decline feature 1",
+            ))
+            replacements.append((
+                r"2\. \*\*.*?\*\* \(" + FLOAT + r"%\)",
+                f"2. **{f2['feature']}** ({f2['importance']*100:.1f}%)",
+                "decline feature 2",
+            ))
+            replacements.append((
+                r"3\. \*\*.*?\*\* \(" + FLOAT + r"%\)",
+                f"3. **{f3['feature']}** ({f3['importance']*100:.1f}%)",
+                "decline feature 3",
+            ))
+
+    # ── J. Generate Section 16 (first-timer decision trees) ─────────────
     if ft_trees:
         main_langs = ["Python", "TypeScript", "Go", "Rust", "C++", "Java", "C", "JavaScript", "C#"]
         available = [lang for lang in main_langs if lang in ft_trees]

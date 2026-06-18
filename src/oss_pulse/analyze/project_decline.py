@@ -231,6 +231,7 @@ def update_stats(
     stats["project_decline"] = {
         "n_declining": n_declining,
         "n_stable": n_stable,
+        "n_total": n_declining + n_stable,
         "best_model": best_model,
         "best_auc": round(best_auc, 3),
         "top_3_features": top_3_features,
@@ -301,7 +302,10 @@ if __name__ == "__main__":
     print(f"\nSaved feature importance figure to {path}")
 
     # Step 6: Update stats.json
-    top_3 = importance.head(3)["feature"].tolist()
+    top_3 = [
+        {"feature": row["feature"], "importance": round(float(row["importance"]), 3)}
+        for _, row in importance.head(3).iterrows()
+    ]
     stats_path = data_dir / "processed" / "stats.json"
     update_stats(
         stats_path,

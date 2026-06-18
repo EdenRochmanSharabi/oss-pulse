@@ -62,6 +62,7 @@ analyze:
 analyze-advanced:
 	python -m oss_pulse.analyze.contributor_return
 	python -m oss_pulse.analyze.repo_embeddings
+	python notebooks/ga_health_weights.py
 
 # ── Figures ────────────────────────────────────────────
 figures:
