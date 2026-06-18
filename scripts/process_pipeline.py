@@ -311,6 +311,82 @@ def _generate_stats(
             "languages": languages_list,
         }
 
+    # ── Author distribution (by PR count, excluding bots) ───────────────
+    author_class_counts = h["author_class"].value_counts()
+    total_human_prs = len(h)
+    stats["author_distribution"] = {
+        "maintainer_pct": round(
+            author_class_counts.get("maintainer", 0) / total_human_prs * 100, 1
+        ),
+        "regular_pct": round(
+            author_class_counts.get("regular", 0) / total_human_prs * 100, 1
+        ),
+        "firsttimer_pct": round(
+            author_class_counts.get("first-timer", 0) / total_human_prs * 100, 1
+        ),
+        "bot_pct": round(
+            len(featured[featured["is_bot"]]) / len(featured) * 100, 1
+        ),
+    }
+
+    # ── Growth: early vs recent monthly PR counts ─────────────────────
+    h_monthly = (
+        h.groupby(h["pr_created_at"].dt.to_period("M"))
+        .size()
+        .reset_index(name="pr_count")
+    )
+    h_monthly["pr_created_at"] = h_monthly["pr_created_at"].dt.to_timestamp()
+    early_months = h_monthly[h_monthly["pr_created_at"] < "2020-01-01"]
+    recent_months = h_monthly[h_monthly["pr_created_at"] >= "2025-01-01"]
+    early_avg = round(float(early_months["pr_count"].mean()), 1) if len(early_months) > 0 else 0
+    recent_avg = round(float(recent_months["pr_count"].mean()), 1) if len(recent_months) > 0 else 0
+    growth_factor = round(recent_avg / early_avg, 2) if early_avg > 0 else 0
+    stats["growth"] = {
+        "early_monthly_avg": early_avg,
+        "recent_monthly_avg": recent_avg,
+        "growth_factor": growth_factor,
+    }
+
+    # ── Weekend rate ──────────────────────────────────────────────────
+    if "is_weekend" in featured.columns:
+        weekend_rate = round(featured["is_weekend"].mean() * 100, 1)
+    else:
+        weekend_rate = round(
+            featured["pr_created_at"].dt.dayofweek.isin([5, 6]).mean() * 100, 1
+        )
+    stats["weekend_rate"] = weekend_rate
+
+    # ── Era PR size: median additions per era (additions > 0) ─────────
+    era_boundaries = {
+        "2016_2019": ("2016-01-01", "2020-01-01"),
+        "2020_2021": ("2020-01-01", "2022-01-01"),
+        "2022_copilot": ("2022-01-01", "2023-01-01"),
+        "2023_chatgpt": ("2023-01-01", "2024-01-01"),
+        "2024_cursor": ("2024-01-01", "2025-01-01"),
+        "2025_agentic": ("2025-01-01", "2026-06-01"),
+    }
+    era_pr_size = {}
+    for era_key, (start, end) in era_boundaries.items():
+        e = h[(h["pr_created_at"] >= start) & (h["pr_created_at"] < end)]
+        e_sized = e[e["additions"] > 0]
+        if len(e_sized) > 0:
+            era_pr_size[era_key] = int(e_sized["additions"].median())
+        else:
+            era_pr_size[era_key] = 0
+    stats["era_pr_size"] = era_pr_size
+
+    # ── Era PRs per author: prs_per_month / contributors_per_month ────
+    era_prs_per_author = {}
+    for era_key in era_boundaries:
+        era_data = stats["ai_eras"].get(era_key, {})
+        cpm = era_data.get("contributors_per_month", 0)
+        ppm = era_data.get("prs_per_month", 0)
+        if cpm > 0:
+            era_prs_per_author[era_key] = round(ppm / cpm, 2)
+        else:
+            era_prs_per_author[era_key] = 0
+    stats["era_prs_per_author"] = era_prs_per_author
+
     # ── Counterfactual: ETS forecast from pre-Copilot data ──────────────
     from statsmodels.tsa.holtwinters import ExponentialSmoothing as _ETS
 

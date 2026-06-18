@@ -100,7 +100,7 @@ See `docs/process_log.md` for the complete project diary.
 - **4,048,297 PRs** across **580 software repos**, spanning **2016-2026**
 - **419,177 unique contributors** (excluding bots)
 - Outcome distribution: **69.5% merged**, 27.9% closed, 1.5% abandoned, 1.1% still open
-- Author distribution: 72% maintainers, 15% regulars, 7% first-timers, 6% bots (by PR count)
+- Author distribution: 79.4% maintainers, 14.5% regulars, 6.1% first-timers, 6.7% bots (by PR count)
 
 ### 1. Open Source Is Growing, But Unevenly
 
@@ -167,7 +167,7 @@ Did LLM coding tools (Copilot, ChatGPT, GPT-4) change open-source contribution d
 | First-timers/month | 1,283 | 1,459 | 1,577 | 2,038 | 2,129 | **3,708** |
 | First-timer rejection | 53.7% | 53.0% | 53.8% | 55.5% | 56.4% | **62.2%** |
 | Overall rejection | 31.7% | 27.6% | 27.0% | 25.4% | 25.5% | **36.6%** |
-| Median PR size (lines)* | 10 | 17 | 16 | 16 | 19 | **37** |
+| Median PR size (lines)* | 9 | 14 | 14 | 15 | 19 | **34** |
 | PRs/author/month | 2.93 | 3.42 | 3.6 | 3.81 | 3.97 | **3.99** |
 
 *\*Median PR size uses only PRs with additions > 0 (25-46% per era). The Search API returns 0 additions for most PRs; these are excluded to avoid deflating the median.*
@@ -194,7 +194,7 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_04_firsttimer_analysis.svg" width="100%">
 
-**5f. PRs grew ~4x.** Among PRs with reported size data, the median PR went from 10 lines (2016-2019) to 37 lines (2025-2026). The growth was gradual until 2024 (19 lines) then accelerated sharply. This is consistent with AI-assisted code generation producing larger changesets, and the timing aligns with widespread LLM adoption rather than any single tool launch.
+**5f. PRs grew ~4x.** Among PRs with reported size data, the median PR went from 9 lines (2016-2019) to 34 lines (2025-2026). The growth was gradual until 2024 (19 lines) then accelerated sharply. This is consistent with AI-assisted code generation producing larger changesets, and the timing aligns with widespread LLM adoption rather than any single tool launch.
 
 <img src="output/figures/ai_05_pr_size_trend.svg" width="100%">
 
@@ -202,15 +202,15 @@ The most striking feature of this table is that the biggest shifts don't appear 
 
 <img src="output/figures/ai_06_prs_per_contributor.svg" width="100%">
 
-**5h. Who benefits? Productivity and merge rate by author group.** The aggregate +36% masks a stark inequality. Maintainers went from 5.42 to 6.91 PRs/person/month while their merge rate declined from 75% to 75%. Regulars gained modestly (1.4 to 1.47) but their merge rate collapsed from 54% to 42%. First-timers are by definition at 1 PR/month, but their merge rate dropped from 46% to 34%.
+**5h. Who benefits? Productivity and merge rate by author group.** The aggregate +36% masks a stark inequality. Maintainers went from 5.42 to 6.91 PRs/person/month while their merge rate declined from 76% to 76%. Regulars gained modestly (1.4 to 1.47) but their merge rate collapsed from 54% to 43%. First-timers are by definition at 1 PR/month, but their merge rate dropped from 46% to 34%.
 
 | Group | PRs/person/month (2016-2019) | PRs/person/month (2025-2026) | Merge rate (2016-2019) | Merge rate (2025-2026) |
 |-------|------------------------|------------------------|-------------------|-------------------|
-| Maintainer | 5.42 | 6.91 | 75% | 75% |
-| Regular | 1.4 | 1.47 | 54% | 42% |
+| Maintainer | 5.42 | 6.91 | 76% | 76% |
+| Regular | 1.4 | 1.47 | 54% | 43% |
 | First-timer | 1.0 | 1.0 | 46% | 34% |
 
-The productivity gains are concentrated in those who already had expertise. For everyone else, the bar has risen: regulars' merge rate fell 12 percentage points, and first-timers' fell 12 points.
+The productivity gains are concentrated in those who already had expertise. For everyone else, the bar has risen: regulars' merge rate fell 11 percentage points, and first-timers' fell 12 points.
 
 <img src="output/figures/ai_07_productivity_by_group.svg" width="100%">
 
@@ -239,9 +239,9 @@ We trained forecasting models (ETS) on pre-Copilot data only (2016 to May 2022),
 | PR volume/month | 35,135 | 43,582 | **+24%** |
 | Unique contributors/month | 7,756 | 11,168 | **+44%** |
 | First-timers/month | 1,709 | 2,547 | **+49%** |
-| Rejection rate | 20% | 33% | **+78%** |
-| First-timer rejection rate | 52% | 58% | **+12%** |
-| Median PR size (lines) | 18 | 22 | **+18%** |
+| Rejection rate | 20% | 30% | **+22%** |
+| First-timer rejection rate | 50% | 50% | **+13%** |
+| Median PR size (lines) | 19 | 22 | **+18%** |
 
 <img src="output/figures/counterfactual_01_pr_count.svg" width="100%">
 
@@ -261,11 +261,11 @@ The rejection rate diverged the most from the prediction: 22% higher than expect
 
 <img src="output/figures/counterfactual_05_ft_rejection.svg" width="100%">
 
-First-timer rejection is 13% above the counterfactual. The model predicted rejection would stabilize around 52%; instead it climbed to 58-63%.
+First-timer rejection is 13% above the counterfactual. The model predicted rejection would stabilize around 50%; instead it climbed to 50-62%.
 
 <img src="output/figures/counterfactual_06_median_size.svg" width="100%">
 
-PRs are 35% larger than expected. The pre-AI trend showed slow growth in PR size; post-AI, the growth accelerated.
+PRs are 18% larger than expected. The pre-AI trend showed slow growth in PR size; post-AI, the growth accelerated.
 
 **Counterfactual conclusion:** AI tools appear to have accelerated every metric: more contributors, more PRs, larger PRs, but also more rejections. The most striking finding is that the rejection rate trend *reversed*. Before AI, projects were getting better at accepting contributions. After AI, that progress stopped and rejection climbed. This suggests that while AI lowers the barrier to *submitting* code, it may not be raising the quality enough to clear the bar that maintainers set.
 
@@ -369,7 +369,7 @@ ETS wins with 21.7% MAPE. The traditional ARIMA and ML-based XGBoost perform sim
 
 Section 10 predicts whether a *single PR* will be abandoned (AUC=0.916). This section asks a different question: will a *contributor* come back after their latest PR? Contributor behavior is *sequential*: a developer whose last 3 PRs were merged quickly is different from one with growing gaps and recent rejections. We trained an LSTM on the chronological sequence of each contributor's PRs.
 
-The LSTM achieved **AUC=0.848** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
+The LSTM achieved **AUC=0.852** on the contributor-return task, capturing temporal patterns that flat-feature models cannot express: merge momentum, growing gaps between PRs, and rejection streaks.
 
 <img src="output/figures/nn_contributor_return.svg" width="100%">
 
@@ -400,9 +400,9 @@ The Health Index weights (Section 6) were hand-picked. But which weights actuall
 | Merge rate | 20.0% | 0.0% |
 | Trend | 15.0% | 72.8% |
 
-The GA nearly doubled the weight on response time (25.0% to 0%) and eliminated trend (15.0% to 72.8%). The optimized weights improved Spearman correlation from -0.0492 to 0.0669.
+The GA massively increased trend (15.0% to 72.8%) and eliminated response time (25.0% to 0.0%). The optimized weights improved Spearman correlation from -0.0492 to 0.0669.
 
-**The insight**: The single best predictor of whether a project will grow is **how fast it responds to contributions**. Not its current momentum, not its merge rate. Speed of response. This aligns with the contributor return finding (Section 13): contributors come back when they get fast feedback.
+**The insight**: The single best predictor of whether a project will grow is **its recent momentum (activity trend)**. Not its merge rate, not its response time. A project with strong upward momentum attracts more contributors regardless of other factors.
 
 <img src="output/figures/ga_weights_comparison.svg" width="100%">
 <img src="output/figures/ga_convergence.svg" width="100%">

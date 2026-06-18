@@ -76,6 +76,11 @@ def main() -> None:
     counterfactual = stats.get("counterfactual", {})
     decline = stats.get("project_decline", {})
     ga = stats.get("ga_weights", {})
+    author_dist = stats.get("author_distribution", {})
+    growth = stats.get("growth", {})
+    weekend_rate = stats.get("weekend_rate", None)
+    era_pr_size = stats.get("era_pr_size", {})
+    era_prs_per_author = stats.get("era_prs_per_author", {})
 
     # ── Derived values ──────────────────────────────────────────────────────
 
@@ -100,18 +105,18 @@ def main() -> None:
 
     maint_prs_early = maint_pre["prs_per_person_month"]
     maint_prs_recent = maint_post["prs_per_person_month"]
-    maint_merge_early = int(maint_pre["merge_rate_pct"])
-    maint_merge_recent = int(maint_post["merge_rate_pct"])
+    maint_merge_early = round(maint_pre["merge_rate_pct"])
+    maint_merge_recent = round(maint_post["merge_rate_pct"])
 
     reg_prs_early = reg_pre["prs_per_person_month"]
     reg_prs_recent = reg_post["prs_per_person_month"]
-    reg_merge_early = int(reg_pre["merge_rate_pct"])
-    reg_merge_recent = int(reg_post["merge_rate_pct"])
+    reg_merge_early = round(reg_pre["merge_rate_pct"])
+    reg_merge_recent = round(reg_post["merge_rate_pct"])
 
     ft_prs_early = ft_pre["prs_per_person_month"]
     ft_prs_recent = ft_post["prs_per_person_month"]
-    ft_merge_early = int(ft_pre["merge_rate_pct"])
-    ft_merge_recent = int(ft_post["merge_rate_pct"])
+    ft_merge_early = round(ft_pre["merge_rate_pct"])
+    ft_merge_recent = round(ft_post["merge_rate_pct"])
 
     # Funnel derived
     second_pr_count = funnel["2nd_pr"]
@@ -199,6 +204,50 @@ def main() -> None:
         ),
         "outcome distribution",
     ))
+
+    # "- Author distribution: 72% maintainers, 15% regulars, 7% first-timers, 6% bots (by PR count)"
+    if author_dist:
+        replacements.append((
+            r"- Author distribution: " + PCT + r" maintainers, " + PCT + r" regulars, " + PCT + r" first-timers, " + PCT + r" bots \(by PR count\)",
+            (
+                f"- Author distribution: {author_dist['maintainer_pct']}% maintainers, "
+                f"{author_dist['regular_pct']}% regulars, "
+                f"{author_dist['firsttimer_pct']}% first-timers, "
+                f"{author_dist['bot_pct']}% bots (by PR count)"
+            ),
+            "author distribution",
+        ))
+
+    # ── Era table: Median PR size row ────────────────────────────────────
+    if era_pr_size:
+        era_keys_list = ['2016_2019', '2020_2021', '2022_copilot', '2023_chatgpt', '2024_cursor', '2025_agentic']
+        replacements.append((
+            r"\| Median PR size \(lines\)\*? \|" + (r" " + NUM + r" \|") * 5 + r" \*\*" + NUM + r"\*\* \|",
+            (
+                "| Median PR size (lines)*"
+                + "".join(f" | {era_pr_size.get(k, 0)}" for k in era_keys_list[:-1])
+                + f" | **{era_pr_size.get(era_keys_list[-1], 0)}** |"
+            ),
+            "era table median PR size",
+        ))
+
+    # ── Section 5f: PR size inline prose ─────────────────────────────────
+    if era_pr_size:
+        first_size = era_pr_size.get("2016_2019", 10)
+        last_size = era_pr_size.get("2025_agentic", 37)
+        cursor_size = era_pr_size.get("2024_cursor", 19)
+        size_ratio = f"~{round(last_size / first_size)}x" if first_size > 0 else "~4x"
+        replacements.append((
+            r"\*\*5f\. PRs grew ~\d+x\.\*\* Among PRs with reported size data, the median PR went from "
+            + NUM + r" lines \(2016-2019\) to " + NUM + r" lines \(2025-2026\)\. The growth was gradual until 2024 \("
+            + NUM + r" lines\)",
+            (
+                f"**5f. PRs grew {size_ratio}.** Among PRs with reported size data, the median PR went from "
+                f"{first_size} lines (2016-2019) to {last_size} lines (2025-2026). The growth was gradual until 2024 ("
+                f"{cursor_size} lines)"
+            ),
+            "5f PR size inline",
+        ))
 
     # ── Section 4: Retention Crisis ──────────────────────────────────────
 
@@ -805,25 +854,67 @@ def main() -> None:
             "GA spearman improvement",
         ))
 
-        # "25% to 49%" in the prose (response time change)
-        if "response_time" in ga_w:
-            rt_orig = ga_w["response_time"]["original_pct"]
-            rt_opt = ga_w["response_time"]["optimized_pct"]
-            replacements.append((
-                r"nearly doubled the weight on response time \(" + PCT + r" to " + FLOAT + r"%\)",
-                f"nearly doubled the weight on response time ({rt_orig}% to {round(rt_opt)}%)",
-                "GA prose response time",
-            ))
+        # ── Dynamic GA prose: find biggest winner and biggest loser ────
+        # Sort components by change in weight to describe accurately
+        ga_changes = []
+        for key, info in ga_w.items():
+            ga_changes.append({
+                "key": key,
+                "label": component_labels.get(key, key),
+                "orig": info["original_pct"],
+                "opt": info["optimized_pct"],
+                "delta": info["optimized_pct"] - info["original_pct"],
+            })
+        ga_changes.sort(key=lambda x: x["delta"], reverse=True)
 
-        # "eliminated trend (15% to 0.4%)"
-        if "trend" in ga_w:
-            tr_orig = ga_w["trend"]["original_pct"]
-            tr_opt = ga_w["trend"]["optimized_pct"]
-            replacements.append((
-                r"eliminated trend \(" + PCT + r" to " + PCT + r"\)",
-                f"eliminated trend ({tr_orig}% to {tr_opt}%)",
-                "GA prose trend",
-            ))
+        # Biggest increase = first element, biggest decrease = last element
+        biggest_increase = ga_changes[0]
+        biggest_decrease = ga_changes[-1]
+
+        # Build the two-change prose line: "The GA massively increased trend (15.0% to 72.8%) and eliminated response time (25.0% to 0%)."
+        inc_label = biggest_increase["label"].lower()
+        dec_label = biggest_decrease["label"].lower()
+
+        inc_desc = f"massively increased {inc_label} ({biggest_increase['orig']}% to {biggest_increase['opt']}%)"
+        if biggest_decrease["opt"] == 0.0:
+            dec_desc = f"eliminated {dec_label} ({biggest_decrease['orig']}% to {biggest_decrease['opt']}%)"
+        else:
+            dec_desc = f"reduced {dec_label} ({biggest_decrease['orig']}% to {biggest_decrease['opt']}%)"
+
+        # Replace the old two-change prose sentence (matches both halves)
+        replacements.append((
+            r"The GA [\w ]+\(" + PCT + r" to " + FLOAT + r"%\) and [\w ]+\(" + PCT + r" to " + PCT + r"\)\.",
+            f"The GA {inc_desc} and {dec_desc}.",
+            "GA prose two-change",
+        ))
+
+        # ── Dynamic insight paragraph ─────────────────────────────────
+        # The old insight says "how fast it responds" (response_time).
+        # Generate correct insight based on the component with highest optimized weight.
+        top_component = max(ga_w.items(), key=lambda x: x[1]["optimized_pct"])
+        top_key = top_component[0]
+        top_label = component_labels.get(top_key, top_key).lower()
+        insight_map = {
+            "trend": "its recent momentum (activity trend)",
+            "response_time": "how fast it responds to contributions",
+            "bus_factor": "its bus factor (contribution concentration)",
+            "diversity": "its contributor diversity",
+            "merge_rate": "its merge rate",
+        }
+        top_insight = insight_map.get(top_key, top_label)
+        replacements.append((
+            r"\*\*The insight\*\*: The single best predictor of whether a project will grow is \*\*[^*]+\*\*\."
+            r" Not [^.]+\.",
+            f"**The insight**: The single best predictor of whether a project will grow is **{top_insight}**."
+            f" Not its merge rate, not its response time.",
+            "GA insight paragraph",
+        ))
+        # Also replace the follow-up sentence about alignment
+        replacements.append((
+            r"Speed of response\. This aligns with.*?fast feedback\.",
+            f"A project with strong upward momentum attracts more contributors regardless of other factors.",
+            "GA insight follow-up",
+        ))
 
     # ── H. Counterfactual table (Section 5j) ────────────────────────────
     if counterfactual:
@@ -851,12 +942,14 @@ def main() -> None:
                 pred_str = f"{pred * 100:.0f}%"
                 act_str = f"{actual * 100:.0f}%"
             elif key == "median_pr_size":
-                pred_str = str(int(pred))
-                act_str = str(int(actual))
+                pred_str = str(round(pred))
+                act_str = str(round(actual))
 
             escaped_label = re.escape(label)
+            # Match table cells that may contain plain numbers or percentages
+            CF_CELL = r"[\d,.]+%?"
             replacements.append((
-                r"\| " + escaped_label + r" \| " + FLOAT + r" \| " + FLOAT + r" \| \*\*\+" + NUM + r"%\*\* \|",
+                r"\| " + escaped_label + r" \| " + CF_CELL + r" \| " + CF_CELL + r" \| \*\*\+" + NUM + r"%\*\* \|",
                 f"| {label} | {pred_str} | {act_str} | **+{excess}%** |",
                 f"counterfactual {key}",
             ))
@@ -891,11 +984,27 @@ def main() -> None:
                 "counterfactual rejection prose",
             ))
         if "ft_rejection_rate" in counterfactual:
-            ftr = counterfactual["ft_rejection_rate"]["excess_pct"]
+            ftr_cf = counterfactual["ft_rejection_rate"]
+            ftr = ftr_cf["excess_pct"]
+            ftr_pred_pct = ftr_cf["predicted"] * 100
+            ftr_act_pct = ftr_cf["actual"] * 100
             replacements.append((
                 r"First-timer rejection is " + NUM + r"% above the counterfactual",
                 f"First-timer rejection is {ftr}% above the counterfactual",
                 "counterfactual FT rejection prose",
+            ))
+            # "The model predicted rejection would stabilize around 52%; instead it climbed to 58-63%."
+            replacements.append((
+                r"The model predicted rejection would stabilize around " + NUM + r"%; instead it climbed to " + NUM + r"-\d+%",
+                f"The model predicted rejection would stabilize around {ftr_pred_pct:.0f}%; instead it climbed to {ftr_act_pct:.0f}-{eras['2025_agentic']['ft_rejection_rate']:.0f}%",
+                "counterfactual FT rejection narrative",
+            ))
+        if "median_pr_size" in counterfactual:
+            ms = counterfactual["median_pr_size"]["excess_pct"]
+            replacements.append((
+                r"PRs are " + NUM + r"% larger than expected",
+                f"PRs are {ms}% larger than expected",
+                "counterfactual PR size prose",
             ))
 
     # ── I. Project decline (Section 11) ───────────────────────────────
