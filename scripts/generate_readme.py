@@ -52,8 +52,8 @@ def load_stats() -> dict:
 def regex_replace(text: str, pattern: str, replacement: str,
                   label: str = "") -> tuple[str, bool]:
     """Apply a single regex replacement. Returns (new_text, matched)."""
-    if re.search(pattern, text, re.DOTALL):
-        text = re.sub(pattern, replacement, text, count=1, flags=re.DOTALL)
+    if re.search(pattern, text):
+        text = re.sub(pattern, replacement, text, count=1)
         return text, True
     return text, False
 
@@ -918,17 +918,17 @@ def main() -> None:
             f3 = top3[2] if len(top3) > 2 else {"feature": "?", "importance": 0}
 
             replacements.append((
-                r"1\. \*\*.*?\*\* \(.*?, " + FLOAT + r"%\)",
-                f"1. **{f1['feature']}** ({f1['importance']*100:.1f}%)",
+                r"1\. \*\*[A-Za-z_ ]+\*\* \([^)]+, [\d.]+%\)",
+                f"1. **{f1['feature']}** ({f1['feature']}, {f1['importance']*100:.1f}%)",
                 "decline feature 1",
             ))
             replacements.append((
-                r"2\. \*\*.*?\*\* \(" + FLOAT + r"%\)",
+                r"2\. \*\*[A-Za-z_ ]+\*\* \([\d.]+%\)",
                 f"2. **{f2['feature']}** ({f2['importance']*100:.1f}%)",
                 "decline feature 2",
             ))
             replacements.append((
-                r"3\. \*\*.*?\*\* \(" + FLOAT + r"%\)",
+                r"3\. \*\*[A-Za-z_ ]+\*\* \([\d.]+%\)",
                 f"3. **{f3['feature']}** ({f3['importance']*100:.1f}%)",
                 "decline feature 3",
             ))
