@@ -1,4 +1,4 @@
-# oss-pulse
+# The largest open source research done in my room, so far. 
 
 **A time-series study of 4.0 million Pull Requests across 580 top open-source software projects (2016-2026).**
 
